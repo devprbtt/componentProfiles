@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="rafael" model="doria" alias="matrix doria 42" device_class="AV_switch" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 3.0 $">
+    <notes>
+        This product is a Hibrid 4x2 HDMI matrix. Compatible with Absolute NDS-623D-LH-RX and NDS-624D-RPT devices, for HDMI over CAT-X transmission.
+        Rev. 3.0: correção de comandos via IP para output 1 e 2
+    </notes>
+    <control_interfaces preferred="rs232">
+        <ir ir_command_format_type="racepointmedia"/>
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" connector_type="db9 female" cable_type="rs232 straight" response_time_length_ms="500">
+            <baud_rate speed="9600"/>
+            <send_postfix type="hex">0D0A</send_postfix>
+        </rs232>
+        <ip port="23" response_time_length_ms="500"></ip>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="HDMI IN 1">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="HDMI IN 2">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="HDMI IN 3">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="HDMI IN 4">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI OUT 1">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <combined_media>
+                <audio_media type="rj45_audio"/>
+                <video_media type="rj45"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI OUT 2">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <combined_media>
+                <audio_media type="rj45_audio"/>
+                <video_media type="rj45"/>
+            </combined_media>
+        </output>      
+        <data name_on_component="LAN">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="23"/>
+            </combined_media>
+        </data>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_main" min_value="0" max_value="1">0</state_variable>
+        <state_variable name="Power_current_power_zone2" min_value="0" max_value="1">0</state_variable>
+        <volume_state_variable name="Volume_current_volume_main" granularity="1.0" owning_logical_component="AV_switch" state_center_binding="CurrentVolume" state_center_type="string" min_value="0" max_value="98">0</volume_state_variable>
+        <volume_state_variable name="Volume_current_volume_zone2" granularity="1.0" owning_logical_component="AV_switch_2" state_center_binding="CurrentVolume" state_center_type="string" min_value="0" max_value="98">0</volume_state_variable>
+        <state_variable name="Mute_current_mute_main" owning_logical_component="AV_switch" state_center_binding="CurrentMuteStatus" state_center_type="string">OFF</state_variable>
+        <state_variable name="Mute_current_mute_zone2" owning_logical_component="AV_switch_2" state_center_binding="CurrentMuteStatus" state_center_type="string">OFF</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="AV_switch">
+        <implementation>
+            <input name_on_component="HDMI IN 1">
+                <action_to_select name="SelectInput1"/>
+            </input>
+            <output name_on_component="HDMI OUT 1"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 2">
+                <action_to_select name="SelectInput2"/>
+            </input>
+            <output name_on_component="HDMI OUT 1"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 3">
+                <action_to_select name="SelectInput3"/>
+            </input>
+            <output name_on_component="HDMI OUT 1"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 4">
+                <action_to_select name="SelectInput4"/>
+            </input>
+            <output name_on_component="HDMI OUT 1"/>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentInputStatus">
+                <constant type="character">s1</constant>
+                <data type="character" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="0">
+                            <update state="CurrentInput" type="string">Input1</update>
+                        </map>
+                        <map key="1">
+                            <update state="CurrentInput" type="string">Input2</update>
+                        </map>
+                        <map key="2">
+                            <update state="CurrentInput" type="string">Input3</update>
+                        </map>
+                        <map key="3">
+                            <update state="CurrentInput" type="string">Input4</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+        </status_messages>
+        <custom_component_actions>
+            <action name="SelectInput1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 17</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a17</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"> 0000000000009333015500A900150015001500150015001500150040001500400015001500150015001500150015001500150015001500150015004000150040001500150015001500150040001500400015001500150015001500400015001500150015001500150015001500150015001500400015004000150015001500400015004000150040001500400015066700000000</command_string>
+                        <delay ms_delay="400"/>
+			<command_string type="hex"> 0000000000009333015500A900150015001500150015001500150040001500400015001500150015001500150015001500150015001500150015004000150040001500150015001500150040001500150015001500150015001500150015004000150015001500400015001500150040001500400015004000150040001500150015004000150015001500400015066600000000</command_string>
+                        <delay ms_delay="400"/>
+			<command_string type="hex">000000000000948c015500A60016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E001600140016001400160014001600140016003E001600140016003E001600140016003E0016003E0016003E0016003E001600140016003E001600140016003E0016065A0155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInput2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 12</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a12</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E0016003E001600140016003E001600140016003E001600140016003E00160014001600140016003E001600140016003E001600140016003E001600140016003E0016065E0155005400160E2C0155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput3">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 59</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a59</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A60016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E0016001400160014001600140016003E00160014001600140016003E001600140016003E0016003E0016003E001600140016003E0016003E001600140016003E001606590155005300160E250155005300160E240155005300160E240155005300160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput4">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 08</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a08</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001400160014001600140016003F0016003F0016001400160014001600140016001400160014001600140016003F0016003F00160014001600140016003F001600140016003F001600140016003F00160014001600140016003F001600140016003F001600140016003F001600140016003F0016003F001600140016003F0016065F0155005400160E300155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputPrevious">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 1B</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a1B</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015600AB0015001500150015001500150015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500400015001500150040001500400015001500150015001500150015001500150015001500400015001500150015001500400015004000150040001505EC01560056001504D700000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputNext">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 11</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a11</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015600AB0015001500150015001500150015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500150015001500150015001500400015001500150015001500150015001500150040001500400015004000150015001500400015004000150040001505EC01560056001504D700000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_2">
+        <implementation>
+            <input name_on_component="HDMI IN 1">
+                <action_to_select name="SelectInput1"/>
+            </input>
+            <output name_on_component="HDMI OUT 2"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 2">
+                <action_to_select name="SelectInput2"/>
+            </input>
+            <output name_on_component="HDMI OUT 2"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 3">
+                <action_to_select name="SelectInput3"/>
+            </input>
+            <output name_on_component="HDMI OUT 2"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI IN 4">
+                <action_to_select name="SelectInput4"/>
+            </input>
+            <output name_on_component="HDMI OUT 2"/>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentInputStatus">
+                <constant type="character">s2</constant>
+                <data type="character" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="0">
+                            <update state="CurrentInput" type="string">Input1</update>
+                        </map>
+                        <map key="1">
+                            <update state="CurrentInput" type="string">Input2</update>
+                        </map>
+                        <map key="2">
+                            <update state="CurrentInput" type="string">Input3</update>
+                        </map>
+                        <map key="3">
+                            <update state="CurrentInput" type="string">Input4</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+        </status_messages>
+        <custom_component_actions>
+            <action name="SelectInput1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 5E</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a5E</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E001600140016003E0016003E0016003E0016003E001600140016003E001600140016003E001600140016001400160014001600140016003E001600140016003E0016065B0155005300160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInput2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 06</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a06</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E001600140016003E0016003E00160014001600140016001400160014001600140016003E00160014001600140016003E0016003E0016003E0016003E0016003E0016065F0155005400160E2F0155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInput3">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 05</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a05</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001500160015001600150016003E0016003E0016001500160015001600150016001500160015001600150016003E0016003E00160015001600150016003E0016003E001600150016003E0016001500160015001600150016001500160015001600150016003E001600150016003E0016003E0016003E0016003E0016003E0016065F0155005400160E300155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInput4">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 03</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a03</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500A70016001400160014001600140016003E0016003E0016001400160014001600140016001400160014001600140016003E0016003E00160014001600140016003E0016003E0016003E00160014001600140016001400160014001600140016001400160014001600140016003E0016003E0016003E0016003E0016003E0016003E001606600155005500160E300155005400160ED800000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInputPrevious">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 55</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a55</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015600AB0015001500150015001500150015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500150015004000150015001500400015001500150040001500150015001500150040001500150015004000150015001500400015001500150040001505EF01560056001504D900000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+            <action name="SelectInputNext">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">cir 48</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">a48</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015600AB0015001500150015001500150015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015001500150040001500150015001500150040001500150015004000150040001500400015001500150040001500400015001500150040001505EC01560056001504D700000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>                
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

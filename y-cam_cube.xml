@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Y-CAM" model="Cube" device_class="Security_camera_fixed" unique_identifier="hostname" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+    
+    <notes>
+        If the camera is password protected, use this format in the hostname field in Blueprint's device inspector:  username:password@cameraAddress.
+        If you don't want password protection, login into the camera and go to Basic Configurations->Users and enable anonymous viewer login.
+    </notes>
+    <control_interfaces preferred="ip">
+        <ip port="82" response_time_length_ms="12000" name_on_component="ETHERNET"  protocol="http">
+        </ip>
+    </control_interfaces>
+    
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="80"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Security Camera">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_SECURITYCAMERA_SOURCE"/>
+        </internal>    
+    </media_interfaces>
+    
+    <logical_component logical_component_name="Security_camera">
+        <implementation>
+            <internal name_on_component="Security Camera"/>
+        </implementation>
+        <image_access>
+            <image_format format="mjpg" resolution="default" is_default="yes">/live/0/mjpeg.jpg</image_format>
+            <image_format format="mjpg" resolution="320x240" is_multiview_default="yes">/live/1/mjpeg.jpg</image_format>
+            <image_format format="jpg" resolution="default">/live/0/jpeg.jpg</image_format>
+        </image_access>
+    </logical_component>
+</component>

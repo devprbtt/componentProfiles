@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Ubiquiti" model="mFi" device_class="Trigger_environment_device" minimum_component_engine_version="0" rpm_xml_version="2.0">
+	<notes>
+	    Inspect profie in Blueprint and add the Login and Password in state variables.
+	</notes>
+    <control_interfaces preferred="ip">
+        <ip port="23" response_time_length_ms="500" protocol="telnet">
+            <send_postfix type="hex">0D0A</send_postfix>
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <data name_on_component="ETHERNET">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="23"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Trigger environment device">
+            <environmental_media/>
+            <resource resource_type="ENV_GENERALTRIGGERCONTROLLEDDEVICE_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Login" receive_updates_from_state_center="yes" user_editable="yes" owning_logical_component="Trigger_environment_device" note="Login"></state_variable>
+        <state_variable name="Password" receive_updates_from_state_center="yes" user_editable="yes" owning_logical_component="Trigger_environment_device" note="Password"></state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Trigger_environment_device">
+        <implementation>
+            <internal name_on_component="Trigger environment device"/>
+        </implementation>
+        <status_messages>
+            <status_message name="UserName">
+                <constant type="character">login:</constant>
+                <run_elements>
+                    <actions>
+                        <action name="UserName">
+                            <command_interface interface="ip">
+                                <command response_required="no">
+                                    <parameter_list>
+                                        <parameter parameter_data_type="character" state_variable="Login"></parameter>
+                                    </parameter_list>
+                                    <delay ms_delay="200"/>
+                                </command>
+                            </command_interface>
+                        </action>
+                    </actions>
+                </run_elements>
+            </status_message>
+                <status_message name="Password">
+                    <constant type="character">Password:</constant>
+                    <run_elements>
+                        <actions>
+                            <action name="Password">
+                                <command_interface interface="ip">
+                                    <command response_required="no">
+                                        <parameter_list>
+                                            <parameter parameter_data_type="character" state_variable="Password"></parameter>
+                                        </parameter_list>
+                                        <delay ms_delay="200"/>
+                                    </command>
+                                </command_interface>
+                            </action>
+                        </actions>
+                    </run_elements>
+                </status_message>
+            <status_message name="Voltage">
+                <constant type="character">VoltageSensors</constant>
+                <constant type="hex">0D0A</constant>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_1" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_2" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_3" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_4" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_5" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_6" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_7" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="VoltageSensor_8" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="2320">
+                    <update state="unusedData" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Current">
+                <constant type="character">CurrentSensors</constant>
+                <constant type="hex">0D0A</constant>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_1" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_2" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_3" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_4" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_5" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_6" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_7" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="CurrentSensor_8" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="2320">
+                    <update state="unusedData" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Power">
+                <constant type="character">PowerSensors</constant>
+                <constant type="hex">0D0A</constant>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_1" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_2" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_3" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_4" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_5" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_6" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_7" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="PowerSensor_8" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="2320">
+                    <update state="unusedData" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Relay">
+                <constant type="character">RelaySensors</constant>
+                <constant type="hex">0D0A</constant>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_1" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_2" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_3" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_4" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_5" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_6" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_7" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="0D0A">
+                    <update state="RelaySensor_8" type="string"></update>
+                </data>
+                <data type="character" terminator_type="hex" terminator="2320">
+                    <update state="unusedData" type="string"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <custom_component_actions>
+            <action name="SetOutletPower">
+                <action_argument name="OutletNumber" note="1, 2, 3..."/>
+                <action_argument name="Value" note="0=Off, 1=On"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">echo </command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Value" parameter_total_width="1" parameter_data_width="1"></parameter>
+                            <parameter parameter_data_type="character"> > /proc/power/output</parameter>
+                            <parameter parameter_data_type="character" action_argument="OutletNumber" parameter_total_width="1" parameter_data_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReadVoltageSensor">
+                <command_interface interface="ip">
+                    <command response_required="yes" response_time_length_ms="2000">
+                        <command_string type="character">echo VoltageSensors&amp;&amp;cat /proc/power/v_rms1&amp;&amp;cat /proc/power/v_rms2&amp;&amp;cat /proc/power/v_rms3&amp;&amp;cat /proc/power/v_rms4&amp;&amp;cat /proc/power/v_rms5&amp;&amp;cat /proc/power/v_rms6&amp;&amp;cat /proc/power/v_rms7&amp;&amp;cat /proc/power/v_rms8</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+            <action name="ReadCurrentSensor">
+                <command_interface interface="ip">
+                    <command response_required="yes" response_time_length_ms="2000">
+                        <command_string type="character">echo CurrentSensors&amp;&amp;cat /proc/power/i_rms1&amp;&amp;cat /proc/power/i_rms2&amp;&amp;cat /proc/power/i_rms3&amp;&amp;cat /proc/power/i_rms4&amp;&amp;cat /proc/power/i_rms5&amp;&amp;cat /proc/power/i_rms6&amp;&amp;cat /proc/power/i_rms7&amp;&amp;cat /proc/power/i_rms8</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="12000"></execute_on_schedule>
+            </action>
+            <action name="ReadPowerSensor">
+                <command_interface interface="ip">
+                    <command response_required="yes" response_time_length_ms="2000">
+                        <command_string type="character">echo PowerSensors&amp;&amp;cat /proc/power/active_pwr1&amp;&amp;cat /proc/power/active_pwr2&amp;&amp;cat /proc/power/active_pwr3&amp;&amp;cat /proc/power/active_pwr4&amp;&amp;cat /proc/power/active_pwr5&amp;&amp;cat /proc/power/active_pwr6&amp;&amp;cat /proc/power/active_pwr7&amp;&amp;cat /proc/power/active_pwr8</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="15000"></execute_on_schedule>
+            </action>
+            <action name="ReadRelaySensor">
+                <command_interface interface="ip">
+                    <command response_required="yes" response_time_length_ms="2000">
+                        <command_string type="character">echo RelaySensors&amp;&amp;cat /proc/power/relay1&amp;&amp;cat /proc/power/relay2&amp;&amp;cat /proc/power/relay3&amp;&amp;cat /proc/power/relay4&amp;&amp;cat /proc/power/relay5&amp;&amp;cat /proc/power/relay6&amp;&amp;cat /proc/power/relay7&amp;&amp;cat /proc/power/relay8</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="17000"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

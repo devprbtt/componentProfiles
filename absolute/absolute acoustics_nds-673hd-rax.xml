@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" 
+    manufacturer="Absolute Acoustics" model="NDS-673HD-RAX" alias="Absolute Nexos Local Amp" 
+    device_class="AV_processor" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 2.1">
+    <notes>
+
+        The ID need to be 00.
+
+    </notes>
+    <control_interfaces preferred="rs232">
+        <ir ir_command_format_type="racepointmedia"/>
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" connector_type="rs232 other" cable_type="rs232 straight" response_time_length_ms="500">
+            <baud_rate speed="9600"/>
+            <send_postfix type="hex">0D0A</send_postfix>
+            <receive_end_condition test_condition="data" type="hex">0D0A</receive_end_condition>
+        </rs232>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="HDMI IN HDBASET">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="STEREO RCA LOCAL SOURCE">
+            <audio_media type="rca_stereo"></audio_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="STEREO RCA ARC">
+            <audio_media type="rca_stereo"></audio_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI OUT">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="SPEAKER OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>
+        <output name_on_component="LINE OUT">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+    </media_interfaces>
+    <logical_ios>
+        <input logical_name="HDMI_IN">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <default_io name_on_component="HDMI IN HDBASET"/>
+        </input>
+        <input logical_name="HDMI_ARC_IN">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </input>
+    </logical_ios>
+    <state_variable_list>
+        <state_variable name="Power_current_power_main" min_value="0" max_value="1">0</state_variable>
+        <volume_state_variable name="Volume_current_volume_setting" min_value="0" max_value="100" granularity="1" owning_logical_component="AV_processor" state_center_binding="CurrentVolume" state_center_type="integer">0</volume_state_variable>
+        <volume_state_variable name="Volume_default_volume_setting" min_value="0" max_value="100 " granularity="1" owning_logical_component="AV_processor" state_center_binding="CurrentVolume" state_center_type="integer">0</volume_state_variable>
+        <state_variable name="Mute_current_mute_setting" state_center_type="string" state_center_binding="CurrentMuteStatus" owning_logical_component="AV_processor">OFF</state_variable>
+    </state_variable_list> 
+    <state_variable_list>
+        
+    </state_variable_list>
+    <logical_component logical_component_name="AV_processor">
+        <implementation>
+            <input logical_name="HDMI_IN">
+                <action_to_select name="SelectInput1"/>
+            </input>
+            <output name_on_component="HDMI OUT" />
+            <output name_on_component="SPEAKER OUT"/>
+            <output name_on_component="LINE OUT" />
+        </implementation>
+        <implementation>
+            <input logical_name="HDMI_ARC_IN">
+                <action_to_select name="SelectInput2"/>
+            </input>
+            <output name_on_component="HDMI OUT" />
+            <output name_on_component="SPEAKER OUT"/>
+            <output name_on_component="LINE OUT" />
+        </implementation>
+        <implementation>
+            <input name_on_component="STEREO RCA ARC">
+                <action_to_select name="SelectInput2"/>
+            </input>
+            <output name_on_component="HDMI OUT" />
+            <output name_on_component="SPEAKER OUT"/>
+            <output name_on_component="LINE OUT" />
+        </implementation>
+        <implementation>
+            <input name_on_component="STEREO RCA LOCAL SOURCE">
+                <action_to_select name="SelectInput3"/>
+            </input>
+            <output name_on_component="HDMI OUT" />
+            <output name_on_component="SPEAKER OUT"/>
+            <output name_on_component="LINE OUT" />
+        </implementation>
+        <status_messages>
+            <!--Send "GetStatus" When device is ON-->
+            <status_message name="GetStatus">
+                <constant type="hex">0A204558</constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="Unused" type="string"></update>
+                </data>
+                <run_elements>
+                    <actions>
+                        <action name="GetStatus">
+                            <command_interface interface="rs232">
+                                <command response_required="no">
+                                    <delay ms_delay="2000"/>
+                                </command>
+                                <command response_required="no">
+                                    <command_string type="character">bc 00</command_string>
+                                    <delay ms_delay="400"/>
+                                </command>
+                                <command response_required="no">
+                                    <command_string type="character">bc 00</command_string>
+                                    <delay ms_delay="400"/>
+                                </command>
+                                <command response_required="no">
+                                    <command_string type="character">bc 00</command_string>
+                                    <delay ms_delay="400"/>
+                                </command>
+                            </command_interface>    
+                        </action>
+                    </actions>
+                </run_elements>
+            </status_message>
+            
+            <status_message name="CurrentInputStatus">
+                <constant type="character">rac 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentInput" type="string">HDBT</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentInput" type="string">HDMI-ARC</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentInput" type="string">Analog L/R</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentVolume">
+                <constant type="character">vol 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+            <status_message name="CurrentSub">
+                <constant type="character">sub 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentSub" type="integer"></update>
+                </data>
+            </status_message>
+            <status_message name="CurrentEqualization">
+                <constant type="character">seq 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="EQMode" type="string">Normal</update>
+                        </map>
+                        <map key="01">
+                            <update state="EQMode" type="string">Pop</update>
+                        </map>
+                        <map key="02">
+                            <update state="EQMode" type="string">Classic</update>
+                        </map>
+                        <map key="03">
+                            <update state="EQMode" type="string">Metal</update>
+                        </map>
+                        <map key="04">
+                            <update state="EQMode" type="string">Jazz</update>
+                        </map>
+                        <map key="05">
+                            <update state="EQMode" type="string">Rock</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentAudioMode">
+                <constant type="character">bas 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="AudioMode" type="string">2.0</update>
+                        </map>
+                        <map key="01">
+                            <update state="AudioMode" type="string">2.1</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentMuteStatus">
+                <constant type="character">mut 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentMuteStatus" type="string">OFF</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentMuteStatus" type="string">ON</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentBalance">
+                <constant type="character">bal 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentBalance" type="integer"></update>
+                </data>
+            </status_message>
+            <status_message name="CurrentEDIDMode">
+                <constant type="character">rem 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="EDIDMode" type="string">Display</update>
+                        </map>
+                        <map key="01">
+                            <update state="EDIDMode" type="string">Reserved</update>
+                        </map>
+                        <map key="02">
+                            <update state="EDIDMode" type="string">1080p 3D Stereo</update>
+                        </map>
+                        <map key="03">
+                            <update state="EDIDMode" type="string">1080p 2D Stereo</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentOperationMode">
+                <constant type="character">auo 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="OperationMode" type="string">Normal</update>
+                        </map>
+                        <map key="01">
+                            <update state="OperationMode" type="string">Continuo</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentBass">
+                <constant type="character">buw 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentBass" type="string">-7</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentBass" type="string">-6</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentBass" type="string">-5</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentBass" type="string">-4</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentBass" type="string">-3</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentBass" type="string">-2</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentBass" type="string">-1</update>
+                        </map>
+                        <map key="07">
+                            <update state="CurrentBass" type="string">0</update>
+                        </map>
+                        <map key="08">
+                            <update state="CurrentBass" type="string">1</update>
+                        </map>
+                        <map key="09">
+                            <update state="CurrentBass" type="string">2</update>
+                        </map>
+                        <map key="10">
+                            <update state="CurrentBass" type="string">3</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentBass" type="string">4</update>
+                        </map>
+                        <map key="12">
+                            <update state="CurrentBass" type="string">5</update>
+                        </map>
+                        <map key="13">
+                            <update state="CurrentBass" type="string">6</update>
+                        </map>
+                        <map key="14">
+                            <update state="CurrentBass" type="string">7</update>
+                        </map>
+                        <map key="15">
+                            <update state="CurrentBass" type="string">7</update>
+                        </map>
+                    </data_map>
+                    <!--<update state="CurrentBass" type="integer"></update>-->
+                </data>
+            </status_message>
+            <status_message name="CurrentTreble">
+                <constant type="character">tuw 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentTreble" type="string">-7</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentTreble" type="string">-6</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentTreble" type="string">-5</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentTreble" type="string">-4</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentTreble" type="string">-3</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentTreble" type="string">-2</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentTreble" type="string">-1</update>
+                        </map>
+                        <map key="07">
+                            <update state="CurrentTreble" type="string">0</update>
+                        </map>
+                        <map key="08">
+                            <update state="CurrentTreble" type="string">1</update>
+                        </map>
+                        <map key="09">
+                            <update state="CurrentTreble" type="string">2</update>
+                        </map>
+                        <map key="10">
+                            <update state="CurrentTreble" type="string">3</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentTreble" type="string">4</update>
+                        </map>
+                        <map key="12">
+                            <update state="CurrentTreble" type="string">5</update>
+                        </map>
+                        <map key="13">
+                            <update state="CurrentTreble" type="string">6</update>
+                        </map>
+                        <map key="14">
+                            <update state="CurrentTreble" type="string">7</update>
+                        </map>
+                        <map key="15">
+                            <update state="CurrentTreble" type="string">7</update>
+                        </map>
+                    </data_map>
+                    <!--<update state="CurrentTreble" type="integer"></update>-->
+                </data>
+            </status_message>
+            <status_message name="CurrentAudioDelay">
+                <constant type="character">aud 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="AudioDelay" type="string">No Delay</update>
+                        </map>
+                        <map key="01">
+                            <update state="AudioDelay" type="string">Short Delay</update>
+                        </map>
+                        <map key="02">
+                            <update state="AudioDelay" type="string">Long Delay</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="DefaultVolume">
+                <constant type="character">vod 00 </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="DefaultVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_main" test_condition="not_equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_main" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sty 00 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                    <!--<command response_required="no">
+                        <command_string type="character">bc 00</command_string>
+                        <delay ms_delay="400"/>
+                    </command>-->
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500400015004000150015001500400015001500150040001500150015001500150015001500150015004000150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_main" update_type="set" update_source="constant">0</update_state_variable>                
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sty 00 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015004000150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerToggle">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="IncreaseVolume">
+                <update_volume_variables name="Volume_current_volume_setting" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">vol 00 up</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_volume_variables name="Volume_current_volume_setting" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">vol 00 dn</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn"> 
+                <update_state_variable name="Mute_current_mute_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">mut 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <update_state_variable name="Mute_current_mute_setting" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">mut 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteToggle">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetVolume">
+                <action_argument name="VolumeValue" note="Value: 00~50 -> 0~100"/>
+                <update_volume_variables name="Volume_current_volume_setting" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">vol 00 </command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="Volume_current_volume_setting" parameter_data_type="character" action_argument="VolumeValue" parameter_data_width="3" parameter_total_width="3" parameter_justify="right"></volume_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        
+        <resource_component_actions resource_type="AV_STEREOPROCESSOR_FUNCTION">
+            <action name="IncrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">buw 00 up</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">buw 00 dn</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetBass">
+                <action_argument name="BassValue" note="Value: 00˜16"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">buw 00 </command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BassValue" parameter_data_width="2" parameter_total_width="2"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">tuw 00 up</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">tuw 00 dn</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetTreble">
+                <action_argument name="TrebleValue" note="Value: 00~16"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">tuw 00 </command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="TrebleValue" parameter_data_width="2" parameter_total_width="2"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BalanceRight">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bal 00 up</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BalanceLeft">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bal 00 dn</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetBalance">
+                <action_argument name="BalanceBias" note="Value: -20~20"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bal 00 </command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BalanceBias" parameter_data_width="3" parameter_total_width="3"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        
+        <custom_component_actions>
+            <action name="SelectInput1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">wac 00 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">wac 00 02</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput3">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">wac 00 03</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="GetSystemStatus">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bc 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseSubVolume">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sub 00 up</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseSubVolume">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sub 00 dn</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetSub">
+                <action_argument name="SubValue" note="Value: 00~100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sub 00 </command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="SubValue" parameter_data_width="3" parameter_total_width="3" parameter_justify="right"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelEDIDHDMI">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sem 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelEDIDHDBaseT">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sem 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelEDID1080p3D">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sem 00 02</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelEDID1080p2D">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">sem 00 03</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="HDBaseTAudioDeEmbModeNormal">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">auo 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="HDBaseTAudioDeEmbModeForced">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">auo 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="HDBaseTAudioDelayOff">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">aud 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="HDBaseTAudioDelayShort">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">aud 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="HDBaseTAudioDelayLong">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">aud 00 02</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BassVoiceCommandOpen">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bas 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BassVoiceCommandClose">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bas 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BassVoiceCommandToggle">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IRFeedbackOn">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">chl 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IRFeedbackOff">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">chl 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="SetEQNormal">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEQPop">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 01</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEQClassic">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 02</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEQMetal">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 03</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEQJazz">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 04</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEQRock">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">seq 00 05</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009333015400AA0015001500150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015001500150015001500150015001500150040001500400015001500150015001500400015004000150040001506B000000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetDefaultVolume">
+                <action_argument name="DefaultVolumeValue" note="Value: 00~50 -> 00~100"/>
+                <update_volume_variables name="Volume_default_volume_setting" update_type="set" update_source="action_argument">DefaultVolumeValue</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">vod 00 </command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="Volume_default_volume_setting" parameter_data_type="character" action_argument="DefaultVolumeValue" parameter_data_width="2" parameter_total_width="2"></volume_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <!--Set Address to 00-->
+            <action name="SetAddress00">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">adr 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <!--Get Status-->
+            <action name="GetStatus">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">bc 00</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    
+</component>

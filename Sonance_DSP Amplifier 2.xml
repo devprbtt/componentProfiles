@@ -1,0 +1,2887 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Sonance" model="DSP Amplifier" rpm_xml_version="2.1" minimum_component_engine_version="0.0" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" device_class="Amplifier" alias="">
+    <notes>
+<notes>
+       This profile works for the following DSP amplifier models:
+	DSP 8-130 MKII running firmware v2.2.8130 or later
+	DSP 2-150 MKII running firmware v2.2.2150 or later
+	DSP 2-750 MKII running firmware v2.3.2750 or later
+
+
+
+***PLEASE READ***
+This profile is designed to be used when audio sources are connected directly to the Sonance amp. Output on/off, volume, muting, and matrix switching are supported. Connecting an audio matrix to the amp when using this profile will generate several  service paths and is not recommended. Instead, when using an external audio matrix, it is recommended to use the Generic Power Stereo Amplifier profile.
+
+
+
+***FOR BEST RESULTS***
+1. Please update the DSP amplifier to the latest firmware by navigating to Amp_IP_Address/Update.htm (Note the capital “U” in Update. Example 192.168.1.100/Update.htm)
+2. The amp’s default Turn-On volume is +12 dB (100%). This should be changed to “LAST”. If you choose to establish default turn-on volumes by zone, do so in System Monitor > Services > Default Volume.
+
+
+Outputs are assigned to an Output Group in the amplifier. The defaults are:
+	DSP 8-130 MKII: Groups A, B, C, D
+	DSP 2-150 MKII: Group A
+	DSP 2-750 MKII: Group A
+
+Physical outputs can be reassigned to different Output Groups in the amp, and can be changed in Blueprint to reflect the amp’s configuration by opening Inspector and rearranging the Assigned I/O’s. This allows for combining or separating output channels into discrete zones. 
+
+Example using DSP 8-130 MKII:
+	Group A = Channel 1,2,3,4
+	Group B = Channel 5
+	Group C = Channel 6
+	Group D = Channel 7
+	Group E = Channel 8
+
+Power, mute, volume, and input commands are sent to Output Groups, not channels. Groups can be turned on and off manually by navigating to Amp_IP_Address/Status.htm (Note the capital “S” in Status. Example 192.168.1.100/Status.htm)
+
+		
+		
+		====================== Change Log ==================
+		None
+
+</notes>
+
+</notes>
+    <control_interfaces preferred="ip">
+        <ip name_on_component="LAN" response_time_length_ms="100" port="52000" protocol="tcp">
+            <send_prefix type="hex">FF55</send_prefix> 
+            <send_postfix type="hex"></send_postfix>
+        </ip>
+        <ir ir_command_format_type="racepointmedia"></ir>
+        <trigger trigger_active_voltage="12" name_on_component="VOLTAGE TRIGGER"></trigger>
+    </control_interfaces>
+    <media_interfaces>
+        <output name_on_component="SPEAKER OUT 1">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 2">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 3">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 4">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 1 - LEFT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 2 - LEFT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 3 - LEFT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 4 - LEFT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 1 - RIGHT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 2 - RIGHT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 3 - RIGHT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <output name_on_component="SPEAKER OUT 4 - RIGHT (SINGLE CHANNEL)">
+            <audio_media type="speakers_stereo"></audio_media>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+        </output>
+        <data name_on_component="LAN">
+            <combined_media>
+                <data_media type="ethernet"></data_media>
+                <control port="52000"></control>
+            </combined_media>
+        </data>
+    </media_interfaces>
+    <modular_chassis>
+        <module model_name="Digital Input Module">
+            <input name_on_component="IN 1-3">
+                <audio_media type="optical_digital"/>
+                <audio_media type="coaxial_digital"/>
+            </input>
+            <input name_on_component="IN 2-4">
+                <audio_media type="optical_digital"/>
+                <audio_media type="coaxial_digital"/>
+            </input>
+            <output name_on_component="OUT 1-3">
+                <audio_media type="optical_digital"/>
+                <audio_media type="coaxial_digital"/>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+            <output name_on_component="OUT 2-4">
+                <audio_media type="optical_digital"/>
+                <audio_media type="coaxial_digital"/>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+        </module>
+        <module model_name="Analog Input Module 1-2">
+            <input name_on_component="IN 1">
+                <audio_media type="rca_stereo"></audio_media>
+            </input>
+            <input name_on_component="IN 2">
+                <audio_media type="rca_stereo"></audio_media>
+            </input>
+            <output name_on_component="OUT 1">
+                <audio_media type="rca_stereo"></audio_media>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+            <output name_on_component="OUT 2">
+                <audio_media type="rca_stereo"></audio_media>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+        </module>
+        <module model_name="Analog Input Module 3-4">
+            <input name_on_component="IN 3">
+                <audio_media type="rca_stereo"></audio_media>
+            </input>
+            <input name_on_component="IN 4">
+                <audio_media type="rca_stereo"></audio_media>
+            </input>
+            <output name_on_component="OUT 3">
+                <audio_media type="rca_stereo"></audio_media>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+            <output name_on_component="OUT 4">
+                <audio_media type="rca_stereo"></audio_media>
+                <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+            </output>
+        </module>
+        <chassis_slots>
+            <slot id="Slot1 (Left)">
+                <supported_module model_name="Digital Input Module"/>
+                <supported_module model_name="Analog Input Module 1-2"/>
+                <default_module model_name="Analog Input Module 1-2"/>
+            </slot>
+            <slot id="Slot2 (Right)">
+                <supported_module model_name="Digital Input Module"/>
+                <supported_module model_name="Analog Input Module 3-4"/>
+                <default_module model_name="Analog Input Module 3-4"/>
+            </slot>
+        </chassis_slots>
+    </modular_chassis>
+    <logical_ios>
+        <input logical_name="IN 1">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="IN 1" model="Analog Input Module 1-2" slot="Slot1 (Left)"/>
+            <default_io name_on_component="IN 1-3" model="Digital Input Module" slot="Slot1 (Left)"/>
+        </input>
+        <input logical_name="IN 2">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="IN 2" model="Analog Input Module 1-2" slot="Slot1 (Left)"/>
+            <default_io name_on_component="IN 2-4" model="Digital Input Module" slot="Slot1 (Left)"/>
+        </input>
+        <input logical_name="IN 3">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="IN 3" model="Analog Input Module 3-4" slot="Slot2 (Right)"/>
+            <default_io name_on_component="IN 1-3" model="Digital Input Module" slot="Slot2 (Right)"/>
+        </input>
+        <input logical_name="IN 4">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="IN 4" model="Analog Input Module 3-4" slot="Slot2 (Right)"/>
+            <default_io name_on_component="IN 2-4" model="Digital Input Module" slot="Slot2 (Right)"/>
+        </input>
+        <output logical_name="OUT 1">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="OUT 1" model="Analog Input Module 1-2" slot="Slot1 (Left)"/>
+            <default_io name_on_component="OUT 1-3" model="Digital Input Module" slot="Slot1 (Left)"/>
+        </output>
+        <output logical_name="OUT 2">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="OUT 2" model="Analog Input Module 1-2" slot="Slot1 (Left)"/>
+            <default_io name_on_component="OUT 2-4" model="Digital Input Module" slot="Slot1 (Left)"/>
+        </output>
+        <output logical_name="OUT 3">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="OUT 3" model="Analog Input Module 3-4" slot="Slot2 (Right)"/>
+            <default_io name_on_component="OUT 1-3" model="Digital Input Module" slot="Slot2 (Right)"/>
+        </output>
+        <output logical_name="OUT 4">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+            <default_io name_on_component="OUT 4" model="Analog Input Module 3-4" slot="Slot2 (Right)"/>
+            <default_io name_on_component="OUT 2-4" model="Digital Input Module" slot="Slot2 (Right)"/>
+        </output>
+        <output logical_name="Group A">
+            <audio_media type="speakers_stereo"></audio_media>
+            <default_io name_on_component="SPEAKER OUT 1"></default_io>
+        </output>
+        <output logical_name="Group B">
+            <audio_media type="speakers_stereo"></audio_media>
+            <default_io name_on_component="SPEAKER OUT 2"></default_io>
+        </output>
+        <output logical_name="Group C">
+            <audio_media type="speakers_stereo"></audio_media>
+            <default_io name_on_component="SPEAKER OUT 3"></default_io>
+        </output>
+        <output logical_name="Group D">
+            <audio_media type="speakers_stereo"></audio_media>
+            <default_io name_on_component="SPEAKER OUT 4"></default_io>
+        </output>
+        <output logical_name="Group E">
+            <audio_media type="speakers_stereo"></audio_media>
+        </output>
+        <output logical_name="Group F">
+            <audio_media type="speakers_stereo"></audio_media>
+        </output>
+        <output logical_name="Group G">
+            <audio_media type="speakers_stereo"></audio_media>
+        </output>
+        <output logical_name="Group H">
+            <audio_media type="speakers_stereo"></audio_media>
+        </output>
+    </logical_ios>
+    <state_variable_list>
+        <!--
+        <state_variable name="Volume_0_Amplifier" owning_logical_component="Amplifier">0172</state_variable>
+        <state_variable name="Volume_1_Amplifier" owning_logical_component="Amplifier">0173</state_variable>
+        <state_variable name="Volume_2_Amplifier" owning_logical_component="Amplifier">0174</state_variable>
+        <state_variable name="Volume_3_Amplifier" owning_logical_component="Amplifier">0175</state_variable>
+        <state_variable name="Volume_4_Amplifier" owning_logical_component="Amplifier">0176</state_variable>
+        <state_variable name="Volume_5_Amplifier" owning_logical_component="Amplifier">0177</state_variable>
+        <state_variable name="Volume_6_Amplifier" owning_logical_component="Amplifier">0178</state_variable>
+        <state_variable name="Volume_7_Amplifier" owning_logical_component="Amplifier">0179</state_variable>
+        <state_variable name="Volume_8_Amplifier" owning_logical_component="Amplifier">017A</state_variable>
+        <state_variable name="Volume_9_Amplifier" owning_logical_component="Amplifier">017B</state_variable>
+        <state_variable name="Volume_10_Amplifier" owning_logical_component="Amplifier">017C</state_variable>
+        <state_variable name="Volume_11_Amplifier" owning_logical_component="Amplifier">017D</state_variable>
+        <state_variable name="Volume_12_Amplifier" owning_logical_component="Amplifier">017E</state_variable>
+        <state_variable name="Volume_13_Amplifier" owning_logical_component="Amplifier">017F</state_variable>
+        <state_variable name="Volume_14_Amplifier" owning_logical_component="Amplifier">0180</state_variable>
+        <state_variable name="Volume_15_Amplifier" owning_logical_component="Amplifier">0181</state_variable>
+        <state_variable name="Volume_16_Amplifier" owning_logical_component="Amplifier">0182</state_variable>
+        <state_variable name="Volume_17_Amplifier" owning_logical_component="Amplifier">0283</state_variable>
+        <state_variable name="Volume_18_Amplifier" owning_logical_component="Amplifier">0284</state_variable>
+        <state_variable name="Volume_19_Amplifier" owning_logical_component="Amplifier">0285</state_variable>
+        <state_variable name="Volume_20_Amplifier" owning_logical_component="Amplifier">0286</state_variable>
+        <state_variable name="Volume_21_Amplifier" owning_logical_component="Amplifier">0287</state_variable>
+        <state_variable name="Volume_22_Amplifier" owning_logical_component="Amplifier">0288</state_variable>
+        <state_variable name="Volume_23_Amplifier" owning_logical_component="Amplifier">0289</state_variable>
+        <state_variable name="Volume_24_Amplifier" owning_logical_component="Amplifier">028A</state_variable>
+        <state_variable name="Volume_25_Amplifier" owning_logical_component="Amplifier">028B</state_variable>
+        <state_variable name="Volume_26_Amplifier" owning_logical_component="Amplifier">028C</state_variable>
+        <state_variable name="Volume_27_Amplifier" owning_logical_component="Amplifier">028D</state_variable>
+        <state_variable name="Volume_28_Amplifier" owning_logical_component="Amplifier">028E</state_variable>
+        <state_variable name="Volume_29_Amplifier" owning_logical_component="Amplifier">028F</state_variable>
+        <state_variable name="Volume_30_Amplifier" owning_logical_component="Amplifier">0290</state_variable>
+        <state_variable name="Volume_31_Amplifier" owning_logical_component="Amplifier">0291</state_variable>
+        <state_variable name="Volume_32_Amplifier" owning_logical_component="Amplifier">0292</state_variable>
+        <state_variable name="Volume_33_Amplifier" owning_logical_component="Amplifier">0293</state_variable>
+        <state_variable name="Volume_34_Amplifier" owning_logical_component="Amplifier">0294</state_variable>
+        <state_variable name="Volume_35_Amplifier" owning_logical_component="Amplifier">0295</state_variable>
+        <state_variable name="Volume_36_Amplifier" owning_logical_component="Amplifier">0296</state_variable>
+        <state_variable name="Volume_37_Amplifier" owning_logical_component="Amplifier">0297</state_variable>
+        <state_variable name="Volume_38_Amplifier" owning_logical_component="Amplifier">0298</state_variable>
+        <state_variable name="Volume_39_Amplifier" owning_logical_component="Amplifier">0299</state_variable>
+        <state_variable name="Volume_40_Amplifier" owning_logical_component="Amplifier">029A</state_variable>
+        <state_variable name="Volume_41_Amplifier" owning_logical_component="Amplifier">029B</state_variable>
+        <state_variable name="Volume_42_Amplifier" owning_logical_component="Amplifier">029C</state_variable>
+        <state_variable name="Volume_43_Amplifier" owning_logical_component="Amplifier">029D</state_variable>
+        <state_variable name="Volume_44_Amplifier" owning_logical_component="Amplifier">029E</state_variable>
+        <state_variable name="Volume_45_Amplifier" owning_logical_component="Amplifier">029F</state_variable>
+        <state_variable name="Volume_46_Amplifier" owning_logical_component="Amplifier">02A1</state_variable>
+        <state_variable name="Volume_47_Amplifier" owning_logical_component="Amplifier">02A2</state_variable>
+        <state_variable name="Volume_48_Amplifier" owning_logical_component="Amplifier">02A3</state_variable>
+        <state_variable name="Volume_49_Amplifier" owning_logical_component="Amplifier">02A4</state_variable>
+        <state_variable name="Volume_50_Amplifier" owning_logical_component="Amplifier">02A5</state_variable>
+        <state_variable name="Volume_51_Amplifier" owning_logical_component="Amplifier">02A6</state_variable>
+        <state_variable name="Volume_52_Amplifier" owning_logical_component="Amplifier">02A7</state_variable>
+        <state_variable name="Volume_53_Amplifier" owning_logical_component="Amplifier">02A8</state_variable>
+        <state_variable name="Volume_54_Amplifier" owning_logical_component="Amplifier">02A9</state_variable>
+        <state_variable name="Volume_55_Amplifier" owning_logical_component="Amplifier">02B0</state_variable>
+        <state_variable name="Volume_56_Amplifier" owning_logical_component="Amplifier">02B1</state_variable>
+        <state_variable name="Volume_57_Amplifier" owning_logical_component="Amplifier">02B2</state_variable>
+        <state_variable name="Volume_58_Amplifier" owning_logical_component="Amplifier">02B3</state_variable>
+        <state_variable name="Volume_59_Amplifier" owning_logical_component="Amplifier">02B4</state_variable>
+        <state_variable name="Volume_60_Amplifier" owning_logical_component="Amplifier">02B5</state_variable>
+        <state_variable name="Volume_61_Amplifier" owning_logical_component="Amplifier">02B6</state_variable>
+        <state_variable name="Volume_62_Amplifier" owning_logical_component="Amplifier">02B7</state_variable>
+        <state_variable name="Volume_63_Amplifier" owning_logical_component="Amplifier">02B8</state_variable>
+        <state_variable name="Volume_64_Amplifier" owning_logical_component="Amplifier">02B9</state_variable>
+        <state_variable name="Volume_65_Amplifier" owning_logical_component="Amplifier">02BA</state_variable>
+        <state_variable name="Volume_66_Amplifier" owning_logical_component="Amplifier">02BB</state_variable>
+        <state_variable name="Volume_67_Amplifier" owning_logical_component="Amplifier">02BC</state_variable>
+        <state_variable name="Volume_68_Amplifier" owning_logical_component="Amplifier">02BD</state_variable>
+        <state_variable name="Volume_69_Amplifier" owning_logical_component="Amplifier">02BE</state_variable>
+        <state_variable name="Volume_70_Amplifier" owning_logical_component="Amplifier">02BF</state_variable>
+        <state_variable name="Volume_71_Amplifier" owning_logical_component="Amplifier">02C0</state_variable>
+        <state_variable name="Volume_72_Amplifier" owning_logical_component="Amplifier">02C1</state_variable>
+        <state_variable name="Volume_73_Amplifier" owning_logical_component="Amplifier">02C2</state_variable>
+        <state_variable name="Volume_74_Amplifier" owning_logical_component="Amplifier">02C3</state_variable>
+        -->
+        
+        <state_variable name="Volume_-70_Amplifier1" owning_logical_component="Amplifier">0271</state_variable>
+        <state_variable name="Volume_-69_Amplifier1" owning_logical_component="Amplifier">0272</state_variable>
+        <state_variable name="Volume_-68_Amplifier1" owning_logical_component="Amplifier">0273</state_variable>
+        <state_variable name="Volume_-67_Amplifier1" owning_logical_component="Amplifier">0274</state_variable>
+        <state_variable name="Volume_-66_Amplifier1" owning_logical_component="Amplifier">0275</state_variable>
+        <state_variable name="Volume_-65_Amplifier1" owning_logical_component="Amplifier">0276</state_variable>
+        <state_variable name="Volume_-64_Amplifier1" owning_logical_component="Amplifier">0277</state_variable>
+        <state_variable name="Volume_-63_Amplifier1" owning_logical_component="Amplifier">0278</state_variable>
+        <state_variable name="Volume_-62_Amplifier1" owning_logical_component="Amplifier">0279</state_variable>
+        <state_variable name="Volume_-61_Amplifier1" owning_logical_component="Amplifier">027A</state_variable>
+        <state_variable name="Volume_-60_Amplifier1" owning_logical_component="Amplifier">027B</state_variable>
+        <state_variable name="Volume_-59_Amplifier1" owning_logical_component="Amplifier">027C</state_variable>
+        <state_variable name="Volume_-58_Amplifier1" owning_logical_component="Amplifier">027D</state_variable>
+        <state_variable name="Volume_-57_Amplifier1" owning_logical_component="Amplifier">027E</state_variable>
+        <state_variable name="Volume_-56_Amplifier1" owning_logical_component="Amplifier">027F</state_variable>
+        <state_variable name="Volume_-55_Amplifier1" owning_logical_component="Amplifier">0280</state_variable>
+        <state_variable name="Volume_-54_Amplifier1" owning_logical_component="Amplifier">0281</state_variable>
+        <state_variable name="Volume_-53_Amplifier1" owning_logical_component="Amplifier">0282</state_variable>
+        <state_variable name="Volume_-52_Amplifier1" owning_logical_component="Amplifier">0283</state_variable>
+        <state_variable name="Volume_-51_Amplifier1" owning_logical_component="Amplifier">0284</state_variable>
+        <state_variable name="Volume_-50_Amplifier1" owning_logical_component="Amplifier">0285</state_variable>
+        <state_variable name="Volume_-49_Amplifier1" owning_logical_component="Amplifier">0286</state_variable>
+        <state_variable name="Volume_-48_Amplifier1" owning_logical_component="Amplifier">0287</state_variable>
+        <state_variable name="Volume_-47_Amplifier1" owning_logical_component="Amplifier">0288</state_variable>
+        <state_variable name="Volume_-46_Amplifier1" owning_logical_component="Amplifier">0289</state_variable>
+        <state_variable name="Volume_-45_Amplifier1" owning_logical_component="Amplifier">028A</state_variable>
+        <state_variable name="Volume_-44_Amplifier1" owning_logical_component="Amplifier">028B</state_variable>
+        <state_variable name="Volume_-43_Amplifier1" owning_logical_component="Amplifier">028C</state_variable>
+        <state_variable name="Volume_-42_Amplifier1" owning_logical_component="Amplifier">028D</state_variable>
+        <state_variable name="Volume_-41_Amplifier1" owning_logical_component="Amplifier">028E</state_variable>
+        <state_variable name="Volume_-40_Amplifier1" owning_logical_component="Amplifier">028F</state_variable>
+        <state_variable name="Volume_-39_Amplifier1" owning_logical_component="Amplifier">0290</state_variable>
+        <state_variable name="Volume_-38_Amplifier1" owning_logical_component="Amplifier">0291</state_variable>
+        <state_variable name="Volume_-37_Amplifier1" owning_logical_component="Amplifier">0292</state_variable>
+        <state_variable name="Volume_-36_Amplifier1" owning_logical_component="Amplifier">0293</state_variable>
+        <state_variable name="Volume_-35_Amplifier1" owning_logical_component="Amplifier">0294</state_variable>
+        <state_variable name="Volume_-34_Amplifier1" owning_logical_component="Amplifier">0295</state_variable>
+        <state_variable name="Volume_-33_Amplifier1" owning_logical_component="Amplifier">0296</state_variable>
+        <state_variable name="Volume_-32_Amplifier1" owning_logical_component="Amplifier">0297</state_variable>
+        <state_variable name="Volume_-31_Amplifier1" owning_logical_component="Amplifier">0298</state_variable>
+        <state_variable name="Volume_-30_Amplifier1" owning_logical_component="Amplifier">0299</state_variable>
+        <state_variable name="Volume_-29_Amplifier1" owning_logical_component="Amplifier">029A</state_variable>
+        <state_variable name="Volume_-28_Amplifier1" owning_logical_component="Amplifier">029B</state_variable>
+        <state_variable name="Volume_-27_Amplifier1" owning_logical_component="Amplifier">029C</state_variable>
+        <state_variable name="Volume_-26_Amplifier1" owning_logical_component="Amplifier">029D</state_variable>
+        <state_variable name="Volume_-25_Amplifier1" owning_logical_component="Amplifier">029E</state_variable>
+        <state_variable name="Volume_-24_Amplifier1" owning_logical_component="Amplifier">029F</state_variable>
+        <state_variable name="Volume_-23_Amplifier1" owning_logical_component="Amplifier">02A0</state_variable>
+        <state_variable name="Volume_-22_Amplifier1" owning_logical_component="Amplifier">02A1</state_variable>
+        <state_variable name="Volume_-21_Amplifier1" owning_logical_component="Amplifier">02A2</state_variable>
+        <state_variable name="Volume_-20_Amplifier1" owning_logical_component="Amplifier">02A3</state_variable>
+        <state_variable name="Volume_-19_Amplifier1" owning_logical_component="Amplifier">02A4</state_variable>
+        <state_variable name="Volume_-18_Amplifier1" owning_logical_component="Amplifier">02A5</state_variable>
+        <state_variable name="Volume_-17_Amplifier1" owning_logical_component="Amplifier">02A6</state_variable>
+        <state_variable name="Volume_-16_Amplifier1" owning_logical_component="Amplifier">02A7</state_variable>
+        <state_variable name="Volume_-15_Amplifier1" owning_logical_component="Amplifier">02A8</state_variable>
+        <state_variable name="Volume_-14_Amplifier1" owning_logical_component="Amplifier">02A9</state_variable>
+        <state_variable name="Volume_-13_Amplifier1" owning_logical_component="Amplifier">02AA</state_variable>
+        <state_variable name="Volume_-12_Amplifier1" owning_logical_component="Amplifier">02AB</state_variable>
+        <state_variable name="Volume_-11_Amplifier1" owning_logical_component="Amplifier">02AC</state_variable>
+        <state_variable name="Volume_-10_Amplifier1" owning_logical_component="Amplifier">02AD</state_variable>
+        <state_variable name="Volume_-9_Amplifier1" owning_logical_component="Amplifier">02AE</state_variable>
+        <state_variable name="Volume_-8_Amplifier1" owning_logical_component="Amplifier">02AF</state_variable>
+        <state_variable name="Volume_-7_Amplifier1" owning_logical_component="Amplifier">02B0</state_variable>
+        <state_variable name="Volume_-6_Amplifier1" owning_logical_component="Amplifier">02B1</state_variable>
+        <state_variable name="Volume_-5_Amplifier1" owning_logical_component="Amplifier">02B2</state_variable>
+        <state_variable name="Volume_-4_Amplifier1" owning_logical_component="Amplifier">02B3</state_variable>
+        <state_variable name="Volume_-3_Amplifier1" owning_logical_component="Amplifier">02B4</state_variable>
+        <state_variable name="Volume_-2_Amplifier1" owning_logical_component="Amplifier">02B5</state_variable>
+        <state_variable name="Volume_-1_Amplifier1" owning_logical_component="Amplifier">02B6</state_variable>
+        <state_variable name="Volume_0_Amplifier1" owning_logical_component="Amplifier">02B7</state_variable>
+        <state_variable name="Volume_1_Amplifier1" owning_logical_component="Amplifier">02B8</state_variable>
+        <state_variable name="Volume_2_Amplifier1" owning_logical_component="Amplifier">02B9</state_variable>
+        <state_variable name="Volume_3_Amplifier1" owning_logical_component="Amplifier">02BA</state_variable>
+        <state_variable name="Volume_4_Amplifier1" owning_logical_component="Amplifier">02BB</state_variable>
+        <state_variable name="Volume_5_Amplifier1" owning_logical_component="Amplifier">02BC</state_variable>
+        <state_variable name="Volume_6_Amplifier1" owning_logical_component="Amplifier">02BD</state_variable>
+        <state_variable name="Volume_7_Amplifier1" owning_logical_component="Amplifier">02BE</state_variable>
+        <state_variable name="Volume_8_Amplifier1" owning_logical_component="Amplifier">02BF</state_variable>
+        <state_variable name="Volume_9_Amplifier1" owning_logical_component="Amplifier">02C0</state_variable>
+        <state_variable name="Volume_10_Amplifier1" owning_logical_component="Amplifier">02C1</state_variable>
+        <state_variable name="Volume_11_Amplifier1" owning_logical_component="Amplifier">02C2</state_variable>
+        <state_variable name="Volume_12_Amplifier1" owning_logical_component="Amplifier">02C3</state_variable>
+        
+        <state_variable name="Volume_-70_Amplifier2" owning_logical_component="Amplifier">0271</state_variable>
+        <state_variable name="Volume_-69_Amplifier2" owning_logical_component="Amplifier">0272</state_variable>
+        <state_variable name="Volume_-68_Amplifier2" owning_logical_component="Amplifier">0273</state_variable>
+        <state_variable name="Volume_-67_Amplifier2" owning_logical_component="Amplifier">0274</state_variable>
+        <state_variable name="Volume_-66_Amplifier2" owning_logical_component="Amplifier">0275</state_variable>
+        <state_variable name="Volume_-65_Amplifier2" owning_logical_component="Amplifier">0276</state_variable>
+        <state_variable name="Volume_-64_Amplifier2" owning_logical_component="Amplifier">0277</state_variable>
+        <state_variable name="Volume_-63_Amplifier2" owning_logical_component="Amplifier">0278</state_variable>
+        <state_variable name="Volume_-62_Amplifier2" owning_logical_component="Amplifier">0279</state_variable>
+        <state_variable name="Volume_-61_Amplifier2" owning_logical_component="Amplifier">027A</state_variable>
+        <state_variable name="Volume_-60_Amplifier2" owning_logical_component="Amplifier">027B</state_variable>
+        <state_variable name="Volume_-59_Amplifier2" owning_logical_component="Amplifier">027C</state_variable>
+        <state_variable name="Volume_-58_Amplifier2" owning_logical_component="Amplifier">027D</state_variable>
+        <state_variable name="Volume_-57_Amplifier2" owning_logical_component="Amplifier">027E</state_variable>
+        <state_variable name="Volume_-56_Amplifier2" owning_logical_component="Amplifier">027F</state_variable>
+        <state_variable name="Volume_-55_Amplifier2" owning_logical_component="Amplifier">0280</state_variable>
+        <state_variable name="Volume_-54_Amplifier2" owning_logical_component="Amplifier">0281</state_variable>
+        <state_variable name="Volume_-53_Amplifier2" owning_logical_component="Amplifier">0282</state_variable>
+        <state_variable name="Volume_-52_Amplifier2" owning_logical_component="Amplifier">0283</state_variable>
+        <state_variable name="Volume_-51_Amplifier2" owning_logical_component="Amplifier">0284</state_variable>
+        <state_variable name="Volume_-50_Amplifier2" owning_logical_component="Amplifier">0285</state_variable>
+        <state_variable name="Volume_-49_Amplifier2" owning_logical_component="Amplifier">0286</state_variable>
+        <state_variable name="Volume_-48_Amplifier2" owning_logical_component="Amplifier">0287</state_variable>
+        <state_variable name="Volume_-47_Amplifier2" owning_logical_component="Amplifier">0288</state_variable>
+        <state_variable name="Volume_-46_Amplifier2" owning_logical_component="Amplifier">0289</state_variable>
+        <state_variable name="Volume_-45_Amplifier2" owning_logical_component="Amplifier">028A</state_variable>
+        <state_variable name="Volume_-44_Amplifier2" owning_logical_component="Amplifier">028B</state_variable>
+        <state_variable name="Volume_-43_Amplifier2" owning_logical_component="Amplifier">028C</state_variable>
+        <state_variable name="Volume_-42_Amplifier2" owning_logical_component="Amplifier">028D</state_variable>
+        <state_variable name="Volume_-41_Amplifier2" owning_logical_component="Amplifier">028E</state_variable>
+        <state_variable name="Volume_-40_Amplifier2" owning_logical_component="Amplifier">028F</state_variable>
+        <state_variable name="Volume_-39_Amplifier2" owning_logical_component="Amplifier">0290</state_variable>
+        <state_variable name="Volume_-38_Amplifier2" owning_logical_component="Amplifier">0291</state_variable>
+        <state_variable name="Volume_-37_Amplifier2" owning_logical_component="Amplifier">0292</state_variable>
+        <state_variable name="Volume_-36_Amplifier2" owning_logical_component="Amplifier">0293</state_variable>
+        <state_variable name="Volume_-35_Amplifier2" owning_logical_component="Amplifier">0294</state_variable>
+        <state_variable name="Volume_-34_Amplifier2" owning_logical_component="Amplifier">0295</state_variable>
+        <state_variable name="Volume_-33_Amplifier2" owning_logical_component="Amplifier">0296</state_variable>
+        <state_variable name="Volume_-32_Amplifier2" owning_logical_component="Amplifier">0297</state_variable>
+        <state_variable name="Volume_-31_Amplifier2" owning_logical_component="Amplifier">0298</state_variable>
+        <state_variable name="Volume_-30_Amplifier2" owning_logical_component="Amplifier">0299</state_variable>
+        <state_variable name="Volume_-29_Amplifier2" owning_logical_component="Amplifier">029A</state_variable>
+        <state_variable name="Volume_-28_Amplifier2" owning_logical_component="Amplifier">029B</state_variable>
+        <state_variable name="Volume_-27_Amplifier2" owning_logical_component="Amplifier">029C</state_variable>
+        <state_variable name="Volume_-26_Amplifier2" owning_logical_component="Amplifier">029D</state_variable>
+        <state_variable name="Volume_-25_Amplifier2" owning_logical_component="Amplifier">029E</state_variable>
+        <state_variable name="Volume_-24_Amplifier2" owning_logical_component="Amplifier">029F</state_variable>
+        <state_variable name="Volume_-23_Amplifier2" owning_logical_component="Amplifier">02A0</state_variable>
+        <state_variable name="Volume_-22_Amplifier2" owning_logical_component="Amplifier">02A1</state_variable>
+        <state_variable name="Volume_-21_Amplifier2" owning_logical_component="Amplifier">02A2</state_variable>
+        <state_variable name="Volume_-20_Amplifier2" owning_logical_component="Amplifier">02A3</state_variable>
+        <state_variable name="Volume_-19_Amplifier2" owning_logical_component="Amplifier">02A4</state_variable>
+        <state_variable name="Volume_-18_Amplifier2" owning_logical_component="Amplifier">02A5</state_variable>
+        <state_variable name="Volume_-17_Amplifier2" owning_logical_component="Amplifier">02A6</state_variable>
+        <state_variable name="Volume_-16_Amplifier2" owning_logical_component="Amplifier">02A7</state_variable>
+        <state_variable name="Volume_-15_Amplifier2" owning_logical_component="Amplifier">02A8</state_variable>
+        <state_variable name="Volume_-14_Amplifier2" owning_logical_component="Amplifier">02A9</state_variable>
+        <state_variable name="Volume_-13_Amplifier2" owning_logical_component="Amplifier">02AA</state_variable>
+        <state_variable name="Volume_-12_Amplifier2" owning_logical_component="Amplifier">02AB</state_variable>
+        <state_variable name="Volume_-11_Amplifier2" owning_logical_component="Amplifier">02AC</state_variable>
+        <state_variable name="Volume_-10_Amplifier2" owning_logical_component="Amplifier">02AD</state_variable>
+        <state_variable name="Volume_-9_Amplifier2" owning_logical_component="Amplifier">02AE</state_variable>
+        <state_variable name="Volume_-8_Amplifier2" owning_logical_component="Amplifier">02AF</state_variable>
+        <state_variable name="Volume_-7_Amplifier2" owning_logical_component="Amplifier">02B0</state_variable>
+        <state_variable name="Volume_-6_Amplifier2" owning_logical_component="Amplifier">02B1</state_variable>
+        <state_variable name="Volume_-5_Amplifier2" owning_logical_component="Amplifier">02B2</state_variable>
+        <state_variable name="Volume_-4_Amplifier2" owning_logical_component="Amplifier">02B3</state_variable>
+        <state_variable name="Volume_-3_Amplifier2" owning_logical_component="Amplifier">02B4</state_variable>
+        <state_variable name="Volume_-2_Amplifier2" owning_logical_component="Amplifier">02B5</state_variable>
+        <state_variable name="Volume_-1_Amplifier2" owning_logical_component="Amplifier">02B6</state_variable>
+        <state_variable name="Volume_0_Amplifier2" owning_logical_component="Amplifier">02B7</state_variable>
+        <state_variable name="Volume_1_Amplifier2" owning_logical_component="Amplifier">02B8</state_variable>
+        <state_variable name="Volume_2_Amplifier2" owning_logical_component="Amplifier">02B9</state_variable>
+        <state_variable name="Volume_3_Amplifier2" owning_logical_component="Amplifier">02BA</state_variable>
+        <state_variable name="Volume_4_Amplifier2" owning_logical_component="Amplifier">02BB</state_variable>
+        <state_variable name="Volume_5_Amplifier2" owning_logical_component="Amplifier">02BC</state_variable>
+        <state_variable name="Volume_6_Amplifier2" owning_logical_component="Amplifier">02BD</state_variable>
+        <state_variable name="Volume_7_Amplifier2" owning_logical_component="Amplifier">02BE</state_variable>
+        <state_variable name="Volume_8_Amplifier2" owning_logical_component="Amplifier">02BF</state_variable>
+        <state_variable name="Volume_9_Amplifier2" owning_logical_component="Amplifier">02C0</state_variable>
+        <state_variable name="Volume_10_Amplifier2" owning_logical_component="Amplifier">02C1</state_variable>
+        <state_variable name="Volume_11_Amplifier2" owning_logical_component="Amplifier">02C2</state_variable>
+        <state_variable name="Volume_12_Amplifier2" owning_logical_component="Amplifier">02C3</state_variable>
+        
+        <state_variable name="Current_trigger_state" owning_logical_component="Amplifier" state_center_binding="TriggerLevel" state_center_type="string">Low</state_variable>
+        <state_variable name="Global_Power_current_power_setting" state_center_type="string">OFF</state_variable>
+        <state_variable name="Power_current_power_Amplifier" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_2" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_2">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_2" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_2">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_2" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_2" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_3" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_3">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_3" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_3">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_3" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_3" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_4" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_4">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_4" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_4">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_4" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_4" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_5" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_5">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_5" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_5">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_5" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_5" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_6" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_6">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_6" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_6">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_6" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_6" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_7" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_7">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_7" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_7">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_7" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_7" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Power_current_power_Amplifier_8" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="Amplifier_8">OFF</state_variable>
+        <state_variable name="Mute_current_mute_Amplifier_8" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="Amplifier_8">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_Amplifier_8" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="Amplifier_8" granularity="1" min_value="-70" max_value="12">-70</volume_state_variable>
+        <state_variable name="Arg1">0</state_variable>
+        <state_variable name="Arg2">0</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Amplifier">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group A"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group A"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group A"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group A"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:A Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="1000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026500</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021000</command_string>
+                        <delay ms_delay="1000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026600</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026600</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier1" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier"></parameter>
+                            <parameter parameter_data_type="hex">00</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F0015003F0015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020500</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00AB00AB00150015001500400015001500150015001500150015001500150015001500400015001500150040001500150015001500150015001500150015001500150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015004000150040001500400015001500150040001500400015073C00000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020400</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F00150015001500150015003F0015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020800</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F00150015001500150015003F00150015001500150015003F00150015001500150015003F0015003F001500150015003F0015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020700</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F00150015001500150015003F00150015001500150015003F00150015001500150015003F0015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020900</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F00150015001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F001500150015003F00150015001500150015003F0015003F0015003F001500150015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F001500150015003F0015001500150015001500150015003F0015003F001500150015003F001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F00</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021000</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021100</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021200</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <!-- Channel Commands and Query -->
+            <action name="AssignOutputGroup">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <action_argument name="Group" note="1=GroupA, 2=GroupB, 3=GroupC, 4=GroupD, 5=GroupE, 6=GroupF, 7=GroupG, 8=GroupH"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <update_state_variable name="Arg2" update_type="set" update_source="action_argument">Group</update_state_variable>
+                <update_state_variable name="Arg2" update_type="increment" update_source="constant">32</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">02</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectEQ">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <action_argument name="EQPreset" note="0-49"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <update_state_variable name="Arg2" update_type="set" update_source="action_argument">EQPreset</update_state_variable>
+                <update_state_variable name="Arg2" update_type="increment" update_source="constant">48</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">02</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetChannelToStereo">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0213</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetChannelToMono">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0214</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ToggleChannelToStereo/Mono">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0215</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryDSPPreset">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0216</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryChannelShortProtect">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0217</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryChannelOvertemp">
+                <action_argument name="Channel" note="1=1L, 2=1R, 3=2L, 4=2R, 5=3L, 6=3R, 7=4L, 8=4R"></action_argument>
+                <update_state_variable name="Arg1" update_type="set" update_source="action_argument">Channel</update_state_variable>
+                <update_state_variable name="Arg1" update_type="increment" update_source="constant">7</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0218</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="Arg1" parameter_data_width="1" parameter_total_width="1"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_2">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group B"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group B"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group B"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group B"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:B Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_2" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_2" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026501</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021001</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_2" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026601</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026601</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_2" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_2" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_2"></parameter>
+                            <parameter parameter_data_type="hex">01</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_2" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_2" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015003F0015003F0015001500150015001500150015003F0015003F0015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020501</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_2" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_2" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020401</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_2" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_2" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F001500150015003F0015003F0015001500150015001500150015003F001500150015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020801</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_2" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_2" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F00150015001500150015003F001500150015003F0015003F00150015001500150015003F0015003F001500150015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020701</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F00150015001500150015003F00150015001500150015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020901</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F001500150015003F0015003F00150015001500150015001500150015001500150015003F00150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F0015003F00150015001500150015003F0015003F0015003F0015001500150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015001500150015001500150015003F0015003F0015001500150015001500150015003F0015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F01</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021001</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021101</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021201</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_3">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group C"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group C"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group C"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group C"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:C Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_3" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_3" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026502</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021002</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_3" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026602</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026602</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_3" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_3" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_3"></parameter>
+                            <parameter parameter_data_type="hex">02</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_3" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_3" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015001500150015001500150015003F00150015001500150015003F0015003F0015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020502</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_3" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_3" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015001500150015001500150015003F001500150015003F0015003F0015003F0015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020402</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_3" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_3" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F0015001500150015001500150015003F00150015001500150015003F001500150015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020802</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_3" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_3" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F00150015001500150015003F0015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020702</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F0015001500150015001500150015003F001500150015003F00150015001500150015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020902</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F0015001500150015001500150015003F001500150015001500150015001500150015003F0015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F00150015001500150015003F001500150015003F0015003F0015003F001500150015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F00150015001500150015003F00150015001500150015003F0015003F001500150015003F0015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F02</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021002</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021102</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021202</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_4">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group D"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group D"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group D"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group D"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:D Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_4" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_4" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026503</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021003</command_string>
+                        <delay ms_delay="10"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_4" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026603</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026603</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_4" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_4" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_4"></parameter>
+                            <parameter parameter_data_type="hex">03</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_4" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_4" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015003F001500150015003F00150015001500150015003F0015003F0015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020503</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_4" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_4" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015001500150015001500150015003F001500150015003F001500150015003F0015003F0015003F0015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020403</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_4" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_4" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F001500150015003F001500150015003F00150015001500150015003F001500150015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020803</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_4" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_4" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F00150015001500150015003F001500150015003F001500150015003F001500150015003F0015003F001500150015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020703</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F001500150015003F00150015001500150015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020903</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F001500150015003F001500150015003F001500150015001500150015001500150015003F001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A03</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B03</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F001500150015003F00150015001500150015003F0015003F00150015001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C03</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D03</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E03</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F03</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021003</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021103</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021203</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_5">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group E"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group E"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group E"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group E"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:E Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_5" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_5" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026504</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021004</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_5" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026604</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026604</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_5" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_5" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_5"></parameter>
+                            <parameter parameter_data_type="hex">04</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_5" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_5" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020504</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_5" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_5" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F0015003F0015003F001500150015003F0015001500150015001500150015001500150015001500150015003F001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020404</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_5" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_5" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F00150015001500150015003F0015003F00150015001500150015003F001500150015003F0015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020804</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_5" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_5" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F00150015001500150015003F00150015001500150015003F0015003F001500150015003F0015003F001500150015003F0015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020704</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F00150015001500150015003F0015003F001500150015003F00150015001500150015003F0015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020904</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F00150015001500150015003F0015003F001500150015001500150015001500150015003F0015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A04</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F0015003F001500150015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B04</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F001500150015003F0015003F00150015001500150015003F0015003F001500150015003F00150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C04</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D04</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E04</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F04</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021004</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021104</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021204</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_6">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group F"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group F"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group F"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group F"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:F Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_6" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_6" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026505</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021005</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_6" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026605</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026605</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_6" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_6" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_6"></parameter>
+                            <parameter parameter_data_type="hex">05</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_6" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_6" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015003F0015003F0015003F001500150015003F001500150015003F0015003F0015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020505</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_6" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_6" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015003F0015003F0015003F00150015001500150015003F0015003F0015003F0015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020405</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_6" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_6" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F0015003F001500150015003F00150015001500150015003F0015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020805</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_6" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_6" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020705</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F001500150015003F0015003F0015003F001500150015001500150015001500150015003F0015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020905</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F0015003F0015003F001500150015003F0015003F0015003F001500150015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A05</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015003F00150015001500150015003F0015003F001500150015001500150015001500150015003F001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B05</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C05</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D05</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E05</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F05</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021005</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021105</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021205</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_7">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group G"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group G"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group G"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group G"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:G Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_7" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_7" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026506</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021006</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_7" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026606</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026606</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_7" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_7" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_7"></parameter>
+                            <parameter parameter_data_type="hex">06</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_7" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_7" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015001500150015001500150015003F001500150015003F0015003F0015003F0015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020506</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_7" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_7" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015001500150015001500150015003F001500150015003F0015003F0015003F0015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020406</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_7" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_7" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020806</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_7" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_7" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F001500150015001500150015001500150015003F001500150015003F001500150015003F0015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020706</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020906</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F0015001500150015001500150015003F0015003F0015003F0015003F001500150015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A06</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F0015001500150015001500150015003F001500150015003F0015003F001500150015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B06</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F001500150015003F0015001500150015001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C06</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D06</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E06</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F06</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021006</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021106</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021206</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Amplifier_8">
+        <implementation>
+            <input logical_name="IN 1">
+                <action_to_select name="SelectInputIN 1"></action_to_select>
+            </input>
+            <output logical_name="Group H"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2">
+                <action_to_select name="SelectInputIN 2"></action_to_select>
+            </input>
+            <output logical_name="Group H"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3">
+                <action_to_select name="SelectInputIN 3"></action_to_select>
+            </input>
+            <output logical_name="Group H"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4">
+                <action_to_select name="SelectInputIN 4"></action_to_select>
+            </input>
+            <output logical_name="Group H"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentVolume">
+                <data type="character" terminator_type="character" terminator=","></data>
+                <constant type="character">Group:H Vol=</constant>
+                <data type="character" terminator_type="character" terminator="db">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_Amplifier_8" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_Amplifier_8" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Global_Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F001500150015003F0015003F0015003F00150015001500150015003F001500150015003F0015001500150015001505B700000000</command_string>
+                        <delay ms_delay="3000"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">0101</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026507</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">021007</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_Amplifier_8" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="trigger">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command></command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">026607</command_string>
+                        <delay ms_delay="100"></delay>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">026607</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue"/>
+                <update_state_variable name="Mute_current_mute_Amplifier_8" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_8" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="bcd_hex" state_variable="Volume_*_Amplifier2" wildcard_source="state_variable" wildcard_source_name="Volume_current_volume_Amplifier_8"></parameter>
+                            <parameter parameter_data_type="hex">07</parameter>
+                        </parameter_list>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_8" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_8" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015003F00150015001500150015003F0015003F001500150015003F0015003F001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020507</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_state_variable name="Mute_current_mute_Amplifier_8" update_type="set" update_source="constant">OFF</update_state_variable>
+                <update_volume_variables name="Volume_current_volume_Amplifier_8" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015001500150015001500150015003F00150015001500150015003F001500150015003F0015003F0015003F001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020407</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_8" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_8" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F0015003F001500150015003F00150015001500150015003F0015003F00150015001500150015003F001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020807</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <execute_on_state_variable_condition name="Mute_current_mute_Amplifier_8" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Mute_current_mute_Amplifier_8" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F001500150015003F001500150015003F00150015001500150015003F001500150015003F001500150015003F001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020707</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInputIN 1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F0015003F0015003F001500150015003F00150015001500150015003F0015001500150015001500150015003F001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020907</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015001500150015001500150015003F0015003F00150015001500150015003F0015003F0015003F0015003F00150015001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020A07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F0015003F00150015001500150015003F0015003F00150015001500150015003F001500150015003F0015003F00150015001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020B07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputIN 4">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c00A700A7001500150015003F00150015001500150015001500150015001500150015003F001500150015003F00150015001500150015001500150015001500150015003F001500150015003F001500150015003F0015003F00150015001500150015003F0015003F001500150015003F00150015001500150015003F0015003F00150015001505B700000000</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020C07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ReturnToTurnOnVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020D07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeUp+3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020E07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="VolumeDown-3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">020F07</command_string>
+                        <delay ms_delay="5"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryVolume">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021007</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="QuerySource">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021107</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryMute">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="hex">021207</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+    <logical_component logical_component_name="Loop Outs">
+        <implementation>
+            <input logical_name="IN 1"></input>
+            <output logical_name="OUT 1"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 2"></input>
+            <output logical_name="OUT 2"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 3"></input>
+            <output logical_name="OUT 3"></output>
+        </implementation>
+        <implementation>
+            <input logical_name="IN 4"></input>
+            <output logical_name="OUT 4"></output>
+        </implementation>
+    </logical_component>
+</component>

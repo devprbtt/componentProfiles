@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-H28-SPLT"  alias="Absolute Nexos 2x8 HDMI Splitter" device_class="AV_switch" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 2.0 $">
+    <media_interfaces>
+        <input name_on_component="HDMI Input">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI Output 1">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 2">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 3">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 4">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 5">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 6">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 7">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI Output 8">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="AV_switch">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 1"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_2">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 2"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_3">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 3"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_4">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 4"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_5">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 5"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_6">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 6"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_7">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 7"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_8">
+        <implementation>
+            <input name_on_component="HDMI Input"></input>
+            <output name_on_component="HDMI Output 8"></output>
+        </implementation>
+    </logical_component>
+</component>

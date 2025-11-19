@@ -1,0 +1,2140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Scenario" model="IF-SEI 2020" alias="IFSEI 2020" device_class="Lighting_controller" minimum_component_engine_version="0" rpm_xml_version="$Revision: 1.6.1 $" rpm_xml_version_date="$Date: 2011/12/13 17:00:00 $">
+
+    <notes>
+
+      Versão 1.0 Adicionado função para auto popular cortinas.
+      Na função Shades o Datatable deve ser preenchido com o ID do módulo scenário e cena.
+
+      Address 1 = Cortina Sobe
+      Address 2 = Cortina Para
+      Address 3 = Cortina Desce
+
+      Para preencher o campo Address deve seguir o exemplo:
+      Módulo ID - 4 / Cena 7
+      Campo Address = ID+CENA = 0407
+
+    Versão 1.3.1 Adicionado função para envio de até 5 strings de comando para zonas e cenas direto ao módulo.
+     - String Zone é o envio de até 5 strings diretas para os módulos para controle de circuitos
+            Deve ser preenchida no Datatable seguindo os paramentros:
+                MNCLXXX
+                    "MN" = ID do módulo (00-29)
+                    "C" = Circuito do módulo(1-8) ATENÇÃO! NÃO COLOCAR "0" ANTES DO CIRCUITO
+                    "LXXX" Potencia do circuito. Ex L100 = 100% / L040 = 40% (000-100)
+                    
+    - String Cena é o envio de até 5 cenas para qualquer módulo.
+            Deve ser preenchida no Datatable seguindo os paramentros:
+                MNSN
+                    "MN" = ID do módulo (00-29)
+                    "SN" = Cena do módulo (00-15) "Scene"
+                    
+    Versão 1.4.1 Adicionado função Shade Pulse - Envia pulso de 500ms para o módulo/canal.
+        Address 01 = Módulo
+        Address 02 = Circuito
+        
+    Versão 1.5.1 Adicionado função Shade PRID - Controle de Shades através do botão KP
+        Address 1 = Cortina Sobe
+        Address 2 = Cortina Para
+        Address 3 = Cortina Desce
+
+    Versão 1.5.5 Adicionado função Shade Double - Controle de Shades utilizando dois módulos (Cenas)
+        Address 1 = Cortina Sobe - MNSNMNSN
+        Address 2 = Cortina Para - MNSNMNSN
+        Address 3 = Cortina Desce - MNSNMNSN
+        
+        Deve ser preenchida no Datatable seguindo os paramentros:
+        MNSN
+        "MN" = ID do módulo (00-29)
+        "SN" = Cena do módulo (00-15) "Scene"
+
+    Versão 1.5.7 Adicionado função Shade Pulse 500ms - Controle de Shades utilizando Pulso de 500ms
+        Address 1 = Cortina Sobe - XXYY = XX=ID Módulo / YY= Canal Módulo Ex. 01
+        Address 2 = Cortina Para - XXYY = XX=ID Módulo / YY= Canal Módulo Ex. 01
+        Address 3 = Cortina Desce - XXYY = XX=ID Módulo / YY= Canal Módulo Ex. 01
+
+
+    ====================== Change Log ==================
+        Version: 1.1 Change: Added Auto-population for shades Risk: Low Importance: Non Critical
+        Version: 1.3 Change: Added Strings Commands VIEW NOTES Risk: Low Importance: Non Critical
+        Version: 1.4 Change: Added Shade Pulse Commands VIEW NOTES Risk: Low Importance: Non Critical
+        Version: 1.5 Change: Added Shade PRID Commands VIEW NOTES Risk: Low Importance: Non Critical
+        Version: 1.5.2 Change: Added Polling 5min MON7 VIEW NOTES Risk: Low Importance: Non Critical
+        Version: 1.5.7 Change: Added Shade Pulse 500ms VIEW NOTES Risk: Low Importance: Non Critical
+
+    </notes>
+
+    <control_interfaces preferred="rs232">
+        <rs232 data_length="8" parity_bit="no" stop_bit="1" preferred_baud_rate="9600" response_time_length_ms="300" flow_control="none" connector_type="db9 female" cable_type="rs232 straight">
+            <baud_rate speed="9600"/>
+            <send_postfix type="hex">0D</send_postfix>
+            <receive_start_condition type="character">*</receive_start_condition>
+            <receive_end_condition test_condition="data" type="hex">0D3E</receive_end_condition>
+        </rs232>
+        <ip port="28000" response_time_length_ms="500">
+            <send_postfix type="hex">0D</send_postfix>
+            <receive_start_condition type="character">*</receive_start_condition>
+            <receive_end_condition test_condition="data" type="hex">0D3E</receive_end_condition>
+        </ip>
+    </control_interfaces>
+
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="28000"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Lighting Controller">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_LIGHTINGCONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_SHADECONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    
+    <state_variable_list>
+        <state_variable name="First4" state_center_type="string"></state_variable>
+        <state_variable name="Last4" state_center_type="string"></state_variable>
+    </state_variable_list>
+
+    <logical_component logical_component_name="Lighting_controller">
+        <implementation>
+            <internal name_on_component="Lighting Controller"></internal>
+        </implementation>
+
+        <status_messages>
+            <status_message name="DimmerStatus">
+                <constant type="character">Z</constant>
+                <data type="character" constant_length="2">
+                    <update state="ModuleNumber" type="string"></update>
+                </data>
+                <data type="character" constant_length="2">
+                    <update state="ChannelNumber" type="string"></update>
+                </data>
+                <constant type="character">L</constant>
+                <data type="character" constant_length="3">
+                    <update state="DimmerLevel" type="string"></update>
+                    <data_map match_required="yes">
+                        <map key="000">
+                            <update state="isChannelOn" type="boolean">false</update>
+                        </map>
+                        <map key="001">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="002">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="003">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="004">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="005">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="006">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="007">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="008">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="009">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="010">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="011">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="012">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="013">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="014">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="015">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="016">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="017">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="018">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="019">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="020">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="021">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="022">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="023">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="024">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="025">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="026">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="027">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="028">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="029">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="030">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="031">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="032">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="033">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="034">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="035">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="036">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="037">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="038">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="039">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="040">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="041">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="042">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="043">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="044">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="045">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="046">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="047">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="048">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="049">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="050">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="051">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="052">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="053">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="054">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="055">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="056">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="057">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="058">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="059">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="060">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="061">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="062">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="063">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="064">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="065">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="066">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="067">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="068">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="069">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="070">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="071">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="072">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="073">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="074">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="075">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="076">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="077">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="078">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="079">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="080">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="081">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="082">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="083">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="084">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="085">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="086">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="087">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="088">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="089">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="090">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="091">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="092">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="093">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="094">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="095">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="096">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="097">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="098">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="099">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                        <map key="100">
+                            <update state="isChannelOn" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <append_data_to_state_names state="ModuleNumber" note="00 - 29"/>
+                <append_data_to_state_names state="ChannelNumber" note="01 - 08"/>
+            </status_message>
+            <status_message name="ButtonStatus">
+                <constant type="character">I</constant>
+                <data type="character" constant_length="4">
+                    <update state="ButtonPRID" type="string"></update>
+                </data>
+                <data type="character" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="P">
+                            <update state="isFeedbackOn" type="boolean">true</update>
+                        </map>
+                        <map key="R">
+                            <update state="isFeedbackOn" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+                <append_data_to_state_names state="ButtonPRID" note="'0000' - 'FFFF'"/>
+            </status_message>
+            <status_message name="SceneStatusOn">
+                <constant type="character">C</constant>
+                <data type="character" constant_length="2">
+                    <update state="ModuleNumber" type="string"></update>
+                </data>
+                <data type="character" constant_length="2">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="isSceneOn_00" type="boolean">true</update>
+                        </map>
+                        <map key="01">
+                            <update state="isSceneOn_01" type="boolean">true</update>
+                        </map>
+                        <map key="02">
+                            <update state="isSceneOn_02" type="boolean">true</update>
+                        </map>
+                        <map key="03">
+                            <update state="isSceneOn_03" type="boolean">true</update>
+                        </map>
+                        <map key="04">
+                            <update state="isSceneOn_04" type="boolean">true</update>
+                        </map>
+                        <map key="05">
+                            <update state="isSceneOn_05" type="boolean">true</update>
+                        </map>
+                        <map key="06">
+                            <update state="isSceneOn_06" type="boolean">true</update>
+                        </map>
+                        <map key="07">
+                            <update state="isSceneOn_07" type="boolean">true</update>
+                        </map>
+                        <map key="08">
+                            <update state="isSceneOn_08" type="boolean">true</update>
+                        </map>
+                        <map key="09">
+                            <update state="isSceneOn_09" type="boolean">true</update>
+                        </map>
+                        <map key="10">
+                            <update state="isSceneOn_10" type="boolean">true</update>
+                        </map>
+                        <map key="11">
+                            <update state="isSceneOn_11" type="boolean">true</update>
+                        </map>
+                        <map key="12">
+                            <update state="isSceneOn_12" type="boolean">true</update>
+                        </map>
+                        <map key="13">
+                            <update state="isSceneOn_13" type="boolean">true</update>
+                        </map>
+                        <map key="14">
+                            <update state="isSceneOn_14" type="boolean">true</update>
+                        </map>
+                        <map key="15">
+                            <update state="isSceneOn_15" type="boolean">true</update>
+                        </map>
+                        <map key="16">
+                            <update state="isSceneOn_16" type="boolean">true</update>
+                        </map>
+                        <map key="17">
+                            <update state="isSceneOn_17" type="boolean">true</update>
+                        </map>
+                        <map key="18">
+                            <update state="isSceneOn_18" type="boolean">true</update>
+                        </map>
+                        <map key="19">
+                            <update state="isSceneOn_19" type="boolean">true</update>
+                        </map>
+                        <map key="20">
+                            <update state="isSceneOn_20" type="boolean">true</update>
+                        </map>
+                        <map key="21">
+                            <update state="isSceneOn_21" type="boolean">true</update>
+                        </map>
+                        <map key="22">
+                            <update state="isSceneOn_22" type="boolean">true</update>
+                        </map>
+                        <map key="23">
+                            <update state="isSceneOn_23" type="boolean">true</update>
+                        </map>
+                        <map key="24">
+                            <update state="isSceneOn_24" type="boolean">true</update>
+                        </map>
+                        <map key="25">
+                            <update state="isSceneOn_25" type="boolean">true</update>
+                        </map>
+                        <map key="26">
+                            <update state="isSceneOn_26" type="boolean">true</update>
+                        </map>
+                        <map key="27">
+                            <update state="isSceneOn_27" type="boolean">true</update>
+                        </map>
+                        <map key="28">
+                            <update state="isSceneOn_28" type="boolean">true</update>
+                        </map>
+                        <map key="29">
+                            <update state="isSceneOn_29" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <constant type="character">1</constant>
+                <append_data_to_state_names state="ModuleNumber" note="00 - 29"/>
+            </status_message>
+            <status_message name="SceneStatusOff">
+                <constant type="character">C</constant>
+                <data type="character" constant_length="2">
+                    <update state="ModuleNumber" type="string"></update>
+                </data>
+                <data type="character" constant_length="2">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="isSceneOn_00" type="boolean">false</update>
+                        </map>
+                        <map key="01">
+                            <update state="isSceneOn_01" type="boolean">false</update>
+                        </map>
+                        <map key="02">
+                            <update state="isSceneOn_02" type="boolean">false</update>
+                        </map>
+                        <map key="03">
+                            <update state="isSceneOn_03" type="boolean">false</update>
+                        </map>
+                        <map key="04">
+                            <update state="isSceneOn_04" type="boolean">false</update>
+                        </map>
+                        <map key="05">
+                            <update state="isSceneOn_05" type="boolean">false</update>
+                        </map>
+                        <map key="06">
+                            <update state="isSceneOn_06" type="boolean">false</update>
+                        </map>
+                        <map key="07">
+                            <update state="isSceneOn_07" type="boolean">false</update>
+                        </map>
+                        <map key="08">
+                            <update state="isSceneOn_08" type="boolean">false</update>
+                        </map>
+                        <map key="09">
+                            <update state="isSceneOn_09" type="boolean">false</update>
+                        </map>
+                        <map key="10">
+                            <update state="isSceneOn_10" type="boolean">false</update>
+                        </map>
+                        <map key="11">
+                            <update state="isSceneOn_11" type="boolean">false</update>
+                        </map>
+                        <map key="12">
+                            <update state="isSceneOn_12" type="boolean">false</update>
+                        </map>
+                        <map key="13">
+                            <update state="isSceneOn_13" type="boolean">false</update>
+                        </map>
+                        <map key="14">
+                            <update state="isSceneOn_14" type="boolean">false</update>
+                        </map>
+                        <map key="15">
+                            <update state="isSceneOn_15" type="boolean">false</update>
+                        </map>
+                        <map key="16">
+                            <update state="isSceneOn_16" type="boolean">false</update>
+                        </map>
+                        <map key="17">
+                            <update state="isSceneOn_17" type="boolean">false</update>
+                        </map>
+                        <map key="18">
+                            <update state="isSceneOn_18" type="boolean">false</update>
+                        </map>
+                        <map key="19">
+                            <update state="isSceneOn_19" type="boolean">false</update>
+                        </map>
+                        <map key="20">
+                            <update state="isSceneOn_20" type="boolean">false</update>
+                        </map>
+                        <map key="21">
+                            <update state="isSceneOn_21" type="boolean">false</update>
+                        </map>
+                        <map key="22">
+                            <update state="isSceneOn_22" type="boolean">false</update>
+                        </map>
+                        <map key="23">
+                            <update state="isSceneOn_23" type="boolean">false</update>
+                        </map>
+                        <map key="24">
+                            <update state="isSceneOn_24" type="boolean">false</update>
+                        </map>
+                        <map key="25">
+                            <update state="isSceneOn_25" type="boolean">false</update>
+                        </map>
+                        <map key="26">
+                            <update state="isSceneOn_26" type="boolean">false</update>
+                        </map>
+                        <map key="27">
+                            <update state="isSceneOn_27" type="boolean">false</update>
+                        </map>
+                        <map key="28">
+                            <update state="isSceneOn_28" type="boolean">false</update>
+                        </map>
+                        <map key="29">
+                            <update state="isSceneOn_29" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+                <constant type="character">0</constant>
+                <append_data_to_state_names state="ModuleNumber" note="00 - 29"/>
+            </status_message>
+            <status_message name="IFSEIStatus">
+                <data type="character" constant_length="7">
+                    <data_map match_required="yes">
+                        <map key="IFSEION">
+                            <update state="isIFSEIOn" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+        </status_messages>
+
+        <universal_component_actions>
+            <action name="PowerOn">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MON7</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">MON7</command_string>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+
+      <resource_component_actions resource_type="ENV_LIGHTINGCONTROLLER_SOURCE">
+          <action name="DimmerSet">
+              <action_argument name="Address1" note="Module Number (0 - 29)"/>
+              <action_argument name="Address2" note="Channel Number (1 - 8)"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <action_argument name="DimmerLevel" note="Target Intensity (0 - 100)"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter parameter_data_type="character" action_argument="DimmerLevel"  parameter_total_width="3" parameter_data_width="3"></parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter parameter_data_type="character" action_argument="DimmerLevel"  parameter_total_width="3" parameter_data_width="3"></parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          
+          <action name="SwitchOn">
+              <action_argument name="Address1" note="Module Number (0 - 29)"/>
+              <action_argument name="Address2" note="Channel Number (1 - 8)"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <action_argument name="DimmerLevel" note="Target Intensity (0 - 100)"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter name="DimmerLevel" parameter_data_type="character" parameter_total_width="3" parameter_data_width="3">100</parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter name="DimmerLevel" parameter_data_type="character" parameter_total_width="3" parameter_data_width="3">100</parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="SwitchOff">
+              <action_argument name="Address1" note="Module Number (0 - 29)"/>
+              <action_argument name="Address2" note="Channel Number (1 - 8)"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <action_argument name="DimmerLevel" note="Target Intensity (0 - 100)"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter name="DimmerLevel" parameter_data_type="character" parameter_total_width="3" parameter_data_width="3">000</parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                          <parameter name="DimmerLevel" parameter_data_type="character" parameter_total_width="3" parameter_data_width="3">000</parameter>
+                          <parameter parameter_data_type="character" name="common2" parameter_data_width="2" parameter_total_width="2">T1</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          
+          
+          
+          
+<!-- INICIO TESTE PARA STRING DIRETA / ACTION -->
+
+<!-- INICIO TESTE PARA CIRCUITOS DIRETA / ACTION -->
+
+
+
+          <action name="RFButtonPress">
+              <action_argument name="Address1" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address2" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address3" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address4" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address5" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          
+          
+          <!-- INICIO TESTE PARA CENAS DIRETA / ACTION -->
+          
+          <action name="RFButtonRelease">
+              <action_argument name="Address1" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address2" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address3" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address4" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address5" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+
+              
+              
+              
+<!-- FIM TESTE PARA STRING DIRETA / ACTION -->
+              
+              
+              
+         
+          <action name="DimmerButtonPress">
+              <action_argument name="Address1" note="Module Number (0 - 29)"/>
+              <action_argument name="Address2" note="Scene Number (0 - 15)"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="2" parameter_total_width="2"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="2" parameter_total_width="2"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="ButtonPress">
+              <action_argument name="Address1" note="Button PRID (0000 - FFFF)"/>
+              <action_argument name="Address2" note="not used"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="ButtonRelease">
+              <action_argument name="Address1" note="Button PRID (0000 - FFFF)"/>
+              <action_argument name="Address2" note="not used"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="ButtonPressAndRelease">
+              <action_argument name="Address1" note="Button PRID (0000 - FFFF)"/>
+              <action_argument name="Address2" note="not used"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="300"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="300"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="ButtonHold">
+              <action_argument name="Address1" note="Button PRID (0000 - FFFF)"/>
+              <action_argument name="Address2" note="not used"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">I</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <action name="SceneSave">
+              <action_argument name="Address1" note="Module Number (0 - 29)"/>
+              <action_argument name="Address2" note="not used"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">$D</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="5" parameter_total_width="5">GRAVA</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">$D</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="5" parameter_total_width="5">GRAVA</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+          </action>
+          <entity name="Zone Dimmer" address_components="2">
+              <slider_representation>
+                  <press_action name="DimmerSet"></press_action>
+                  <valueSource name="DimmerLevel">
+                      <unique_identifier name="ModuleNumber" address_component="1" format="%.2d"/>
+                      <unique_identifier name="ChannelNumber" address_component="2" format="%.2d"/>
+                  </valueSource>
+              </slider_representation>
+              <group_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="000"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="000"/>
+                      </osd_press_action>
+                  </push_button_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="020"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="020"/>
+                      </osd_press_action>
+                  </push_button_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="040"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="040"/>
+                      </osd_press_action>
+                  </push_button_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="060"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="060"/>
+                      </osd_press_action>
+                  </push_button_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="080"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="080"/>
+                      </osd_press_action>
+                  </push_button_representation>
+                  <push_button_representation >
+                      <release_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="100"/>
+                      </release_action>
+                      <osd_press_action name="DimmerSet">
+                          <argument name="DimmerLevel" value="100"/>
+                      </osd_press_action>
+                  </push_button_representation>
+              </group_representation>
+              <toggle_button_representation>
+                  <release_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="100"/>
+                  </release_action>
+                  <toggle_release_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="000"/>
+                  </toggle_release_action>
+                  <osd_press_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="100"/>
+                  </osd_press_action>
+                  <osd_hold_action name="DimmerSet">
+                      <argument name="DimmerSet" value="000"/>
+                  </osd_hold_action>
+              </toggle_button_representation>
+          </entity>
+          
+          <entity name="Switch" address_components="2">
+              <toggle_button_representation>
+                  <press_action name="SwitchOn"/>
+                  <toggle_action name="SwitchOff"/>
+                  <osd_press_action name="SwitchOn"/>
+                  <osd_hold_action name="SwitchOff"/>
+                  <toggleOnUsingState name="isChannelOn">
+                      <unique_identifier name="ModuleNumber" address_component="1" format="%.2d"/>
+                      <unique_identifier name="ChannelNumber" address_component="2" format="%.2d"/>
+                  </toggleOnUsingState>
+              </toggle_button_representation>
+          </entity>
+          
+<!--          <entity name="Switch" address_components="2">
+              <toggle_button_representation>
+                  <press_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="100"/>
+                  </press_action>
+                  <toggle_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="000"/>
+                  </toggle_action>
+                  <osd_press_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="100"/>
+                  </osd_press_action>
+                  <osd_hold_action name="DimmerSet">
+                      <argument name="DimmerLevel" value="000"/>
+                  </osd_hold_action>
+                  <toggleOnUsingState name="isChannelOn">
+                      <unique_identifier name="ModuleNumber" address_component="1" format="%.2d"/>
+                      <unique_identifier name="ChannelNumber" address_component="2" format="%.2d"/>
+                  </toggleOnUsingState>
+              </toggle_button_representation>
+          </entity>
+          -->
+          
+          <entity name="Keypad Button" address_components="1">
+              <toggle_button_representation>
+                  <press_action name="ButtonPress"/>
+                  <release_action name="ButtonRelease"/>
+                  <toggle_action name="ButtonPress"/>
+                  <toggle_release_action name="ButtonRelease"/>
+                  <osd_press_action name="ButtonPressAndRelease"/>
+                  <toggleOnUsingState name="isFeedbackOn">
+                      <unique_identifier name="ButtonPRID" address_component="1" format="%.4d"/>
+                  </toggleOnUsingState>
+              </toggle_button_representation>
+          </entity>
+          <entity name="Dimmer Button" address_components="2">
+              <toggle_button_representation>
+                  <press_action name="DimmerButtonPress"/>
+                  <toggle_action name="DimmerButtonPress"/>
+                  <osd_press_action name="DimmerButtonPress"/>
+                  <toggleOnUsingState name="isSceneOn_*" replaceWildCardWithAddressComponent="2" replaceWildCardUsingFormat="%.2d">
+                      <unique_identifier name="ModuleNumber" address_component="1" format="%.2d"/>
+                  </toggleOnUsingState>
+              </toggle_button_representation>
+          </entity>
+          <entity name="SceneSaver Button" address_components="1">
+              <push_button_representation>
+                  <press_action name="SceneSave"/>
+                  <osd_press_action name="SceneSave"/>
+              </push_button_representation>
+          </entity>
+          
+          
+<!-- INICIO TESTE PARA STRING DIRETA / ENTITY -->
+    <!-- INICIO TESTE PARA CIRCUITO DIRETA / ENTITY -->
+          
+          <entity name="Zone String" address_components="5">
+              <push_button_representation>
+                  <press_action name="RFButtonPress"/>
+              </push_button_representation>
+          </entity>
+          
+    <!-- INICIO TESTE PARA CENA DIRETA / ENTITY -->
+    
+    <entity name="Scene String" address_components="5">
+        <push_button_representation>
+            <press_action name="RFButtonRelease"/>
+        </push_button_representation>
+    </entity>
+    
+    
+<!-- FIM TESTE PARA STRING DIRETA / ENTITY -->
+
+
+
+      </resource_component_actions>
+
+        <resource_component_actions resource_type="ENV_SHADECONTROLLER_SOURCE">
+          
+          
+          
+          
+          
+          
+          
+          <!-- INICIO TESTE PARA STRING DIRETA / ACTION -->
+          
+          <!-- INICIO TESTE PARA CIRCUITOS DIRETA / ACTION -->
+          
+          
+          
+          <action name="RFButtonPress">
+              <action_argument name="Address1" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address2" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address3" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address4" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address5" note="MNCLXXX - MN=ID / C=Circuito / LXXX = Level Ex. 040=40%"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="7" parameter_total_width="7"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+              </command_interface>
+          </action>
+          
+          
+          <!-- INICIO TESTE PARA CENAS DIRETA / ACTION -->
+          
+          <action name="RFButtonRelease">
+              <action_argument name="Address1" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address2" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address3" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address4" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address5" note="MNSN - MN=ID SN=Scene"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address4" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">C</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address5" parameter_data_width="4" parameter_total_width="4"></parameter>
+                      </parameter_list>
+                      <delay ms_delay="350"/>
+                  </command>
+              </command_interface>
+          </action>
+          
+          
+          
+          
+          <!-- FIM TESTE PARA STRING DIRETA / ACTION -->
+          
+          
+          
+          <action name="ShadeTiltOpen">
+              <action_argument name="Address1" note="Module Number XX (00 - 29)"/>
+              <action_argument name="Address2" note="Channel Number X (1 - 8)"/>
+              <action_argument name="Address3" note="not used"/>
+              <action_argument name="Address4" note="not used"/>
+              <action_argument name="Address5" note="not used"/>
+              <action_argument name="Address6" note="not used"/>
+              <command_interface interface="rs232">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="4" parameter_total_width="4">L100</parameter>
+                      </parameter_list>
+                      <delay ms_delay="500"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="4" parameter_total_width="4">L000</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+              </command_interface>
+              <command_interface interface="ip">
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="4" parameter_total_width="4">L100</parameter>
+                      </parameter_list>
+                      <delay ms_delay="500"/>
+                  </command>
+                  <command response_required="no">
+                      <command_string type="character">Z</command_string>
+                      <parameter_list>
+                          <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="2" parameter_total_width="2"></parameter>
+                          <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="1" parameter_total_width="1"></parameter>
+                          <parameter parameter_data_type="character" name="common" parameter_data_width="4" parameter_total_width="4">L000</parameter>
+                      </parameter_list>
+                      <delay ms_delay="200"/>
+                  </command>
+
+              </command_interface>
+          </action>
+
+
+          <action name="ButtonPress">
+                <action_argument name="Address1" note="Shade (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ShadeUp">
+                <action_argument name="Address1" note="Shade Up (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ShadeStop">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="Shade Stop (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ShadeDown">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="Shade Down (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadePUp">
+                <action_argument name="Address1" note="Shade Up (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadePStop">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="Shade Stop (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadePDown">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="Shade Down (ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadeUpPRID">
+                <action_argument name="Address1" note="Shade Up (PRID)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadeStopPRID">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="Shade Stop (PRID)"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadeDownPRID">
+                <action_argument name="Address1" note="not used"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="Shade Down (PRID)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">I</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            
+            <action name="ShadeUpDouble">
+                <action_argument name="Address1" note="Shade Up Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="Shade Stop Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address3" note="Shade Down Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <update_state_variable name="First4" update_type="set" update_source="action_argument">Address1</update_state_variable>
+                <update_state_variable name="First4" update_type="strip_trailing_characters" update_source="constant">4</update_state_variable>
+                <update_state_variable name="Last4" update_type="set" update_source="action_argument">Address1</update_state_variable>
+                <update_state_variable name="Last4" update_type="modulus" update_source="constant">10000</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="First4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" state_variable="Last4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadeStopDouble">
+                <action_argument name="Address1" note="Shade Up Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="Shade Stop Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address3" note="Shade Down Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address2" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ShadeDownDouble">
+                <action_argument name="Address1" note="Shade Up Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address2" note="Shade Stop Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address3" note="Shade Down Double (ID[XX]+Cena[YY] = XXYY + ID[XX]+Cena[YY] = XXYY)"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">C</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address3" parameter_data_width="4" parameter_total_width="4"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <entity name="Shade" address_components="3">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeUp"></release_action>
+                        <osd_press_action name="ShadeUp"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeDown"></release_action>
+                        <osd_press_action name="ShadeDown"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeStop"></release_action>
+                        <osd_press_action name="ShadeStop"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+            
+            <entity name="ShadeP" address_components="3">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadePUp"></release_action>
+                        <osd_press_action name="ShadePUp"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadePDown"></release_action>
+                        <osd_press_action name="ShadePDown"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadePStop"></release_action>
+                        <osd_press_action name="ShadePStop"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+            
+            <entity name="ShadeDouble" address_components="3">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeUpDouble"></release_action>
+                        <osd_press_action name="ShadeUpDouble"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeDownDouble"></release_action>
+                        <osd_press_action name="ShadeDownDouble"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeStopDouble"></release_action>
+                        <osd_press_action name="ShadeStopDouble"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+            
+            
+            <entity name="ShadePRID" address_components="3">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeUpPRID"></release_action>
+                        <osd_press_action name="ShadeUpPRID"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeDownPRID"></release_action>
+                        <osd_press_action name="ShadeDownPRID"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeStopPRID"></release_action>
+                        <osd_press_action name="ShadeStopPRID"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+        
+            <entity name="Keypad Button" address_components="1">
+                <push_button_representation>
+                    <release_action name="ShadeUpPRID"></release_action>
+                    <osd_press_action name="ShadeUpPRID"></osd_press_action>
+                </push_button_representation>
+                <toggle_button_representation>
+                    <press_action name="ShadeUpPRID"/>
+                    <release_action name="ShadeUpPRID"/>
+                    <toggle_action name="ShadeUpPRID"/>
+                    <toggle_release_action name="ShadeUpPRID"/>
+                    <toggleOnUsingState name="isFeedbackOn">
+                        <unique_identifier name="ButtonPRID" address_component="1" format="%.4d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+            </entity>
+
+<!-- INICIO TESTE PARA STRING DIRETA / ENTITY -->
+<!-- INICIO TESTE PARA CIRCUITO DIRETA / ENTITY -->
+
+<entity name="Zone String" address_components="5">
+    <push_button_representation>
+        <press_action name="RFButtonPress"/>
+    </push_button_representation>
+</entity>
+
+<!-- INICIO TESTE PARA CENA DIRETA / ENTITY -->
+
+<entity name="Scene String" address_components="5">
+    <push_button_representation>
+        <press_action name="RFButtonRelease"/>
+    </push_button_representation>
+</entity>
+
+
+<!-- FIM TESTE PARA STRING DIRETA / ENTITY -->
+
+<!-- INICIO TESTE PARA SHADE PULSE / ENTITY -->
+
+<entity name="Shade Pulse" address_components="2">
+    <push_button_representation>
+        <press_action name="ShadeTiltOpen"/>
+    </push_button_representation>
+</entity>
+
+
+<!-- FIM TESTE PARA SHADE PULSE / ENTITY -->
+
+<!-- INICIO TESTE PARA SHADE PRID / ENTITY -->
+
+
+<!-- FIM TESTE PARA SHADE PRID / ENTITY -->
+
+            <entity name="Module Scene" address_components="2">
+                <toggle_button_representation>
+                    <press_action name="ButtonPress"/>
+                    <toggle_action name="ButtonPress"/>
+                    <osd_press_action name="ButtonPress"/>
+                    <toggleOnUsingState name="isSceneOn_*" replaceWildCardWithAddressComponent="2" replaceWildCardUsingFormat="%.2d">
+                        <unique_identifier name="ModuleNumber" address_component="1" format="%.2d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+            </entity>
+        </resource_component_actions>
+
+        <custom_component_actions>
+            <action name="Mon7">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MON7</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">MON7</command_string>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="300000"></execute_on_schedule>
+            </action>
+            <action name="Refresh">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">REFRESH</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">REFRESH</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+
+    </logical_component>
+</component>

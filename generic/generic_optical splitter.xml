@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" 
+    manufacturer="Generic" model="Optical Splitter" device_class="Media_converter" minimum_component_engine_version="0" rpm_xml_version="$Revision: 1.1 $">
+    <notes>
+    </notes>
+ 
+   <media_interfaces>
+	<input name_on_component="SOURCE INPUT 1">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="OUT 1">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </output>
+        <output name_on_component="OUT 2">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </output>
+        <output name_on_component="OUT 3">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </output>
+   </media_interfaces>    
+    
+</component>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-H12-SPLT"  alias="Absolute Nexos 1x2 Hibrid HDMI Splitter, NDS-H12-SPLT" device_class="AV_switch" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 1.3 $">
+    <notes>
+        This product is a Hibrid HDMI splitter. Compatible with Absolute NDS-612S-LH-RX and NDS-613S-SH-RX devices, for HDMI over CAT-X transmission.
+    </notes>
+    <media_interfaces>
+        <input name_on_component="HDMI In">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI Out">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="HDMI UTP Out">
+            <combined_media>
+                <audio_media type="rj45_audio"/>
+                <video_media type="rj45"/>
+            </combined_media>
+        </output>
+        <output name_on_component="Audio Out">
+            <audio_media type="analog_minijack"/>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="AV_switch">
+        <implementation>
+            <input name_on_component="HDMI In"></input>
+            <output name_on_component="HDMI Out"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="AV_switch_2">
+        <implementation>
+            <input name_on_component="HDMI In"></input>
+            <output name_on_component="HDMI UTP Out"></output>
+        </implementation>
+    </logical_component>
+    <logical_component logical_component_name="Audio_switch">
+        <implementation>
+            <input name_on_component="HDMI In"></input>
+            <output name_on_component="Audio Out"></output>
+        </implementation>
+    </logical_component>
+    
+</component>

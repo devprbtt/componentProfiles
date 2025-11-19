@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Generic" model="Door Relay" device_class="Garage_controller" minimum_component_engine_version="8.3" rpm_xml_version="2.03">
+    <notes> 
+        This profile will generate a Garage service for a relay controlled garage door. 
+        This is an Normally Open/Active Closed relay profile that will momentarily close for 500ms then open. 
+        This profile will NOT set the feedback state with whichever command was sent last. If feedback is desired, a separate sensor and sensor profile will be needed. You must map to that status state in the data table
+        ====================== Change Log ==================
+        Version: 1.6 Change: Fixed entities for Garage profiles  Risk: Medium Importance: Critical
+        Version: 1.5 Change: Allowed profile for 8.3 or higher.  Risk: Low Importance: Helpful
+        Version: 1.4 Change: Don&apos;t track states in this profile  Risk: Medium Importance: Critical
+        Version: 1.3 Change: Added conditions which need to be met before commands will send, disabling the profile from sending an open command if the door is already open or sending a close command if the door is already closed.  Risk: Low Importance: Critical
+        Version: 1.2 Change: Fixed address notes  Risk: Low Importance: Non Critical
+    </notes>
+    <control_interfaces preferred="contact_sensor" control_optional="false">
+        <contact_sensor sensor_active="closed" name_on_component="Contact Sensor"/>
+    </control_interfaces>
+    
+    <media_interfaces>
+        <internal name_on_component="Device"> 
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_GARAGE_DOOR_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_setting" min_value="0" max_value="1">0</state_variable>
+        <state_variable name="IsOn" state_center_type="boolean" state_center_binding="IsOn" owning_logical_component="Garage_door">0</state_variable>
+        <state_variable name="Current_relay_state" owning_logical_component="Device" state_center_binding="RelayState" state_center_type="string">open</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Garage_door">
+        <implementation>
+            <internal name_on_component="Device"></internal>
+        </implementation>
+        <resource_component_actions resource_type="ENV_GARAGE_DOOR_SOURCE">
+            <action name="OpenGarageDoor">
+                <action_argument name="GarageDoorAddress" note="Address1"/>
+                <action_argument name="GarageDoorAddress2" note="not used"/>
+                <command_interface interface="contact_sensor">
+                    <command response_required="no">
+                        <command_string>close</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string>open</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="CloseGarageDoor">
+                <action_argument name="GarageDoorAddress" note="Address1"/>
+                <action_argument name="GarageDoorAddress2" note="not used"/>
+                <command_interface interface="contact_sensor">
+                    <command response_required="no">
+                        <command_string>close</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string>open</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ToggleGarageDoor">
+                <action_argument name="GarageDoorAddress" note="Address1"/>
+                <action_argument name="GarageDoorAddress2" note="not used"/>
+                <update_state_variable name="Current_relay_state" update_type="set" update_source="constant">closed</update_state_variable>
+                <update_state_variable name="IsOn" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="contact_sensor">
+                    <command response_required="no">
+                        <command_string>close</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string>open</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <entity name="Door" address_components="1" default_address_1="1">
+                <push_button_representation>
+                    <release_action name="ToggleGarageDoor"></release_action>
+                </push_button_representation>
+            </entity>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="Reset">
+                <update_state_variable name="Current_relay_state" update_type="set" update_source="constant">open</update_state_variable>
+                <update_state_variable name="IsOn" update_type="set" update_source="constant">0</update_state_variable>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

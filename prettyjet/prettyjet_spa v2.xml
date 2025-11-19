@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Prettyjet" model="SPA V2" device_class="Pool_and_spa_controller" minimum_component_engine_version="0" rpm_xml_version="2.1">
+    <notes>
+        Aux1 is the Hidro 1
+        Aux2 is the Hidro 2
+        SpaModeOn is AutomaticFill
+        SpaModeOff is MasterOff
+        
+        The wiring diagram for the SPA is:
+        
+        Savant                                SPA
+        Tx+         No Connection
+        Tx-         --------------------        -
+        Rx+         --------------------        +
+        Rx-         ------\ Jumped
+        GND         ------/
+        
+        ====================== Change Log ==================
+		Version: 2.0 Change: Start  Risk: Low Importance: Non Critical
+
+    </notes>
+    <control_interfaces preferred="rs232">
+        <rs422 data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" connector_type="rs232 other" cable_type="rs232 unknown" response_time_length_ms="500" name_on_component="RS485" checksum_type="bitwise_xor">
+            <baud_rate speed="9600"/>
+            <send_prefix type="hex">23</send_prefix>
+            <receive_start_condition type="hex">23</receive_start_condition>
+        </rs422>
+    </control_interfaces>
+    <media_interfaces>
+        <internal name_on_component="Pool/Spa Controller">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_POOLANDSPACONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="CurrentSpaHeaterSetpoint_State" owning_logical_component="Pool_and_spa_controller" state_center_binding="CurrentSpaHeaterSetpoint" state_center_type="string" receive_updates_from_state_center="yes" min_value="10" max_value="40">30</state_variable>
+        <state_variable name="CurrentPumpMode_State" owning_logical_component="Pool_and_spa_controller" state_center_binding="CurrentPumpMode" state_center_type="string" receive_updates_from_state_center="yes" wrap_around_type="reset" min_value="0" max_value="4">0</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Pool_and_spa_controller">
+        <implementation>
+            <internal name_on_component="Pool/Spa Controller"/> 
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentPanelMode">
+                <constant type="hex">60</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="IsPanelLocked" type="boolean">false</update>
+                        </map>
+                        <map key="11">
+                            <update state="IsPanelLocked" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaHeaterSetpoint">
+                <constant type="hex">7c</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">Off</update>
+                        </map>
+                        <map key="0a">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">10</update>
+                        </map>
+                        <map key="0b">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">11</update>
+                        </map>
+                        <map key="0c">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">12</update>
+                        </map>
+                        <map key="0d">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">13</update>
+                        </map>
+                        <map key="0e">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">14</update>
+                        </map>
+                        <map key="0f">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">15</update>
+                        </map>
+                        <map key="10">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">16</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">17</update>
+                        </map>
+                        <map key="12">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">18</update>
+                        </map>
+                        <map key="13">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">19</update>
+                        </map>
+                        <map key="14">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">20</update>
+                        </map>
+                        <map key="15">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">21</update>
+                        </map>
+                        <map key="16">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">22</update>
+                        </map>
+                        <map key="17">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">23</update>
+                        </map>
+                        <map key="18">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">24</update>
+                        </map>
+                        <map key="19">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">25</update>
+                        </map>
+                        <map key="1a">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">26</update>
+                        </map>
+                        <map key="1b">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">27</update>
+                        </map>
+                        <map key="1c">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">28</update>
+                        </map>
+                        <map key="1d">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">29</update>
+                        </map>
+                        <map key="1e">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">30</update>
+                        </map>
+                        <map key="1f">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">31</update>
+                        </map>
+                        <map key="20">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">32</update>
+                        </map>
+                        <map key="21">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">33</update>
+                        </map>
+                        <map key="22">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">34</update>
+                        </map>
+                        <map key="23">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">35</update>
+                        </map>
+                        <map key="24">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">36</update>
+                        </map>
+                        <map key="25">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">37</update>
+                        </map>
+                        <map key="26">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">38</update>
+                        </map>
+                        <map key="27">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">39</update>
+                        </map>
+                        <map key="28">
+                            <update state="CurrentSpaHeaterSetpoint" type="string">40</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaTemperature">
+                <constant type="hex">7d</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentSpaTemperature" type="string">Off</update>
+                        </map>
+                        <map key="0a">
+                            <update state="CurrentSpaTemperature" type="string">10</update>
+                        </map>
+                        <map key="0b">
+                            <update state="CurrentSpaTemperature" type="string">11</update>
+                        </map>
+                        <map key="0c">
+                            <update state="CurrentSpaTemperature" type="string">12</update>
+                        </map>
+                        <map key="0d">
+                            <update state="CurrentSpaTemperature" type="string">13</update>
+                        </map>
+                        <map key="0e">
+                            <update state="CurrentSpaTemperature" type="string">14</update>
+                        </map>
+                        <map key="0f">
+                            <update state="CurrentSpaTemperature" type="string">15</update>
+                        </map>
+                        <map key="10">
+                            <update state="CurrentSpaTemperature" type="string">16</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentSpaTemperature" type="string">17</update>
+                        </map>
+                        <map key="12">
+                            <update state="CurrentSpaTemperature" type="string">18</update>
+                        </map>
+                        <map key="13">
+                            <update state="CurrentSpaTemperature" type="string">19</update>
+                        </map>
+                        <map key="14">
+                            <update state="CurrentSpaTemperature" type="string">20</update>
+                        </map>
+                        <map key="15">
+                            <update state="CurrentSpaTemperature" type="string">21</update>
+                        </map>
+                        <map key="16">
+                            <update state="CurrentSpaTemperature" type="string">22</update>
+                        </map>
+                        <map key="17">
+                            <update state="CurrentSpaTemperature" type="string">23</update>
+                        </map>
+                        <map key="18">
+                            <update state="CurrentSpaTemperature" type="string">24</update>
+                        </map>
+                        <map key="19">
+                            <update state="CurrentSpaTemperature" type="string">25</update>
+                        </map>
+                        <map key="1a">
+                            <update state="CurrentSpaTemperature" type="string">26</update>
+                        </map>
+                        <map key="1b">
+                            <update state="CurrentSpaTemperature" type="string">27</update>
+                        </map>
+                        <map key="1c">
+                            <update state="CurrentSpaTemperature" type="string">28</update>
+                        </map>
+                        <map key="1d">
+                            <update state="CurrentSpaTemperature" type="string">29</update>
+                        </map>
+                        <map key="1e">
+                            <update state="CurrentSpaTemperature" type="string">30</update>
+                        </map>
+                        <map key="1f">
+                            <update state="CurrentSpaTemperature" type="string">31</update>
+                        </map>
+                        <map key="20">
+                            <update state="CurrentSpaTemperature" type="string">32</update>
+                        </map>
+                        <map key="21">
+                            <update state="CurrentSpaTemperature" type="string">33</update>
+                        </map>
+                        <map key="22">
+                            <update state="CurrentSpaTemperature" type="string">34</update>
+                        </map>
+                        <map key="23">
+                            <update state="CurrentSpaTemperature" type="string">35</update>
+                        </map>
+                        <map key="24">
+                            <update state="CurrentSpaTemperature" type="string">36</update>
+                        </map>
+                        <map key="25">
+                            <update state="CurrentSpaTemperature" type="string">37</update>
+                        </map>
+                        <map key="26">
+                            <update state="CurrentSpaTemperature" type="string">38</update>
+                        </map>
+                        <map key="27">
+                            <update state="CurrentSpaTemperature" type="string">39</update>
+                        </map>
+                        <map key="28">
+                            <update state="CurrentSpaTemperature" type="string">40</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaHeaterMode">
+                <constant type="hex">a0</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="50">
+                            <update state="CurrentSpaHeaterMode" type="string">Off</update>
+                            <update state="IsSpaHeaterOn" type="boolean">false</update>
+                        </map>
+                        <map key="51">
+                            <update state="CurrentSpaHeaterMode" type="string">On</update>
+                            <update state="IsSpaHeaterOn" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaMode"><!--Hidro 1 Status-->
+                <constant type="hex">31</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentSpaMode" type="string">Off</update>
+                            <update state="IsSpaModeOn" type="boolean">false</update>
+                            <update state="IsAuxiliary1On" type="boolean">false</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentSpaMode" type="string">On</update>
+                            <update state="IsSpaModeOn" type="boolean">true</update>
+                            <update state="IsAuxiliary1On" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpa2Mode"><!--Hidro 2 Status-->
+                <constant type="hex">32</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentSpa2Mode" type="string">Off</update>
+                            <update state="IsSpa2ModeOn" type="boolean">false</update>
+                            <update state="IsAuxiliary2On" type="boolean">false</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentSpa2Mode" type="string">On</update>
+                            <update state="IsSpa2ModeOn" type="boolean">true</update>
+                            <update state="IsAuxiliary2On" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaLevel">
+                <constant type="hex">40</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="cc">
+                            <update state="CurrentSpaH2OLevel" type="string">Off</update>
+                            <update state="IsSpaH2OLevelOn" type="boolean">false</update>
+                        </map>
+                        <map key="dd">
+                            <update state="CurrentSpaH2OLevel" type="string">On</update>
+                            <update state="IsSpaH2OLevelOn" type="boolean">true</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentSpaCromo">
+                <constant type="hex">38</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentSpaCromo" type="string">Off</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentSpaCromo" type="string">1</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentSpaCromo" type="string">2</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentSpaCromo" type="string">3</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentSpaCromo" type="string">4</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentSpaCromo" type="string">5</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentSpaCromo" type="string">6</update>
+                        </map>
+                        <map key="07">
+                            <update state="CurrentSpaCromo" type="string">7</update>
+                        </map>
+                        <map key="08">
+                            <update state="CurrentSpaCromo" type="string">8</update>
+                        </map>
+                        <map key="09">
+                            <update state="CurrentSpaCromo" type="string">9</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+            <status_message name="CurrentPumpSpeed">
+                <constant type="hex">37</constant>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentPumpMode" type="string">1</update>
+                            <update state="IsPumpModeOn" type="boolean">true</update>
+                            <update state="CurrentPumpSpeedLevel" type="string">1</update>
+                            <update state="CurrentPumpSpeed" type="string">Low</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentPumpMode" type="string">2</update>
+                            <update state="IsPumpModeOn" type="boolean">true</update>
+                            <update state="CurrentPumpSpeedLevel" type="string">2</update>
+                            <update state="CurrentPumpSpeed" type="string">Low</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentPumpMode" type="string">3</update>
+                            <update state="IsPumpModeOn" type="boolean">true</update>
+                            <update state="CurrentPumpSpeedLevel" type="string">3</update>
+                            <update state="CurrentPumpSpeed" type="string">High</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentPumpMode" type="string">4</update>
+                            <update state="IsPumpModeOn" type="boolean">true</update>
+                            <update state="CurrentPumpSpeedLevel" type="string">4</update>
+                            <update state="CurrentPumpSpeed" type="string">High</update>
+                        </map>
+                        <map key="00">
+                            <update state="CurrentPumpMode" type="string">0</update>
+                            <update state="IsPumpModeOn" type="boolean">false</update>
+                            <update state="CurrentPumpSpeedLevel" type="string">0</update>
+                            <update state="CurrentPumpSpeed" type="string">Off</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="ReceivedChecksum" type="string"/>
+                </data>
+            </status_message>
+        </status_messages>
+        
+        <resource_component_actions resource_type="ENV_POOLANDSPACONTROLLER_SOURCE">
+            <action name="SetSpaHeaterSetpoint">
+                <action_argument name="SpaHeaterSetpoint" note="Enter the Desired Spa Heater Setpoint (degrees C)."/>
+                <update_state_variable name="CurrentSpaHeaterSetpoint_State" update_type="set" update_source="action_argument">SpaHeaterSetpoint</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">70</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="CurrentSpaHeaterSetpoint_State" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncrementSpaHeaterSetpoint">
+                <update_state_variable name="CurrentSpaHeaterSetpoint_State" update_type="increment" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">70</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="CurrentSpaHeaterSetpoint_State" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementSpaHeaterSetpoint">
+                <update_state_variable name="CurrentSpaHeaterSetpoint_State" update_type="decrement" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">70</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="CurrentSpaHeaterSetpoint_State" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetSpaModeOn"><!--Ligar Enchimento Automatico-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">1311</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetSpaModeOff"><!--Desligar Tudo-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3955</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="EnableSpaHeater">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a011</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DisableSpaHeater">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a000</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetPumpSpeedLow"><!--Ligar Blower 1-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3701</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetPumpModeOn"><!--Ligar Blower 2-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3702</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetPumpSpeedHigh"><!--Ligar Blower 4-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3704</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetPumpModeOff"><!--Desligar Blower-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3700</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="TogglePumpMode"><!--Ciclar Blower-->
+                <update_state_variable name="CurrentPumpMode_State" update_type="increment" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">37</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="CurrentPumpMode_State" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetAuxiliary1On"><!--Ligar Hidro 1-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3111</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetAuxiliary1Off"><!--Desligar Hidro 1-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3100</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetAuxiliary2On"><!--Ligar Hidro 1-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3211</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetAuxiliary2Off"><!--Desligar Hidro 1-->
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3200</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetCleaningSystemOn">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9a11</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetCleaningSystemOff">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9a00</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <entity name="Hidro1" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="SetAuxiliary1On"></press_action>
+                    <toggle_action name="SetAuxiliary1Off"></toggle_action>
+                    <osd_press_action name="SetAuxiliary1On"></osd_press_action>
+                    <osd_hold_action name="SetAuxiliary1Off"></osd_hold_action>
+                    
+                    <toggleOnUsingState name="IsSpaModeOn"/>
+                </toggle_button_representation>
+            </entity>
+            <entity name="Hidro2" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="SetAuxiliary2On"></press_action>
+                    <toggle_action name="SetAuxiliary2Off"></toggle_action>
+                    <osd_press_action name="SetAuxiliary2On"></osd_press_action>
+                    <osd_hold_action name="SetAuxiliary2Off"></osd_hold_action>
+                    
+                    <toggleOnUsingState name="IsSpa2ModeOn"/>
+                </toggle_button_representation>
+            </entity>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="QuerySpaHeaterSetpoint">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7a55</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+            <action name="QuerySpaTemperature">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7d55</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+            <action name="QueryHeaterMode">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a055</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+            <action name="QuerySpaH2OLevel">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">4055</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="10000"></execute_on_schedule>
+            </action>
+            <action name="Ligar_Hidro">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3111</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Hidro">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3100</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_Enchimento_Automatico">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">1311</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Enchimento_Automatico">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">1300</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temp_Setup_Filtro_10G">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">800a</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temp_Setup_Filtro_24G">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">8018</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Leitura_Setup_Temp_Filtragem">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">8a55</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Status_Prg_Filtragem">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9055</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Programa_F0">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9000</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Programa_F1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9002</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Programa_F2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9001</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_Filtragem">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9a11</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Filtragem">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">9a00</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_H1_Aquecimento">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">b011</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_H1_Aquecimento_Funcao_Banho">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">c011</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_Aquecedor">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a011</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Aquecedor">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a000</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Status_Aquecedor">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a055</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ligar_Hidro_2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3211</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Hidro_2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3200</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3801</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3802</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_3">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3803</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_4">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3804</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_5">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3805</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_6">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3806</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_7">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3807</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_8">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3808</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Cromo_9">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3809</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Cromo">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3800</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Blower_N1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3701</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Blower_N2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3702</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Blower_N3">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3703</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Blower_N4">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3704</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Blower">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3700</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Desligar_Tudo">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">3955</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Status_Teclado">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">6055</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Status_Sistema">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">a101</command_string>
+                        <parameter_list>
+                            <checksum_parameter parameter_data_type="hex" checksum_offset_B="170" checksum_type="bitwise_xor"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component manufacturer="Zafiro" model="HM TV" rpm_xml_version="5.1" minimum_component_engine_version="0.0" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" alias="" device_class="HD_monitor">
+    <notes>teste
+Version: 3.1, Change: Primeira versão
+
+Version: 4.1, Change: conserto dos apps
+
+Version: 5.1, Change: usando prefixo
+</notes>
+    <component_properties>
+        <always_repeat_input_selection>true</always_repeat_input_selection>
+    </component_properties>
+    <control_interfaces preferred="ip">
+        <ip name_on_component="LAN" response_time_length_ms="500" port="9090" protocol="http">
+            <send_prefix type="character">HomeWeb/command.do?id=</send_prefix>
+            <send_postfix type="character"></send_postfix>
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <data name_on_component="LAN">
+            <combined_media>
+                <data_media type="ethernet"></data_media>
+                <control port="9090"></control>
+            </combined_media>
+        </data>
+        <internal name_on_component="Apps">
+            <audio_media></audio_media>
+            <video_media></video_media>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></resource>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"></resource>
+            <resource resource_type="AV_MONITOR_SINK"></resource>
+            <resource resource_type="AV_STEREOSPEAKERS_SINK"></resource>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"></resource>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_HD Monitor" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="HD Monitor">OFF</state_variable>
+        <state_variable name="Mute_current_mute_HD Monitor" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="HD Monitor">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_HD Monitor" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="HD Monitor" granularity="1" min_value="0" max_value="100">0</volume_state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="HD Monitor">
+        <implementation>
+            <internal name_on_component="Apps">
+                <action_to_select name="SelectInternalInputApps"></action_to_select>
+            </internal>
+        </implementation>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_HD Monitor" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_HD Monitor" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">58&amp;valor=IPT-1</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <execute_on_state_variable_condition name="Power_current_power_HD Monitor" test_condition="not_equal">OFF</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_HD Monitor" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">58&amp;valor=OFF</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+    </logical_component>
+</component>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Generic" model="1x8 RCA Stereo Splitter Zafiro" device_class="AV_switch" minimum_component_engine_version="0.0" rpm_xml_version="1.2">
+	<notes>
+		====================== Change Log ==================
+		Version: 1.2 Change: Version Number bump to support new Savant Revisioning Scheme.  Risk: Low Importance: Forced
+	</notes>
+    <media_interfaces>
+        <input name_on_component="IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN2">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN3">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN4">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN5">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN6">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN7">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="IN8">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <output name_on_component="OUT 1">
+            <audio_media type="rca_stereo"/>
+        </output>
+        <output name_on_component="OUT 2">
+            <audio_media type="rca_stereo"/>     
+        </output>
+        <output name_on_component="OUT 3">
+            <audio_media type="rca_stereo"/>
+        </output>
+        <output name_on_component="OUT 4">
+            <audio_media type="rca_stereo"/>     
+        </output>
+        <output name_on_component="OUT 5">
+            <audio_media type="rca_stereo"/>
+        </output>
+        <output name_on_component="OUT 6">
+            <audio_media type="rca_stereo"/>     
+        </output>
+        <output name_on_component="OUT 7">
+            <audio_media type="rca_stereo"/>
+        </output>
+        <output name_on_component="OUT 8">
+            <audio_media type="rca_stereo"/>     
+        </output>
+    </media_interfaces>
+</component>

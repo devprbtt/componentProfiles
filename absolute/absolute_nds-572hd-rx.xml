@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-572HD-RX" device_class="Media_converter" minimum_component_engine_version="0" rpm_xml_version="2.0">
+	<notes>
+	    For more information about this product, please visit: 'http://www.absoluteacoustics.com/nds-570hd-kit.html'.
+	</notes>
+    <media_interfaces>
+        <input name_on_component="HDBaseT In">
+            <combined_media>
+                <audio_media type="link_audio"/>
+                <video_media type="link"/>
+            </combined_media>
+        </input>
+        <output name_on_component="HDMI Out">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <input name_on_component="HDBaseT In"/>
+            <output name_on_component="HDMI Out"/>
+        </implementation>
+    </logical_component>
+</component>

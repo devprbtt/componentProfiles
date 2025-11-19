@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO:	Input Metadata
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd"
+    manufacturer="Naim" model="Uniti" device_class="Media_server"
+    minimum_component_engine_version="0.0" rpm_xml_version="0.4">
+    <notes>
+    ==================== Change Log ============================================
+        Version: 0.1 Change:  Initial Profile Creation
+        Version: 0.2 Change:  Fixed issue with Digital Input1, added transport controls
+        Version: 0.3 Change:  Fixed issue with extra slash "/" in nowplaying request url e.g. "url.com//query?"
+ 
+	</notes>
+    <control_interfaces preferred="ip">
+        <ip port="15081" response_time_length_ms="500" name_on_component="Network" protocol="http"/>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="Input 1">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="Input 2">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="Input 3">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="Input 4">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="Digital Input 1">
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+        </input>
+        <input name_on_component="Digital Input 2">
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+        </input>
+        <input name_on_component="Digital Input 3">
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+        </input>
+        <input name_on_component="Digital Input 4">
+            <audio_media type="optical_digital"/>
+            <audio_media type="coaxial_digital"/>
+        </input>
+        <input name_on_component="Digital Input 5">
+            <audio_media type="coaxial_digital"/>
+            <audio_media type="optical_digital"/>
+        </input>
+        <input name_on_component="HDMI Input">
+            <combined_media>
+                <audio_media type="hdmi_audio" />
+                <video_media type="hdmi" />
+            </combined_media>
+        </input>
+
+        <output name_on_component="Loudspeakers">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AUDIODAC_FUNCTION"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="Preamp Output">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_AUDIODAC_FUNCTION"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>
+        <output name_on_component="Headphone Output">
+            <audio_media type="analog_minijack"/>
+            <resource resource_type="AV_AUDIODAC_FUNCTION"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>
+
+        <data name_on_component="Network">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="15081"/>
+            </combined_media>
+        </data>
+
+        <internal name_on_component="Internet Radio">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Multi-room">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Bluetooth">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Airplay">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Chromecast">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Spotify">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="TIDAL">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Servers">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="Playqueue">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+        <internal name_on_component="USB">
+            <audio_media/>
+            <resource resource_type="AV_EXTERNALMEDIASERVER_SOURCE"
+                services_enabled="false"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="current_power" state_center_type="string" state_center_binding="CurrentPowerStatus" owning_logical_component="Media_player">OFF</state_variable>
+        <state_variable name="current_mute" state_center_type="string" state_center_binding="CurrentMuteStatus" owning_logical_component="Media_player">OFF</state_variable>
+        <volume_state_variable name="current_volume" state_center_type="string" state_center_binding="CurrentVolume" min_value="0" max_value="100" owning_logical_component="Media_player" granularity="1">0</volume_state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="Media_player">
+        <implementation>
+            <input name_on_component="Input 1">
+                <action_to_select name="SelectInput_Analogue1"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input 2">
+                <action_to_select name="SelectInput_Analogue2"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input 3">
+                <action_to_select name="SelectInput_Analogue3"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input 4">
+                <action_to_select name="SelectInput_Analogue4"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Digital Input 1">
+                <action_to_select name="SelectInput_Digital1"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Digital Input 2">
+                <action_to_select name="SelectInput_Digital2"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="Digital Input 3">
+                <action_to_select name="SelectInput_Digital3"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        
+        <implementation>
+            <input name_on_component="Digital Input 4">
+                <action_to_select name="SelectInput_Digital4"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        
+        <implementation>
+            <input name_on_component="Digital Input 5">
+                <action_to_select name="SelectInput_Digital5"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+        
+        <implementation>
+            <input name_on_component="HDMI Input">
+                <action_to_select name="SelectInput_HDMI"/>
+            </input>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+        </implementation>
+
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Internet Radio">
+                <action_to_select name="SelectInput_Radio"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Multi-room">
+                <action_to_select name="SelectInput_Multiroom"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Bluetooth">
+                <action_to_select name="SelectInput_Bluetooth"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Airplay">
+                <action_to_select name="SelectInput_Airplay"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Chromecast">
+                <action_to_select name="SelectInput_Chromecast"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Spotify">
+                <action_to_select name="SelectInput_Spotify"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="TIDAL">
+                <action_to_select name="SelectInput_Tidal"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Servers">
+                <action_to_select name="SelectInput_Servers"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="Playqueue">
+                <action_to_select name="SelectInput_Playqueue"/>
+            </internal>
+        </implementation>
+        <implementation>
+            <output name_on_component="Loudspeakers"/>
+            <output name_on_component="Preamp Output"/>
+            <output name_on_component="Headphone Output"/>
+            <internal name_on_component="USB">
+                <action_to_select name="SelectInput_USB"/>
+            </internal>
+        </implementation>
+
+        <status_messages>
+            <status_message name="Power">
+                <!--
+					{
+					"version":"1.1.0",
+					"changestamp":"0",
+					"name":"Power",
+					"ussi":"power",
+					"class":"object.power",
+					"cpu":"100",
+					"powerMode":"0",
+					"serverMode":"0",
+					"standbyTimeout":"20",
+					"system":"on"
+					}
+				-->
+                <root_object name="none" format="json" matches_required="all">
+                    <values path="/none/class" matches_required="all">
+                        <value_map match_required="yes">
+                            <map key="object.power">
+                                <update state="LastMessageClass" type="string">Power</update>
+                            </map>
+                        </value_map>
+                    </values>
+                    <values path="/none/version" matches_required="none">
+                        <update state="APIVersion" type="string"/>
+                    </values>
+                    <values path="/none/powerMode" matches_required="none">
+                        <update state="PowerMode" type="integer"/>
+                    </values>
+                    <values path="/none/serverMode" matches_required="none">
+                        <update state="ServerMode" type="integer"/>
+                    </values>
+                    <values path="/none/standbyTimeout" matches_required="none">
+                        <update state="StandbyTimeout" type="integer"/>
+                    </values>
+                    <values path="/none/system" matches_required="none">
+                        <update state="SystemPowerState" type="string"/>
+                        <value_map match_required="no">
+                            <map key="on">
+                                <update state="CurrentPowerStatus" type="string">ON</update>
+                            </map>
+                            <map key="lona">
+                                <update state="CurrentPowerStatus" type="string">OFF</update>
+                            </map>
+                        </value_map>
+                    </values>
+                </root_object>
+            </status_message>
+            <status_message name="LevelsStatus">
+                <!--
+					{
+					  "version":"1.1.0",
+					  "changestamp":"0",
+					  "name":"",
+					  "ussi":"levels",
+					  "class":"object.levels",
+					  "balance":"0",
+					  "cpu":"53064",
+					  "mode":"1",
+					  "mute":"0",
+					  "volume":"51"
+					}
+				-->
+                <root_object name="none" matches_required="all" format="json">
+                    <values path="/none/class" matches_required="all">
+                        <value_map match_required="yes">
+                            <map key="object.levels">
+                                <update state="LastMessageClass" type="string">Levels</update>
+                            </map>
+                        </value_map>
+                    </values>
+                    <values path="/none/balance" matches_required="none">
+                        <update state="CurrentBalance" type="integer"/>
+                    </values>
+                    <values path="/none/volume" matches_required="none">
+                        <update state="CurrentVolume" type="integer"/>
+                    </values>
+                    <values path="/none/mute" matches_required="none">
+                        <value_map match_required="no">
+                            <map key="0">
+                                <update state="CurrentMuteStatus" type="string">OFF</update>
+                            </map>
+                            <map key="1">
+                                <update state="CurrentMuteStatus" type="string">ON</update>
+                            </map>
+                        </value_map>
+                    </values>
+                </root_object>
+            </status_message>
+            <status_message name="NowPlaying">
+                <!--
+					{
+					  "version":"1.1.0",
+					  "changestamp":"0",
+					  "name":"Now Playing",
+					  "ussi":"nowplaying",
+					  "class":"object.nowplaying",
+					  "channels":"2",
+					  "codec":"UNKNOWN CODEC",
+					  "cpu":"280",
+					  "error":"0",
+					  "live":"1",
+					  "mimeType":"audio\/unknown",
+					  "repeat":"0",
+					  "sampleRate":"44100",
+					  "shuffle":"0",
+					  "source":"inputs\/dig2",
+					  "sourceMultiroom":"inputs\/0",
+					  "streamDomain":"",
+					  "streamMessage":"",
+					  "transportPosition":"112085",
+					  "transportState":"2"
+					}
+
+
+				-->
+                <root_object name="none" matches_required="at_least_one"
+                    format="json">
+                    <values path="/none/class" matches_required="all">
+                        <value_map match_required="yes">
+                            <map key="object.nowplaying">
+                                <update state="LastMessageClass" type="string">NowPlaying</update>
+                            </map>
+                        </value_map>
+                    </values>
+                    <values path="/none/transportState" matches_required="none">
+                        <update state="TransportState" type="integer"/>
+                    </values>
+                    <values path="/none/transportPosition"
+                        matches_required="none">
+                        <update state="TransportPosition" type="integer"/>
+                    </values>
+                    <values path="/none/sampleRate" matches_required="none">
+                        <update state="SampleRate" type="integer"/>
+                    </values>
+                    <values path="/none/source" matches_required="none">
+                        <update state="Source" type="string"/>
+                        <value_map match_required="no">
+                            <map key="inputs/ana1">
+                                <update state="CurrentInput" type="string">Analogue Input 1</update>
+                            </map>
+                            <map key="inputs/ana2">
+                                <update state="CurrentInput" type="string">Analogue Input 2</update>
+                            </map>
+                            <map key="inputs/ana3">
+                                <update state="CurrentInput" type="string">Analogue Input 3</update>
+                            </map>
+                            <map key="inputs/ana4">
+                                <update state="CurrentInput" type="string">Analogue Input 4</update>
+                            </map>
+                            <map key="inputs/dig1">
+                                <update state="CurrentInput" type="string">Digital Input 1</update>
+                            </map>
+                            <map key="inputs/dig2">
+                                <update state="CurrentInput" type="string">Digital Input 2</update>
+                            </map>
+                            <map key="inputs/dig3">
+                                <update state="CurrentInput" type="string">Digital Input 3</update>
+                            </map>
+                            <map key="inputs/dig4">
+                                <update state="CurrentInput" type="string">Digital Input 4</update>
+                            </map>
+                            <map key="inputs/dig5">
+                                <update state="CurrentInput" type="string">Digital Input 5</update>
+                            </map>
+                            <map key="inputs/hdmi">
+                                <update state="CurrentInput" type="string">HDMI Input </update>
+                            </map>
+                            <map key="inputs/bluetooth">
+                                <update state="CurrentInput" type="string">Bluetooth</update>
+                            </map>
+                            <map key="inputs/spotify">
+                                <update state="CurrentInput" type="string">Spotify</update>
+                            </map>
+                            <map key="inputs/radio">
+                                <update state="CurrentInput" type="string">Internet Radio</update>
+                            </map>
+                            <map key="inputs/usb">
+                                <update state="CurrentInput" type="string">USB</update>
+                            </map>
+                            <map key="inputs/tidal">
+                                <update state="CurrentInput" type="string">TIDAL</update>
+                            </map>
+                            <map key="inputs/multiroom">
+                                <update state="CurrentInput" type="string">Multiroom</update>
+                            </map>
+                            <map key="inputs/servers">
+                                <update state="CurrentInput" type="string">Servers</update>
+                            </map>
+                            <map key="inputs/playqueue">
+                                <update state="CurrentInput" type="string">Playqueue</update>
+                            </map>
+                            <map key="inputs/airplay">
+                                <update state="CurrentInput" type="string">AirPlay</update>
+                            </map>
+                            <map key="inputs/chromecast">
+                                <update state="CurrentInput" type="string">Chromecast</update>
+                            </map>
+                        </value_map>
+                    </values>
+                    <!--					<values path="/none/artwork" matches_required="none">
+						<update state="CurrentArtworkURL" type="string"/>
+					</values>-->
+                </root_object>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="current_power" test_condition="equal">OFF</execute_on_state_variable_condition>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="PUT">power?system=on</command_string>
+                        <delay ms_delay="7000"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">power</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <execute_on_state_variable_condition name="current_power" test_condition="equal">ON</execute_on_state_variable_condition>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="PUT">power?system=lona</command_string>
+                        <delay ms_delay="5000"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">power</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <!-- <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION"> -->
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue" note="0-50"/>
+                <update_volume_variables name="current_volume" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <!-- /levels?volume= -->
+                        <command_string type="character" http_request_type="PUT">levels?volume=</command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="current_volume" action_argument="VolumeValue" parameter_data_type="character"/>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_volume_variables name="current_volume" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="PUT">levels?volume=</command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="current_volume" state_variable="current_volume" parameter_data_type="character" ></volume_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_volume_variables name="current_volume" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="PUT">levels?volume=</command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="current_volume" state_variable="current_volume" parameter_data_type="character" ></volume_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn">
+                <update_state_variable name="current_mute" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <!-- /levels?mute= -->
+                        <command_string type="character" http_request_type="PUT">levels?mute=1</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <update_state_variable name="current_mute" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <!-- /levels?mute= -->
+                        <command_string type="character" http_request_type="PUT">levels?mute=0</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <resource_component_actions resource_type="AV_EXTERNALMEDIASERVER_SOURCE">
+
+            <action name="Play">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying?cmd=playpause</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Pause">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying?cmd=playpause</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SkipUp">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying?cmd=next</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SkipDown">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying?cmd=prev</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Stop">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying?cmd=playpause</command_string>
+                        <delay ms_delay="200"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectInput_Analogue1">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/ana1?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Analogue2">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/ana2?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Analogue3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/ana3?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="SelectInput_Analogue4">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/ana4?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="SelectInput_Digital1">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/dig1?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Digital2">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/dig2?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Digital3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/dig3?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Digital4">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/dig4?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Digital5">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/dig5?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_HDMI">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/hdmi?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Bluetooth">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/bluetooth?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Spotify">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/spotify?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Radio">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/radio?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_USB">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/usb?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Tidal">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/tidal?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Multiroom">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/multiroom?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Servers">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/servers?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Playqueue">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/playqueue?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Airplay">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/airplay?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput_Chromecast">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">inputs/chromecast?cmd=select</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="GetPower">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">power</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="5000"/>
+            </action>
+            <action name="QueryVolume">
+                <execute_on_state_variable_condition name="current_power" test_condition="equal">ON</execute_on_state_variable_condition>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">levels</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"/>
+                <execute_on_schedule period_ms="5000"/>
+            </action>
+            <action name="GetNowplaying">
+                <execute_on_state_variable_condition name="current_power" test_condition="equal">ON</execute_on_state_variable_condition>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">nowplaying</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="1000"/>
+            </action>
+
+
+            <action name="GetNetwork">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">network</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>
+<!--
+================================================================================
+		DEV NOTES
+================================================================================
+	
+response to GET /network
+
+{ 
+   "version":"1.1.0",
+   "changestamp":"0",
+   "name":"network",
+   "ussi":"network",
+   "class":"object.network",
+   "connectionState":"0",
+   "cpu":"68058",
+   "current":"network\/wired",
+   "dhcp":"1",
+   "dns1":"192.168.20.1",
+   "dnsName":"UnitiAtomDining",
+   "gateway":"192.168.20.1",
+   "hostname":"Uniti Atom Dining Room",
+   "ipAddress":"192.168.20.154",
+   "macAddress":"68:C9:0B:B4:A7:92",
+   "netmask":"255.255.255.0",
+   "sambaSpnego":"1",
+   "shareIndexNames":"",
+   "sharePassword":"",
+   "shareRescanRate":"300",
+   "shareUserName":"",
+   "wac":"0",
+   "wifiScanning":"0",
+   "workgroup":"NAIM",
+   "children":[ 
+      { 
+         "name":"wired",
+         "ussi":"network\/wired",
+         "class":"object.netadapter"
+      },
+      { 
+         "name":"wireless",
+         "ussi":"network\/wireless",
+         "class":"object.netadapter"
+      }
+   ]
+}
+
+response to nowplayling (whilst listening to internet radio)
+{ 
+   "version":"1.1.0",
+   "changestamp":"0",
+   "name":"Now Playing",
+   "ussi":"nowplaying",
+   "class":"object.nowplaying",
+   "artwork":"http:\/\/item.radio456.com\/vt\/logo\/logo-93650.jpg",
+   "bitDepth":"32",
+   "bitRate":"128000",
+   "channels":"2",
+   "codec":"AAC",
+   "country":"United Kingdom",
+   "cpu":"361",
+   "description":"Playing What We Want.",
+   "error":"0",
+   "genre":"Top 40",
+   "live":"1",
+   "mimeType":"audio\/unknown",
+   "repeat":"0",
+   "sampleRate":"44100",
+   "shuffle":"0",
+   "source":"inputs\/radio",
+   "sourceMultiroom":"inputs\/0",
+   "station":"JACK Radio",
+   "stationId":"aHR0cDovL25haW0udnR1bmVyLmNvbS9zZXR1cGFwcC9uYWltL2FzcC9mdW5jL2R5bmFtT0QuYXNwP2V4NDV2PWNmYzRhMjg3YTBhMmRmNTA1NDNjYmY1YzhmODZjZmUyJmlkPTkzNjUw",
+   "stationKey":"eyJsb2dvVXJsIjoiaHR0cDovL2l0ZW0ucmFkaW80NTYuY29tL3Z0L2xvZ28vbG9nby05MzY1MC5qcGciLCJjb21tZW50IjoiUGxheWluZyBXaGF0IFdlIFdhbnQuIiwibmFtZSI6IkpBQ0sgUmFkaW8iLCJsb2NhdGlvbiI6IlVuaXRlZCBLaW5nZG9tIiwiYml0cmF0ZSI6MTI4MDAwLCJ1cmwiOiJodHRwOi8vbmFpbS52dHVuZXIuY29tL3NldHVwYXBwL25haW0vYXNwL2Z1bmMvZHluYW1PRC5hc3A_ZXg0NXY9Y2ZjNGEyODdhMGEyZGY1MDU0M2NiZjVjOGY4NmNmZTImaWQ9OTM2NTAiLCJicm93c2VVcmwiOiJ2dHVuZXI6UDJsMFpXMUNhWFJ5WVhSbFBURXlPQ1pwZEdWdFFtOXZhMjFoY21zOWFIUjBjRG92TDI1aGFXMHVkblIxYm1WeUxtTnZiUzl6WlhSMWNHRndjQzl1WVdsdEwyRnpjQzlpY205M2MyVjRjR0V2UVdSa1JtRjJMbUZ6Y0Q5bGJYQjBlU1V6UkNVeU5uTjBZWFJwYjI1cFpDVXpSRGt6TmpVd0ptbDBaVzFDYjI5cmJXRnlhMU5vYjNjbWFYUmxiVU52YlcxbGJuUTlVR3hoZVdsdVp5VXlNRmRvWVhRbE1qQlhaU1V5TUZkaGJuUXVKbWwwWlcxSFpXNXlaVDFVYjNBbE1qQTBNQ1pwZEdWdFRHOWpZWFJwYjI0OVZXNXBkR1ZrSlRJd1MybHVaMlJ2YlNacGRHVnRURzluYnoxb2RIUndPaTh2YVhSbGJTNXlZV1JwYnpRMU5pNWpiMjB2ZG5RdmJHOW5ieTlzYjJkdkxUa3pOalV3TG1wd1p5WnBkR1Z0VG1GdFpUMUtRVU5MSlRJd1VtRmthVzhtYVhSbGJWSnZkejA1TXprbWFYUmxiVlI1Y0dVOVUzUmhkR2x2YmlacGRHVnRWWEpzUFdoMGRIQTZMeTl1WVdsdExuWjBkVzVsY2k1amIyMHZjMlYwZFhCaGNIQXZibUZwYlM5aGMzQXZablZ1WXk5a2VXNWhiVTlFTG1GemNEOWxlRFExZGlVelJHTm1ZelJoTWpnM1lUQmhNbVJtTlRBMU5ETmpZbVkxWXpobU9EWmpabVV5SlRJMmFXUWxNMFE1TXpZMU1BIiwiZ2VucmUiOiJUb3AgNDAiLCJ0eXBlIjoic3RhdGlvbiIsImlzTGl2ZSI6dHJ1ZX0=",
+   "streamDomain":"",
+   "streamMessage":"",
+   "title":"TAYLOR DAYNE - TELL IT TO MY HEART",
+   "transportPosition":"9195",
+   "transportState":"2"
+}
+
+response to /inputs
+{ 
+   "version":"1.1.0",
+   "changestamp":"0",
+   "name":"Inputs",
+   "ussi":"inputs",
+   "class":"object.inputs",
+   "cpu":"549500",
+   "children":[ 
+         { 
+         "name":"Analogue 1",
+         "ussi":"inputs\/ana1",
+         "class":"object.input.analogue",
+         "alias":"ana_1",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+            { 
+         "name":"Analogue 2",
+         "ussi":"inputs\/ana1",
+         "class":"object.input.analogue",
+         "alias":"ana_2",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Analogue 3",
+         "ussi":"inputs\/ana3",
+         "class":"object.input.analogue",
+         "alias":"ana_3",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Digital 1",
+         "ussi":"inputs\/dig1",
+         "class":"object.input.digital",
+         "alias":"",
+         "disabled":"1",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Digital 2",
+         "ussi":"inputs\/dig2",
+         "class":"object.input.digital",
+         "alias":"Sonos",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Digital 3",
+         "ussi":"inputs\/dig3",
+         "class":"object.input.digital",
+         "alias":"CD",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Internet Radio",
+         "ussi":"inputs\/radio",
+         "class":"object.input.radio.internet",
+         "alias":"",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Multi-room",
+         "ussi":"inputs\/multiroom",
+         "class":"object.input.multiroom",
+         "multiroomMaster":"0",
+         "selectable":"0"
+      },
+      { 
+         "name":"Bluetooth",
+         "ussi":"inputs\/bluetooth",
+         "class":"object.input.bluetooth",
+         "alias":"",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"Airplay",
+         "ussi":"inputs\/airplay",
+         "class":"object.input.airplay",
+         "disabled":"0",
+         "multiroomMaster":"0",
+         "selectable":"0"
+      },
+      { 
+         "name":"Chromecast built-in",
+         "ussi":"inputs\/gcast",
+         "class":"object.input.googlecast",
+         "multiroomMaster":"0",
+         "selectable":"0"
+      },
+      { 
+         "name":"Spotify",
+         "ussi":"inputs\/spotify",
+         "class":"object.input.spotify",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"1"
+      },
+      { 
+         "name":"TIDAL",
+         "ussi":"inputs\/tidal",
+         "class":"object.input.tidal",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"0"
+      },
+      { 
+         "name":"Servers",
+         "ussi":"inputs\/upnp",
+         "class":"object.input.upnp",
+         "alias":"",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"0"
+      },
+      { 
+         "name":"Playqueue",
+         "ussi":"inputs\/playqueue",
+         "class":"object.input.playqueue",
+         "multiroomMaster":"1",
+         "selectable":"0"
+      },
+      { 
+         "name":"USB",
+         "ussi":"inputs\/usb",
+         "class":"object.input.usb",
+         "alias":"",
+         "disabled":"0",
+         "multiroomMaster":"1",
+         "selectable":"0"
+      }
+   ]
+}
+
+response to /inputs/ana1
+{
+  "version":"1.1.0",
+  "changestamp":"0",
+  "name":"Analogue 1",
+  "ussi":"inputs\/ana1",
+  "class":"object.input.analogue",
+  "alias":"Tape",
+  "cpu":"130851",
+  "delay":"0",
+  "disabled":"0",
+  "multiroomMaster":"1",
+  "selectable":"1",
+  "sensitivity":"2",
+  "trim":"0",
+  "unityGain":"0"
+}
+-->

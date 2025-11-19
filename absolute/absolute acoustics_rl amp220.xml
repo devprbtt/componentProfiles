@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Acoustics" model="RL AMP220"
+        alias="Absolute 2x1 Multiroom Control Amplifier" device_class="AV_processor" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.02 $">
+    <notes>
+        
+        Audiogene APS
+        07/2021
+        
+        v2.00 correcao mic vol IR command
+        V2.01 correcao de ordem e regras de tags XML no profile, correcao adicional mic vol IR command,
+              mute speaker on/off, remocao de funcoes nao implementadas (mute/unmute mic)
+        V2.02 power on/off corrigidos para códigos novos mute on e off
+        
+    </notes>
+    <control_interfaces preferred="rs232">
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" checksum_type="standard" checksum_offset_B="0" response_time_length_ms="0" connector_type="db9 female" cable_type="rs232 straight">
+            <baud_rate speed="9600"/>
+            <send_prefix type="hex">3E20</send_prefix>
+            <send_postfix type="hex">0D0A</send_postfix>
+            <receive_start_condition type="hex">3C20</receive_start_condition>
+            <receive_end_condition test_condition="data" type="hex">0D</receive_end_condition>
+        </rs232>
+        <trigger trigger_active_voltage="12" name_on_component="Trigger Input"/>
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="SOURCE INPUT 1">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="SOURCE INPUT 2">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>     
+        <output name_on_component="ZONE LEFT RIGHT 1">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>       
+        <output name_on_component="ZONE PRE OUT 1">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>         
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_power_setting_zone1" state_center_type="boolean" min_value="0" max_value="1">00</state_variable>
+        <volume_state_variable name="Volume_current_volume" granularity="1" owning_logical_component="Audio_processor" state_center_binding="CurrentVolume" state_center_type="string" min_value="00" max_value="60">00</volume_state_variable>
+        <state_variable name="Mute_current_mute_setting_zone1" state_center_type="string" state_center_binding="CurrentMuteStatus" owning_logical_component="Audio_processor">MUT A: T</state_variable>
+        <state_variable name="BassValueCalculated" state_center_type="integer">0</state_variable>
+        <state_variable name="TrebleValueCalculated" state_center_type="integer">0</state_variable>
+        <state_variable name="BalanceValueCalculated" state_center_type="integer">0</state_variable>
+    </state_variable_list> 
+    <logical_component logical_component_name="Audio_processor">
+        <implementation>
+            <input name_on_component="SOURCE INPUT 1">
+                <action_to_select name="SelectSource1"/>
+            </input>
+            <output name_on_component="ZONE PRE OUT 1"/>
+            <output name_on_component="ZONE LEFT RIGHT 1"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="SOURCE INPUT 2">
+                <action_to_select name="SelectSource2"/>
+            </input>
+            <output name_on_component="ZONE PRE OUT 1"/>
+            <output name_on_component="ZONE LEFT RIGHT 1"/>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentTreble">
+                <constant type="character">TRE A: </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentTreble" type="string">-4</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentTreble" type="string">-3</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentTreble" type="string">-2</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentTreble" type="string">-1</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentTreble" type="string">flat</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentTreble" type="string">+1</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentTreble" type="string">+2</update>
+                        </map>
+                        <map key="07">
+                            <update state="CurrentTreble" type="string">+3</update>
+                        </map>
+                        <map key="08">
+                            <update state="CurrentTreble" type="string">+4</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="CurrentBass">
+            <constant type="character">BAS A: </constant>
+            <data type="character" terminator_type="end_of_data">
+                <data_map match_required="yes">
+                    <map key="00">
+                        <update state="CurrentBass" type="string">-4</update>
+                    </map>
+                    <map key="01">
+                        <update state="CurrentBass" type="string">-3</update>
+                    </map>
+                    <map key="02">
+                        <update state="CurrentBass" type="string">-2</update>
+                    </map>
+                    <map key="03">
+                        <update state="CurrentBass" type="string">-1</update>
+                    </map>
+                    <map key="04">
+                        <update state="CurrentBass" type="string">flat</update>
+                    </map>
+                    <map key="05">
+                        <update state="CurrentBass" type="string">+1</update>
+                    </map>
+                    <map key="06">
+                        <update state="CurrentBass" type="string">+2</update>
+                    </map>
+                    <map key="07">
+                        <update state="CurrentBass" type="string">+3</update>
+                    </map>
+                    <map key="08">
+                        <update state="CurrentBass" type="string">+4</update>
+                    </map>
+                </data_map>
+            </data>
+            </status_message>
+            <status_message name="CurrentVolume">
+                <constant type="character">VOL A: </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentVolume" type="string">00</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentVolume" type="string">01</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentVolume" type="string">02</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentVolume" type="string">03</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentVolume" type="string">04</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentVolume" type="string">05</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentVolume" type="string">06</update>
+                        </map>
+                        <map key="07">
+                            <update state="CurrentVolume" type="string">07</update>
+                        </map>
+                        <map key="08">
+                            <update state="CurrentVolume" type="string">08</update>
+                        </map>
+                        <map key="09">
+                            <update state="CurrentVolume" type="string">09</update>
+                        </map>
+                        <map key="10">
+                            <update state="CurrentVolume" type="string">10</update>
+                        </map>
+                        <map key="11">
+                            <update state="CurrentVolume" type="string">11</update>
+                        </map>
+                        <map key="12">
+                            <update state="CurrentVolume" type="string">12</update>
+                        </map>
+                        <map key="13">
+                            <update state="CurrentVolume" type="string">13</update>
+                        </map>
+                        <map key="14">
+                            <update state="CurrentVolume" type="string">14</update>
+                        </map>
+                        <map key="15">
+                            <update state="CurrentVolume" type="string">15</update>
+                        </map>
+                        <map key="16">
+                            <update state="CurrentVolume" type="string">16</update>
+                        </map>
+                        <map key="17">
+                            <update state="CurrentVolume" type="string">17</update>
+                        </map>
+                        <map key="18">
+                            <update state="CurrentVolume" type="string">18</update>
+                        </map>
+                        <map key="19">
+                            <update state="CurrentVolume" type="string">19</update>
+                        </map>
+                        <map key="20">
+                            <update state="CurrentVolume" type="string">20</update>
+                        </map>
+                        <map key="21">
+                            <update state="CurrentVolume" type="string">21</update>
+                        </map>
+                        <map key="22">
+                            <update state="CurrentVolume" type="string">22</update>
+                        </map>
+                        <map key="23">
+                            <update state="CurrentVolume" type="string">23</update>
+                        </map>
+                        <map key="24">
+                            <update state="CurrentVolume" type="string">24</update>
+                        </map>
+                        <map key="25">
+                            <update state="CurrentVolume" type="string">25</update>
+                        </map>
+                        <map key="26">
+                            <update state="CurrentVolume" type="string">26</update>
+                        </map>
+                        <map key="27">
+                            <update state="CurrentVolume" type="string">27</update>
+                        </map>
+                        <map key="28">
+                            <update state="CurrentVolume" type="string">28</update>
+                        </map>
+                        <map key="29">
+                            <update state="CurrentVolume" type="string">29</update>
+                        </map>
+                        <map key="30">
+                            <update state="CurrentVolume" type="string">30</update>
+                        </map>
+                        <map key="31">
+                            <update state="CurrentVolume" type="string">31</update>
+                        </map>
+                        <map key="32">
+                            <update state="CurrentVolume" type="string">32</update>
+                        </map>
+                        <map key="33">
+                            <update state="CurrentVolume" type="string">33</update>
+                        </map>
+                        <map key="34">
+                            <update state="CurrentVolume" type="string">34</update>
+                        </map>
+                        <map key="35">
+                            <update state="CurrentVolume" type="string">35</update>
+                        </map>
+                        <map key="36">
+                            <update state="CurrentVolume" type="string">36</update>
+                        </map>
+                        <map key="37">
+                            <update state="CurrentVolume" type="string">37</update>
+                        </map>
+                        <map key="38">
+                            <update state="CurrentVolume" type="string">38</update>
+                        </map>
+                        <map key="39">
+                            <update state="CurrentVolume" type="string">39</update>
+                        </map>
+                        <map key="40">
+                            <update state="CurrentVolume" type="string">40</update>
+                        </map>
+                        <map key="41">
+                            <update state="CurrentVolume" type="string">41</update>
+                        </map>
+                        <map key="42">
+                            <update state="CurrentVolume" type="string">42</update>
+                        </map>
+                        <map key="43">
+                            <update state="CurrentVolume" type="string">43</update>
+                        </map>
+                        <map key="44">
+                            <update state="CurrentVolume" type="string">44</update>
+                        </map>
+                        <map key="45">
+                            <update state="CurrentVolume" type="string">45</update>
+                        </map>
+                        <map key="46">
+                            <update state="CurrentVolume" type="string">46</update>
+                        </map>
+                        <map key="47">
+                            <update state="CurrentVolume" type="string">47</update>
+                        </map>
+                        <map key="48">
+                            <update state="CurrentVolume" type="string">48</update>
+                        </map>
+                        <map key="49">
+                            <update state="CurrentVolume" type="string">49</update>
+                        </map>
+                        <map key="50">
+                            <update state="CurrentVolume" type="string">50</update>
+                        </map>
+                        <map key="51">
+                            <update state="CurrentVolume" type="string">51</update>
+                        </map>
+                        <map key="52">
+                            <update state="CurrentVolume" type="string">52</update>
+                        </map>
+                        <map key="53">
+                            <update state="CurrentVolume" type="string">53</update>
+                        </map>
+                        <map key="54">
+                            <update state="CurrentVolume" type="string">54</update>
+                        </map>
+                        <map key="55">
+                            <update state="CurrentVolume" type="string">55</update>
+                        </map>
+                        <map key="56">
+                            <update state="CurrentVolume" type="string">56</update>
+                        </map>
+                        <map key="57">
+                            <update state="CurrentVolume" type="string">57</update>
+                        </map>
+                        <map key="58">
+                            <update state="CurrentVolume" type="string">58</update>
+                        </map>
+                        <map key="59">
+                            <update state="CurrentVolume" type="string">59</update>
+                        </map>
+                        <map key="60">
+                            <update state="CurrentVolume" type="string">60</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>    
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOff">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">0</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MUT A: T</command_string>
+                        <delay ms_delay="300"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015004000150015001500150015001500150040001500150015004000150040001500150015004000150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>0</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOn">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">0</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MUT A: F</command_string>
+                        <delay ms_delay="300"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500400015001500150040001500150015001500150040001500150015004000150015001500400015001500150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue" note="Value: 00~60"/>
+                <update_volume_variables name="Volume_current_volume" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">VOL A: </command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="Volume_current_volume" parameter_data_type="character" action_argument="VolumeValue" parameter_data_width="2" parameter_total_width="2"></volume_parameter>
+                        </parameter_list>
+                        
+                        <response_codes>
+                            <rspmessage status="success" name="successmsg">
+                                <constant type="character">VOL A: </constant>
+                                <data type="character" terminator_type="end_of_data">
+                                    <data_map match_required="yes">
+                                        <map key="00">
+                                            <update state="CurrentVolume" type="string">0</update>
+                                        </map>
+                                        <map key="01">
+                                            <update state="CurrentVolume" type="string">1</update>
+                                        </map>
+                                        <map key="02">
+                                            <update state="CurrentVolume" type="string">2</update>
+                                        </map>
+                                        <map key="03">
+                                            <update state="CurrentVolume" type="string">3</update>
+                                        </map>
+                                        <map key="04">
+                                            <update state="CurrentVolume" type="string">4</update>
+                                        </map>
+                                        <map key="05">
+                                            <update state="CurrentVolume" type="string">5</update>
+                                        </map>
+                                        <map key="06">
+                                            <update state="CurrentVolume" type="string">6</update>
+                                        </map>
+                                        <map key="07">
+                                            <update state="CurrentVolume" type="string">7</update>
+                                        </map>
+                                        <map key="08">
+                                            <update state="CurrentVolume" type="string">8</update>
+                                        </map>
+                                        <map key="09">
+                                            <update state="CurrentVolume" type="string">9</update>
+                                        </map>
+                                        <map key="10">
+                                            <update state="CurrentVolume" type="string">10</update>
+                                        </map>
+                                        <map key="11">
+                                            <update state="CurrentVolume" type="string">11</update>
+                                        </map>
+                                        <map key="12">
+                                            <update state="CurrentVolume" type="string">12</update>
+                                        </map>
+                                        <map key="13">
+                                            <update state="CurrentVolume" type="string">13</update>
+                                        </map>
+                                        <map key="14">
+                                            <update state="CurrentVolume" type="string">14</update>
+                                        </map>
+                                        <map key="15">
+                                            <update state="CurrentVolume" type="string">15</update>
+                                        </map>
+                                        <map key="16">
+                                            <update state="CurrentVolume" type="string">16</update>
+                                        </map>
+                                        <map key="17">
+                                            <update state="CurrentVolume" type="string">17</update>
+                                        </map>
+                                        <map key="18">
+                                            <update state="CurrentVolume" type="string">18</update>
+                                        </map>
+                                        <map key="19">
+                                            <update state="CurrentVolume" type="string">19</update>
+                                        </map>
+                                        <map key="20">
+                                            <update state="CurrentVolume" type="string">20</update>
+                                        </map>
+                                        <map key="21">
+                                            <update state="CurrentVolume" type="string">21</update>
+                                        </map>
+                                        <map key="22">
+                                            <update state="CurrentVolume" type="string">22</update>
+                                        </map>
+                                        <map key="23">
+                                            <update state="CurrentVolume" type="string">23</update>
+                                        </map>
+                                        <map key="24">
+                                            <update state="CurrentVolume" type="string">24</update>
+                                        </map>
+                                        <map key="25">
+                                            <update state="CurrentVolume" type="string">25</update>
+                                        </map>
+                                        <map key="26">
+                                            <update state="CurrentVolume" type="string">26</update>
+                                        </map>
+                                        <map key="27">
+                                            <update state="CurrentVolume" type="string">27</update>
+                                        </map>
+                                        <map key="28">
+                                            <update state="CurrentVolume" type="string">28</update>
+                                        </map>
+                                        <map key="29">
+                                            <update state="CurrentVolume" type="string">29</update>
+                                        </map>
+                                        <map key="30">
+                                            <update state="CurrentVolume" type="string">30</update>
+                                        </map>
+                                        <map key="31">
+                                            <update state="CurrentVolume" type="string">31</update>
+                                        </map>
+                                        <map key="32">
+                                            <update state="CurrentVolume" type="string">32</update>
+                                        </map>
+                                        <map key="33">
+                                            <update state="CurrentVolume" type="string">33</update>
+                                        </map>
+                                        <map key="34">
+                                            <update state="CurrentVolume" type="string">34</update>
+                                        </map>
+                                        <map key="35">
+                                            <update state="CurrentVolume" type="string">35</update>
+                                        </map>
+                                        <map key="36">
+                                            <update state="CurrentVolume" type="string">36</update>
+                                        </map>
+                                        <map key="37">
+                                            <update state="CurrentVolume" type="string">37</update>
+                                        </map>
+                                        <map key="38">
+                                            <update state="CurrentVolume" type="string">38</update>
+                                        </map>
+                                        <map key="39">
+                                            <update state="CurrentVolume" type="string">39</update>
+                                        </map>
+                                        <map key="40">
+                                            <update state="CurrentVolume" type="string">40</update>
+                                        </map>
+                                        <map key="41">
+                                            <update state="CurrentVolume" type="string">41</update>
+                                        </map>
+                                        <map key="42">
+                                            <update state="CurrentVolume" type="string">42</update>
+                                        </map>
+                                        <map key="43">
+                                            <update state="CurrentVolume" type="string">43</update>
+                                        </map>
+                                        <map key="44">
+                                            <update state="CurrentVolume" type="string">44</update>
+                                        </map>
+                                        <map key="45">
+                                            <update state="CurrentVolume" type="string">45</update>
+                                        </map>
+                                        <map key="46">
+                                            <update state="CurrentVolume" type="string">46</update>
+                                        </map>
+                                        <map key="47">
+                                            <update state="CurrentVolume" type="string">47</update>
+                                        </map>
+                                        <map key="48">
+                                            <update state="CurrentVolume" type="string">48</update>
+                                        </map>
+                                        <map key="49">
+                                            <update state="CurrentVolume" type="string">49</update>
+                                        </map>
+                                        <map key="50">
+                                            <update state="CurrentVolume" type="string">50</update>
+                                        </map>
+                                        <map key="51">
+                                            <update state="CurrentVolume" type="string">51</update>
+                                        </map>
+                                        <map key="52">
+                                            <update state="CurrentVolume" type="string">52</update>
+                                        </map>
+                                        <map key="53">
+                                            <update state="CurrentVolume" type="string">53</update>
+                                        </map>
+                                        <map key="54">
+                                            <update state="CurrentVolume" type="string">54</update>
+                                        </map>
+                                        <map key="55">
+                                            <update state="CurrentVolume" type="string">55</update>
+                                        </map>
+                                        <map key="56">
+                                            <update state="CurrentVolume" type="string">56</update>
+                                        </map>
+                                        <map key="57">
+                                            <update state="CurrentVolume" type="string">57</update>
+                                        </map>
+                                        <map key="58">
+                                            <update state="CurrentVolume" type="string">58</update>
+                                        </map>
+                                        <map key="59">
+                                            <update state="CurrentVolume" type="string">59</update>
+                                        </map>
+                                        <map key="60">
+                                            <update state="CurrentVolume" type="string">60</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_volume_variables name="Volume_current_volume" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">VOL A: +</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500400015001500150040001500400015001500150015001500150015001500150015001500400015001500150015001500400015004000150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_volume_variables name="Volume_current_volume" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">VOL A: -</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500400015001500150040001500400015001500150040001500150015004000150015001500400015001500150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn"> 
+                <update_state_variable name="Mute_current_mute_setting_zone1" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MUT A: T</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015004000150015001500150015001500150040001500150015004000150040001500150015004000150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <update_state_variable name="Mute_current_mute_setting_zone1" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MUT A: F</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500400015001500150040001500150015001500150040001500150015004000150015001500400015001500150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <resource_component_actions resource_type="AV_STEREOPROCESSOR_FUNCTION">
+            <action name="IncrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">BAS A: +</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015001500150040001500400015001500150040001500150015004000150040001500400015001500150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">BAS A: -</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500150015001500150040001500400015001500150040001500150015001500150040001500400015001500150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="IncrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">TRE A: +</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150040001500150015004000150015001500400015001500150015001500150015001500150040001500150015004000150015001500400015004000150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">TRE A: -</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015004000150015001500400015001500150040001500150015004000150040001500150015004000150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectSource1">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A: 1</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015004000150015001500150015001500150015001500150015004000150040001500150015004000150040001500400015004000150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectSource2">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A: 2</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500400015004000150015001500150015001500150040001500150015004000150015001500150015004000150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MicVolumeUp">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MIC 1: LVL +</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015001500150040001500150015001500150040001500150015004000150040001500400015001500150040001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MicVolumeDown">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MIC 1: LVL -</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000010000948c015500AA0015001500150015001500400015001500150015001500150015001500150015001500400015004000150040001500400015004000150040001500400015004000150015001500150015004000150040001500400015001500150040001500150015004000150040001500150015001500150015001500400015001500150040001505ED00000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

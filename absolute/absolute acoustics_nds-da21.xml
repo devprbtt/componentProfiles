@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Acoustics" model="NDS-DA21" alias="Absolute Nexos Digital to Analog Audio Converter, NDS-DA21" device_class="Media_converter" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+    <notes>
+        Absolute Nexos Digital to Analog Audio Converter, NDS-DA21
+    </notes>
+    <component_properties>
+        <always_on_allowed>false</always_on_allowed>
+    </component_properties>
+    <media_interfaces>
+        <input name_on_component="Coax-Opt In">
+            <audio_media type="coaxial_digital"/>
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="Line Out">
+            <audio_media type="rca_stereo"/>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <input name_on_component="Coax-Opt In"/>
+            <output name_on_component="Line Out"/>
+        </implementation>
+    </logical_component>
+</component>

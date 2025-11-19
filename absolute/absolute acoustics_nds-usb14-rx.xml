@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-USB14-RX" alias="Absolute USB Over CAT-X kit, NDS-USB14-RX" device_class="Media_converter" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 1.0 $">
+
+    <component_properties>
+        <always_on_allowed>false</always_on_allowed>
+    </component_properties>
+    
+    <media_interfaces>
+        <data name_on_component="RJ45">
+            <data_media type="ethernet"/>
+        </data>
+        <data name_on_component="USB 1">
+            <data_media type="usb"/>
+        </data>
+        <data name_on_component="USB 2">
+            <data_media type="usb"/>
+        </data>
+        <data name_on_component="USB 3">
+            <data_media type="usb"/>
+        </data>
+        <data name_on_component="USB 4">
+            <data_media type="usb"/>
+        </data>
+    </media_interfaces>
+    
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <data name_on_component="RJ45"></data>
+            <data name_on_component="USB 1"></data>
+        </implementation> 
+    </logical_component>
+    <logical_component logical_component_name="Network_device2">
+        <implementation>
+            <data name_on_component="RJ45"></data>
+            <data name_on_component="USB 2"></data>
+        </implementation> 
+    </logical_component>
+    <logical_component logical_component_name="Network_device3">
+        <implementation>
+            <data name_on_component="RJ45"></data>
+            <data name_on_component="USB 3"></data>
+        </implementation> 
+    </logical_component>
+    <logical_component logical_component_name="Network_device4">
+        <implementation>
+            <data name_on_component="RJ45"></data>
+            <data name_on_component="USB 4"></data>
+        </implementation> 
+    </logical_component>
+    
+</component>

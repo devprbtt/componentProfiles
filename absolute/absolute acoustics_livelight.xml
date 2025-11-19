@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="LiveLight 2" alias="Absolute Livelight Lighting Control System" device_class="Lighting_controller" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.2 $" rpm_xml_version_date="$Date: 2011/02/11 10:30:00 $">
+    <control_interfaces preferred="ip">
+        <rs232 data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="19200" connector_type="db9 female" cable_type="rs232 straight" response_time_length_ms="500">
+            <baud_rate speed="19200"/>
+            <send_postfix type="hex">0D</send_postfix>
+        </rs232>        
+        <ip port="50000" response_time_length_ms="500">
+            <send_postfix type="hex">0D</send_postfix>
+            <receive_end_condition test_condition="data" type="hex">0D</receive_end_condition>
+        </ip>
+    </control_interfaces>
+    
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="50000"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Lighting Controller">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_LIGHTINGCONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_SHADECONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_SECURITYSYSTEMCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    
+    <logical_component logical_component_name="Lighting_controller">
+        <implementation>
+            <internal name_on_component="Lighting Controller"></internal>
+        </implementation>
+        
+        <status_messages>
+            <status_message name="DimmerStatus">
+                <constant type="character">D</constant>
+                <data type="character" constant_length = "3">
+                    <update state="DimmerNumber" type="string"></update>
+                </data>
+                <constant type="character">L</constant>
+                <data type="character" constant_length = "3">
+                    <update state="DimmerLevel" type="string"></update>
+                    <data_map match_required="yes">
+                        <map key="000">
+                            <update state="DimmerPercentText" type="string">0 %</update>
+                        </map>
+                        <map key="001">
+                            <update state="DimmerPercentText" type="string">1 %</update>
+                        </map>
+                        <map key="002">
+                            <update state="DimmerPercentText" type="string">2 %</update>
+                        </map>
+                        <map key="003">
+                            <update state="DimmerPercentText" type="string">3 %</update>
+                        </map>
+                        <map key="004">
+                            <update state="DimmerPercentText" type="string">4 %</update>
+                        </map>
+                        <map key="005">
+                            <update state="DimmerPercentText" type="string">5 %</update>
+                        </map>
+                        <map key="006">
+                            <update state="DimmerPercentText" type="string">6 %</update>
+                        </map>
+                        <map key="007">
+                            <update state="DimmerPercentText" type="string">7 %</update>
+                        </map>
+                        <map key="008">
+                            <update state="DimmerPercentText" type="string">8 %</update>
+                        </map>
+                        <map key="009">
+                            <update state="DimmerPercentText" type="string">9 %</update>
+                        </map>
+                        <map key="010">
+                            <update state="DimmerPercentText" type="string">10 %</update>
+                        </map>
+                        <map key="011">
+                            <update state="DimmerPercentText" type="string">11 %</update>
+                        </map>
+                        <map key="012">
+                            <update state="DimmerPercentText" type="string">12 %</update>
+                        </map>
+                        <map key="013">
+                            <update state="DimmerPercentText" type="string">13 %</update>
+                        </map>
+                        <map key="014">
+                            <update state="DimmerPercentText" type="string">14 %</update>
+                        </map>
+                        <map key="015">
+                            <update state="DimmerPercentText" type="string">15 %</update>
+                        </map>
+                        <map key="016">
+                            <update state="DimmerPercentText" type="string">16 %</update>
+                        </map>
+                        <map key="017">
+                            <update state="DimmerPercentText" type="string">17 %</update>
+                        </map>
+                        <map key="018">
+                            <update state="DimmerPercentText" type="string">18 %</update>
+                        </map>
+                        <map key="019">
+                            <update state="DimmerPercentText" type="string">19 %</update>
+                        </map>
+                        <map key="020">
+                            <update state="DimmerPercentText" type="string">20 %</update>
+                        </map>
+                        <map key="021">
+                            <update state="DimmerPercentText" type="string">21 %</update>
+                        </map>
+                        <map key="022">
+                            <update state="DimmerPercentText" type="string">22 %</update>
+                        </map>
+                        <map key="023">
+                            <update state="DimmerPercentText" type="string">23 %</update>
+                        </map>
+                        <map key="024">
+                            <update state="DimmerPercentText" type="string">24 %</update>
+                        </map>
+                        <map key="025">
+                            <update state="DimmerPercentText" type="string">25 %</update>
+                        </map>
+                        <map key="026">
+                            <update state="DimmerPercentText" type="string">26 %</update>
+                        </map>
+                        <map key="027">
+                            <update state="DimmerPercentText" type="string">27 %</update>
+                        </map>
+                        <map key="028">
+                            <update state="DimmerPercentText" type="string">28 %</update>
+                        </map>
+                        <map key="029">
+                            <update state="DimmerPercentText" type="string">29 %</update>
+                        </map>
+                        <map key="030">
+                            <update state="DimmerPercentText" type="string">30 %</update>
+                        </map>
+                        <map key="031">
+                            <update state="DimmerPercentText" type="string">31 %</update>
+                        </map>
+                        <map key="032">
+                            <update state="DimmerPercentText" type="string">32 %</update>
+                        </map>
+                        <map key="033">
+                            <update state="DimmerPercentText" type="string">33 %</update>
+                        </map>
+                        <map key="034">
+                            <update state="DimmerPercentText" type="string">34 %</update>
+                        </map>
+                        <map key="035">
+                            <update state="DimmerPercentText" type="string">35 %</update>
+                        </map>
+                        <map key="036">
+                            <update state="DimmerPercentText" type="string">36 %</update>
+                        </map>
+                        <map key="037">
+                            <update state="DimmerPercentText" type="string">37 %</update>
+                        </map>
+                        <map key="038">
+                            <update state="DimmerPercentText" type="string">38 %</update>
+                        </map>
+                        <map key="039">
+                            <update state="DimmerPercentText" type="string">39 %</update>
+                        </map>
+                        <map key="040">
+                            <update state="DimmerPercentText" type="string">40 %</update>
+                        </map>
+                        <map key="041">
+                            <update state="DimmerPercentText" type="string">41 %</update>
+                        </map>
+                        <map key="042">
+                            <update state="DimmerPercentText" type="string">42 %</update>
+                        </map>
+                        <map key="043">
+                            <update state="DimmerPercentText" type="string">43 %</update>
+                        </map>
+                        <map key="044">
+                            <update state="DimmerPercentText" type="string">44 %</update>
+                        </map>
+                        <map key="045">
+                            <update state="DimmerPercentText" type="string">45 %</update>
+                        </map>
+                        <map key="046">
+                            <update state="DimmerPercentText" type="string">46 %</update>
+                        </map>
+                        <map key="047">
+                            <update state="DimmerPercentText" type="string">47 %</update>
+                        </map>
+                        <map key="048">
+                            <update state="DimmerPercentText" type="string">48 %</update>
+                        </map>
+                        <map key="049">
+                            <update state="DimmerPercentText" type="string">49 %</update>
+                        </map>
+                        <map key="050">
+                            <update state="DimmerPercentText" type="string">50 %</update>
+                        </map>
+                        <map key="051">
+                            <update state="DimmerPercentText" type="string">51 %</update>
+                        </map>
+                        <map key="052">
+                            <update state="DimmerPercentText" type="string">52 %</update>
+                        </map>
+                        <map key="053">
+                            <update state="DimmerPercentText" type="string">53 %</update>
+                        </map>
+                        <map key="054">
+                            <update state="DimmerPercentText" type="string">54 %</update>
+                        </map>
+                        <map key="055">
+                            <update state="DimmerPercentText" type="string">55 %</update>
+                        </map>
+                        <map key="056">
+                            <update state="DimmerPercentText" type="string">56 %</update>
+                        </map>
+                        <map key="057">
+                            <update state="DimmerPercentText" type="string">57 %</update>
+                        </map>
+                        <map key="058">
+                            <update state="DimmerPercentText" type="string">58 %</update>
+                        </map>
+                        <map key="059">
+                            <update state="DimmerPercentText" type="string">59 %</update>
+                        </map>
+                        <map key="060">
+                            <update state="DimmerPercentText" type="string">60 %</update>
+                        </map>
+                        <map key="061">
+                            <update state="DimmerPercentText" type="string">61 %</update>
+                        </map>
+                        <map key="062">
+                            <update state="DimmerPercentText" type="string">62 %</update>
+                        </map>
+                        <map key="063">
+                            <update state="DimmerPercentText" type="string">63 %</update>
+                        </map>
+                        <map key="064">
+                            <update state="DimmerPercentText" type="string">64 %</update>
+                        </map>
+                        <map key="065">
+                            <update state="DimmerPercentText" type="string">65 %</update>
+                        </map>
+                        <map key="066">
+                            <update state="DimmerPercentText" type="string">66 %</update>
+                        </map>
+                        <map key="067">
+                            <update state="DimmerPercentText" type="string">67 %</update>
+                        </map>
+                        <map key="068">
+                            <update state="DimmerPercentText" type="string">68 %</update>
+                        </map>
+                        <map key="069">
+                            <update state="DimmerPercentText" type="string">69 %</update>
+                        </map>
+                        <map key="070">
+                            <update state="DimmerPercentText" type="string">70 %</update>
+                        </map>
+                        <map key="071">
+                            <update state="DimmerPercentText" type="string">71 %</update>
+                        </map>
+                        <map key="072">
+                            <update state="DimmerPercentText" type="string">72 %</update>
+                        </map>
+                        <map key="073">
+                            <update state="DimmerPercentText" type="string">73 %</update>
+                        </map>
+                        <map key="074">
+                            <update state="DimmerPercentText" type="string">74 %</update>
+                        </map>
+                        <map key="075">
+                            <update state="DimmerPercentText" type="string">75 %</update>
+                        </map>
+                        <map key="076">
+                            <update state="DimmerPercentText" type="string">76 %</update>
+                        </map>
+                        <map key="077">
+                            <update state="DimmerPercentText" type="string">77 %</update>
+                        </map>
+                        <map key="078">
+                            <update state="DimmerPercentText" type="string">78 %</update>
+                        </map>
+                        <map key="079">
+                            <update state="DimmerPercentText" type="string">79 %</update>
+                        </map>
+                        <map key="080">
+                            <update state="DimmerPercentText" type="string">80 %</update>
+                        </map>
+                        <map key="081">
+                            <update state="DimmerPercentText" type="string">81 %</update>
+                        </map>
+                        <map key="082">
+                            <update state="DimmerPercentText" type="string">82 %</update>
+                        </map>
+                        <map key="083">
+                            <update state="DimmerPercentText" type="string">83 %</update>
+                        </map>
+                        <map key="084">
+                            <update state="DimmerPercentText" type="string">84 %</update>
+                        </map>
+                        <map key="085">
+                            <update state="DimmerPercentText" type="string">85 %</update>
+                        </map>
+                        <map key="086">
+                            <update state="DimmerPercentText" type="string">86 %</update>
+                        </map>
+                        <map key="087">
+                            <update state="DimmerPercentText" type="string">87 %</update>
+                        </map>
+                        <map key="088">
+                            <update state="DimmerPercentText" type="string">88 %</update>
+                        </map>
+                        <map key="089">
+                            <update state="DimmerPercentText" type="string">89 %</update>
+                        </map>
+                        <map key="090">
+                            <update state="DimmerPercentText" type="string">90 %</update>
+                        </map>
+                        <map key="091">
+                            <update state="DimmerPercentText" type="string">91 %</update>
+                        </map>
+                        <map key="092">
+                            <update state="DimmerPercentText" type="string">92 %</update>
+                        </map>
+                        <map key="093">
+                            <update state="DimmerPercentText" type="string">93 %</update>
+                        </map>
+                        <map key="094">
+                            <update state="DimmerPercentText" type="string">94 %</update>
+                        </map>
+                        <map key="095">
+                            <update state="DimmerPercentText" type="string">95 %</update>
+                        </map>                         
+                        <map key="096">
+                            <update state="DimmerPercentText" type="string">96 %</update>
+                        </map>
+                        <map key="097">
+                            <update state="DimmerPercentText" type="string">97 %</update>
+                        </map>
+                        <map key="098">
+                            <update state="DimmerPercentText" type="string">98 %</update>
+                        </map>
+                        <map key="099">
+                            <update state="DimmerPercentText" type="string">99 %</update>
+                        </map>
+                        <map key="100">
+                            <update state="DimmerPercentText" type="string">100 %</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="character" constant_length = "1">
+                    <data_map match_required="yes">
+                        <map key="1">
+                            <update state="IsDimmerOn" type="boolean">true</update>
+                        </map>
+                        <map key="0">
+                            <update state="IsDimmerOn" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+                <append_data_to_state_names state="DimmerNumber" note="'001' - '999'"/>
+            </status_message>            
+            <status_message name="ButtonStatus">
+                <constant type="character">B</constant>
+                <data type="character" constant_length = "3">
+                    <update state="ButtonNumber" type="string"></update>
+                </data>
+                <data type="character" constant_length = "1">
+                    <data_map match_required="yes">
+                        <map key="P">
+                            <update state="IsButtonPressed" type="boolean">true</update>
+                        </map>
+                        <map key="R">
+                            <update state="IsButtonPressed" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+                <append_data_to_state_names state="ButtonNumber" note="'001' - '999'"/>
+            </status_message>
+            <status_message name="FeedbackStatus">
+                <constant type="character">F</constant>
+                <data type="character" constant_length = "3">
+                    <update state="FeedbackNumber" type="string"></update>
+                </data>
+                <data type="character" constant_length = "1">
+                    <data_map match_required="yes">
+                        <map key="P">
+                            <update state="IsFeedbackOn" type="boolean">true</update>
+                            <update state="CurrentZoneStatus" type="string">Porta Aberta</update>
+                        </map>
+                        <map key="R">
+                            <update state="IsFeedbackOn" type="boolean">false</update>
+                            <update state="CurrentZoneStatus" type="string">Porta Fechada</update>
+                        </map>
+                    </data_map>
+                </data>
+                <append_data_to_state_names state="FeedbackNumber" note="'001' - '999'"/>
+            </status_message>
+        </status_messages>
+        
+        <resource_component_actions resource_type="ENV_LIGHTINGCONTROLLER_SOURCE">
+            <action name="DimmerSet">
+                <action_argument name="Address1" note="Dimmer Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <action_argument name="DimmerLevel" note="Target Intensity (000 - 100)"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                            <parameter parameter_data_type="character" action_argument="DimmerLevel"  parameter_total_width="3" parameter_data_width="3"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">L</parameter>
+                            <parameter parameter_data_type="character" action_argument="DimmerLevel"  parameter_total_width="3" parameter_data_width="3"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DimmerIncrease">
+                <action_argument name="Address1" note="Dimmer Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">U</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">U</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>            
+            <action name="DimmerDecrease">
+                <action_argument name="Address1" note="Dimmer Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">D</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">D</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>            
+            <action name="ButtonPress">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ButtonRelease">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ButtonPressAndRelease">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                    </command>                    
+                </command_interface>
+            </action>
+            <action name="ButtonHold">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <entity name="Dimmer" address_components="1">
+                <slider_representation>
+                    <press_action name="DimmerSet"></press_action>
+                    <valueSource name="DimmerLevel">
+                        <unique_identifier name="DimmerNumber" address_component="1" format="%.3d"/>
+                    </valueSource>
+                </slider_representation>
+                <group_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="000"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="000"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="020"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="020"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="040"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="040"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="060"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="060"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="080"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="080"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="100"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="100"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+                <toggle_button_representation>
+                    <release_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="100"/>
+                    </release_action>
+                    <toggle_release_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="000"/>
+                    </toggle_release_action>
+                    <osd_press_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="100"/>
+                    </osd_press_action>
+                    <osd_hold_action name="DimmerSet">
+                        <argument name="DimmerSet" value="000"/>
+                    </osd_hold_action>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryDimmerLevel" period_ms="0">
+                    <with_arg name="DimmerNumber" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+            <entity name="Zone Dimmer" address_components="1"><!--Dimmer-->
+                <slider_representation>
+                    <press_action name="DimmerSet"></press_action>
+                    <valueSource name="DimmerLevel">
+                        <unique_identifier name="DimmerNumber" address_component="1" format="%.3d"/>
+                    </valueSource>
+                </slider_representation>
+                <group_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="000"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="000"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="020"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="020"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="040"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="040"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="060"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="060"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="080"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="080"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="100"/>
+                        </release_action>
+                        <osd_press_action name="DimmerSet">
+                            <argument name="DimmerLevel" value="100"/>
+                        </osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+                <toggle_button_representation>
+                    <release_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="100"/>
+                    </release_action>
+                    <toggle_release_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="000"/>
+                    </toggle_release_action>
+                    <osd_press_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="100"/>
+                    </osd_press_action>
+                    <osd_hold_action name="DimmerSet">
+                        <argument name="DimmerSet" value="000"/>
+                    </osd_hold_action>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryDimmerLevel" period_ms="0">
+                    <with_arg name="DimmerNumber" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+            <entity name="Switch" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="099"/>
+                    </press_action>
+                    <toggle_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="099"/>
+                    </toggle_action>
+                    <osd_press_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="099"/>
+                    </osd_press_action>
+                    <osd_hold_action name="DimmerSet">
+                        <argument name="DimmerLevel" value="099"/>
+                    </osd_hold_action>
+                    <toggleOnUsingState name="IsDimmerOn">
+                        <unique_identifier name="DimmerNumber" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryDimmerLevel" period_ms="0">
+                    <with_arg name="DimmerNumber" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+            <entity name="Keypad Button Press Release" address_components="1">
+                <push_button_representation>
+                    <press_action name="ButtonPress"></press_action>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                    <osd_press_action name="ButtonPressAndRelease"></osd_press_action>
+                </push_button_representation>
+            </entity>
+            <entity name="Keypad Button Press Hold Release" address_components="1">
+                <push_button_representation sendReleaseActionAfterHoldAction="true">
+                    <press_action name="ButtonPress"></press_action>
+                    <hold_action name="ButtonPress"></hold_action>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                </push_button_representation>
+            </entity>
+            <entity name="Keypad Button Toggle" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="ButtonPress"/>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                    <toggle_action name="ButtonPress"/>
+                    <toggle_release_action name="ButtonPressAndRelease"/>
+                    <osd_press_action name="ButtonPressAndRelease"/>
+                    <toggleOnUsingState name="IsFeedbackOn" replaceWildCardWithAddressComponent="1" replaceWildCardUsingFormat="%d">
+                        <unique_identifier name="Address1" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryLEDState" period_ms="0">
+                    <with_arg name="FeedbackNumber" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+            <entity name="Keypad Button" address_components="1"><!--Keypad Button Toggle-->
+                <toggle_button_representation>
+                    <press_action name="ButtonPressAndRelease"/>
+                    <!--<release_action name="ButtonPressAndRelease"/>-->
+                    <toggle_action name="ButtonPressAndRelease"/>
+                    <!--<toggle_release_action name="ButtonPressAndRelease"/>-->
+                    <osd_press_action name="ButtonPressAndRelease"/>
+                    <toggleOnUsingState name="IsFeedbackOn" replaceWildCardWithAddressComponent="1" replaceWildCardUsingFormat="%d">
+                        <unique_identifier name="Address1" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryLEDState" period_ms="0">
+                    <with_arg name="FeedbackNumber" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+        </resource_component_actions>
+        
+        <resource_component_actions resource_type="ENV_SHADECONTROLLER_SOURCE">            
+            <action name="ButtonPress">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ButtonRelease">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ButtonPressAndRelease">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">R</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+            </action>
+            <action name="ButtonHold">
+                <action_argument name="Address1" note="Button Number (001 - 999)"/>
+                <action_argument name="Address2" note="not used"/>
+                <action_argument name="Address3" note="not used"/>
+                <action_argument name="Address4" note="not used"/>
+                <action_argument name="Address5" note="not used"/>
+                <action_argument name="Address6" note="not used"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">B</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1" parameter_data_width="3" parameter_total_width="3"></parameter>
+                            <parameter parameter_data_type="character" name="common" parameter_data_width="1" parameter_total_width="1">P</parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <entity name="Switch" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="ButtonPressAndRelease"/>
+                    <toggle_action name="ButtonPressAndRelease"/>
+                    <osd_press_action name="ButtonPressAndRelease"/>
+                    <toggleOnUsingState name="IsFeedbackOn" replaceWildCardWithAddressComponent="1" replaceWildCardUsingFormat="%d">
+                        <unique_identifier name="FeedbackNumber" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryLEDState" period_ms="0">
+                    <with_arg name="IsFeedbackOn" address_component="1" format="%.3d"/>
+                </query_status_with_action>
+            </entity>
+            <entity name="Keypad Button Press" address_components="1">
+                <push_button_representation>
+                    <press_action name="ButtonPress"></press_action>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                    <osd_press_action name="ButtonPressAndRelease"></osd_press_action>
+                </push_button_representation>
+            </entity>
+            <entity name="Keypad Button Press Release" address_components="1">
+                <push_button_representation>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                    <osd_press_action name="ButtonPressAndRelease"></osd_press_action>
+                </push_button_representation>
+            </entity>
+            <entity name="Keypad Button Toggle" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="ButtonPress"/>
+                    <release_action name="ButtonPressAndRelease"/>
+                    <toggle_action name="ButtonPress"/>
+                    <toggle_release_action name="ButtonPressAndRelease"/>
+                    <osd_press_action name="ButtonPressAndRelease"/>
+                    <toggleOnUsingState name="IsFeedbackOn">
+                        <unique_identifier name="FeedbackNumber" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+            </entity>
+            <entity name="Keypad Button" address_components="1"><!--Keypad Button Toggle-->
+                <toggle_button_representation>
+                    <press_action name="ButtonPressAndRelease"/>
+                    <!--<release_action name="ButtonPressAndRelease"/>-->
+                    <toggle_action name="ButtonPressAndRelease"/>
+                    <!--<toggle_release_action name="ButtonPressAndRelease"/>-->
+                    <osd_press_action name="ButtonPressAndRelease"/>
+                    <toggleOnUsingState name="IsFeedbackOn">
+                        <unique_identifier name="FeedbackNumber" address_component="1" format="%.3d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+            </entity>            
+        </resource_component_actions>
+        
+        <resource_component_actions resource_type="ENV_SECURITYSYSTEMCONTROLLER_SOURCE">
+            <entity name="Zone" address_components="1">
+                <security_zone_group_representation supports_bypass="no">
+                    <status_valueSource name="CurrentZoneStatus">
+                        <unique_identifier name="FeedbackNumber" address_component="1" format="%.3d"/>
+                    </status_valueSource>
+                </security_zone_group_representation>
+            </entity>
+        </resource_component_actions>
+        
+    </logical_component>
+</component>

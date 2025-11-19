@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Zafiro" model="8x8 audio matriz splitter" rpm_xml_version="5.4" minimum_component_engine_version="0.0" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" alias="" device_class="AV_switch">
+    <notes>
+Version: 3.1, Change: Teste
+
+Version: 4.1, Change: add output
+
+Version: 5.1, Change: removido IR
+
+
+</notes>
+    <control_interfaces preferred="ir"></control_interfaces>
+    <media_interfaces>
+        <input name_on_component="Input 8">
+            <audio_media type="speakers_stereo"></audio_media>
+        </input>
+        <input name_on_component="Input 7">
+            <audio_media type="rca_stereo"></audio_media>
+        </input>
+        <input name_on_component="Input 6">
+            <audio_media type="rca_stereo"></audio_media>
+        </input>
+        <input name_on_component="Input 5">
+            <audio_media type="rca_stereo"></audio_media>
+        </input>
+        <input name_on_component="Input 4">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </input>
+        <input name_on_component="Input 3">
+            <audio_media type="coaxial_digital"></audio_media>
+        </input>
+        <input name_on_component="Input 2">
+            <audio_media type="optical_digital"></audio_media>
+        </input>
+        <input name_on_component="Input 1">
+            <audio_media type="optical_digital"></audio_media>
+        </input>
+        <output name_on_component="Output 8">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 7">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 6">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 5">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 4">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 3">
+            <audio_media type="rca_stereo"></audio_media>
+        </output>
+        <output name_on_component="Output 2">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="Output 1">
+            <audio_media type="optical_digital"></audio_media>
+        </output>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_AV Switch" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="AV Switch">OFF</state_variable>
+        <state_variable name="Mute_current_mute_AV Switch" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="AV Switch">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_AV Switch" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="AV Switch" granularity="1" min_value="0" max_value="100">0</volume_state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="AV Switch">
+        <implementation>
+            <input name_on_component="Input Name 8">
+                <action_to_select name="SelectInputInput Name 8"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 7">
+                <action_to_select name="SelectInputInput Name 7"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 6">
+                <action_to_select name="SelectInputInput Name 6"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 5">
+                <action_to_select name="SelectInputInput Name 5"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 4">
+                <action_to_select name="SelectInputInput Name 4"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 3">
+                <action_to_select name="SelectInputInput Name 3"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 2">
+                <action_to_select name="SelectInputInput Name 2"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="Input Name 1">
+                <action_to_select name="SelectInputInput Name 1"></action_to_select>
+            </input>
+            <output name_on_component="Input Name 16"></output>
+            <output name_on_component="Input Name 15"></output>
+            <output name_on_component="Input Name 14"></output>
+            <output name_on_component="Input Name 13"></output>
+            <output name_on_component="Input Name 12"></output>
+            <output name_on_component="Input Name 11"></output>
+            <output name_on_component="Input Name 10"></output>
+            <output name_on_component="Input Name 9"></output>
+        </implementation>
+    </logical_component>
+</component>

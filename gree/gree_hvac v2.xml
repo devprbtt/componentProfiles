@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Gree" model="HVAC V2" device_class="HVAC_controller" minimum_component_engine_version="0" rpm_xml_version="$Revision: 1.1 $" rpm_xml_version_date="$Date: 2009/10/10 12:00:00 $">
+    <control_interfaces preferred="ir">
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <internal name_on_component="HVAC Controller">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <logical_component logical_component_name="HVAC_controller">
+        <implementation>
+            <internal name_on_component="HVAC Controller System"/>    
+        </implementation>   
+        <resource_component_actions resource_type="ENV_HVACCONTROLLER_SOURCE">
+            <action name="Poweroff">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0016003F001600160016001600160016001600160016003F0016003F001600160016003F0016003F001600160016003F0016001600160016001600160016001600160016001600160016001600160016001600160016001600160016001600160016003F0016001600160016001600160016003F001600160016003F00160016001600160016003F00160016001604D800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>            
+            <action name="Temperature16">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F001700170017001700170017001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature17">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017003F0017001700170017001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature18">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F001700170017003F00170017001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature19">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017003F0017003F00170017001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature20">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017003F001700170017003F001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature21">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F001700170017003F0017003F001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature22">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017003F0017003F0017003F001700170017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature23">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017001700170017001700170017003F0017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Temperature24">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0017003F00170017001700170017003F0017003F001700170017003F0017003F0017003F00170017001700170017003F0017003F001700170017001700170017001700170017001700170017001700170017003F0017003F0017003F0017003F0017003F0017001700170017001700170017003F001700170017003F00170017001700170017003F00170017001704D900000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Fan">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015900AC001700170017001700170017001700030000003E0017003E001700170017001700170017001700170017001700170017001700030000003E001700170017001700170017001700170017001700170017001700170017001700170017001700170017003E00170017001700030000003E001700170017001700170017001700030000003E001700170017003E00170017001700170017003E0017001700170003000004E300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Mode">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015600AA001600160016003F001600160016003F00160016001600160016003F001600160016003F00160016001600160016003F001600160016001600160016001600160016001600160016001600160016001600160016001600160016001600160016001600160016001600160016001600160016003F001600160016003F00160016001600160016003F00160016001604D400000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+    </logical_component>
+</component>

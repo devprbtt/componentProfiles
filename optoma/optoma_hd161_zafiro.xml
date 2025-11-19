@@ -1,0 +1,1864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Optoma" model="HD161_Zafiro" device_class="HD_monitor" minimum_component_engine_version="0.0" rpm_xml_version="3.2">
+	<notes>
+		====================== Change Log ==================
+		Version: 1.3 Change: Version Number bump to support new Savant Revisioning Scheme.  Risk: Low Importance: Forced
+	</notes>
+    <control_interfaces preferred="rs232">
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" connector_type="db9 female" cable_type="rs232 null modem" response_time_length_ms="500">
+            <baud_rate speed="9600"/>
+            <response_codes>
+                <rspmessage status="success" name="SuccessMsg">
+                    <constant type="hex">500D</constant>
+                </rspmessage>
+                <rspmessage status="failure" name="FailureMsg">
+                    <constant type="hex">460D</constant>
+                </rspmessage>
+            </response_codes>
+        </rs232>
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="VGA/SCART">
+            <video_media type="vga"/>
+            <resource resource_type="AV_MONITOR_SINK"/>
+        </input>
+        <input name_on_component="HDMI 1">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_MONITOR_SINK"/>
+        </input>
+        <input name_on_component="HDMI 2">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_MONITOR_SINK"/>
+        </input>
+        <input name_on_component="Y/G Pb/B Pr/R">
+            <video_media type="component_coaxial"/>
+            <resource resource_type="AV_MONITOR_SINK"/>
+        </input>
+        <input name_on_component="VIDEO">
+            <video_media type="composite"/>
+            <resource resource_type="AV_MONITOR_SINK"/>
+        </input>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_setting" owning_logical_component="HD_monitor" state_center_binding="CurrentPowerStatus" state_center_type="string">OFF</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="HD_monitor">
+        <implementation>
+            <input name_on_component="VGA/SCART">
+                <action_to_select name="SelectInputVGA"/>
+            </input>
+        </implementation>
+        
+        <implementation>
+            <input name_on_component="HDMI 1">
+                <action_to_select name="SelectInputHDMI1"/>
+            </input>
+        </implementation>
+        <implementation>
+            <input name_on_component="HDMI 2">
+                <action_to_select name="SelectInputHDMI2"/>
+            </input>
+        </implementation>
+        <implementation>
+            <input name_on_component="Y/G Pb/B Pr/R">
+                <action_to_select name="SelectInputComponent"/>
+            </input>
+        </implementation>
+        <implementation>
+            <input name_on_component="VIDEO">
+                <action_to_select name="SelectInputVideo"/>
+            </input>
+        </implementation>
+        
+        <status_messages>
+            <status_message name="CurrentProjectorState">
+                <constant type="character">INFO</constant>
+                <data type="character" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="0">
+                            <update state="CurrentProjectorState" type="string">Standby</update>
+                        </map>
+                        <map key="1">
+                            <update state="CurrentProjectorState" type="string">Warming</update>
+                        </map>
+                        <map key="2">
+                            <update state="CurrentProjectorState" type="string">Cooling</update>
+                        </map>
+                        <map key="3">
+                            <update state="CurrentProjectorState" type="string">Lamp Fail</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOn">
+                <execute_on_state_variable_condition name="Power_current_power_setting" test_condition="not_equal">ON</execute_on_state_variable_condition>
+                <update_state_variable name="Power_current_power_setting" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009753015b00ae00140017001400420015001600140017001400420016004000150016001500160015004100160015001600410015004100150016001500160015004100140042001400170015004100160015001600150015001600160015001500160015001700150041001400170014004200140042001400420014004200150041001500410016060900000000</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                        <command response_required="no">
+                            <command_string type="hex">0000000000009753015b00ae00140017001400420015001600140017001400420016004000150016001500160015004100160015001600410015004100150016001500160015004100140042001400170015004100160015001600150015001600160015001500160015001700150041001400170014004200140042001400420014004200150041001500410016060900000000</command_string>
+                            <delay ms_delay="15000"/>
+                        </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">30</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">30</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">30</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">30</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">20</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">31</command_string>
+                        <delay ms_delay="50"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">0D</command_string>
+                        <delay ms_delay="6000"/>
+                    </command>    
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Power_current_power_setting" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015500A8001600130016003D00160013001600130016003D0016003D00160013001600130016003D001600130016003D0016003D00160013001600130016003D0016003D001600130016003D0016003D0016003D001600130016003D00160013001600130016003D0016001300160013001600130016003D001600130016003D0016003D001605E80155005400160ED100000000</command_string>
+                        <delay ms_delay="2000"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015500A8001600130016003D00160013001600130016003D0016003D00160013001600130016003D001600130016003D0016003D00160013001600130016003D0016003D001600130016003D0016003D0016003D001600130016003D00160013001600130016003D0016001300160013001600130016003D001600130016003D0016003D001605E80155005400160ED100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015500A8001600130016003D00160013001600130016003D0016003D00160013001600130016003D001600130016003D0016003D00160013001600130016003D0016003D001600130016003D0016003D0016003D001600130016003D00160013001600130016003D0016001300160013001600130016003D001600130016003D0016003D001605E80155005400160ED100000000</command_string>
+                        <delay ms_delay="10000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030303020320D</command_string>
+                        <delay ms_delay="10000"/>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <custom_component_actions>
+            <action name="Resync">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030303120310D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="SelectInputHDMI1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009753015b00ae00150016001500410015001600150016001600400016004000160015001600150016004100150016001500410015004100150016001500160015004100160040001600150016004000160041001500160015004100150016001500160015001600150041001500160015001600160040001600150016004000160040001600410015060900000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313220310D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputHDMI2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009753015b00ad00160015001600400016001600150016001500410015004100150016001500160015004100150016001500410016004000160015001600150016004000160041001500160015001600150016001500160015004100150041001500160015001600160040001600400016004000160041001500160015001600150041001500410015060900000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E303031322031350D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputComponent">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150040001500400015001500150040001500150015001500150015001500150015001500150015001500400015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E303031322031340D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputVGA">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150040001500150015004000150040001500150015001500150015001500150015001500150040001500150015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313220350D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputSVideo">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313220390D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInputVideo">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150015001500400015004000150040001500150015001500150015001500400015004000150015001500150015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E303031322031300D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput">
+                <action_argument name="InputNumber" note="1 - HDMI1, 15 - HDMI2, 2 - DVI, 14 - Component, 7 - VGA, 9 - S-Video, 10 - Video"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303132200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="InputNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="DisplayMode">
+                <action_argument name="DisplayNumber" note="1 - Cinema, 2 - Bright, 3 - Photo, 4 - Reference, 5 - User"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303230200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="DisplayNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Values -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323320310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentDisplayModeResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentDisplayMode" type="string">Cinema</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentDisplayMode" type="string">Bright</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentDisplayMode" type="string">Photo</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentDisplayMode" type="string">Reference</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentDisplayMode" type="string">User</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Brightness">
+                <action_argument name="BrightnessNumber" note="Range: 0 - 100"/>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150040001500400015004000150015001500400015001500150015001500400015001500150015001500150015004000150015001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303231200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BrightnessNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323520310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentBrightnessResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="3">
+                                    <update state="CurrentBrightness" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Contrast">
+                <action_argument name="ContrastNumber" note="Range: 0 - 100"/>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150040001500150015001500150015001500150015004000150015001500400015001500150040001500400015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303232200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ContrastNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323620310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentContrastResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="3">
+                                    <update state="CurrentContrast" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Sharpness">
+                <action_argument name="SharpnessNumber" note="Range: 1 - 35"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303232200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="SharpnessNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Color">
+                <action_argument name="ColorNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303434200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ColorNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Tint">
+                <action_argument name="TintNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303435200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="TintNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="NoiseReduction">
+                <action_argument name="NoiseReductionNumber" note="Range: 0 - 10"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313936200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="NoiseReductionNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="GammaMode">
+                <action_argument name="GammaModeNumber" note="Values: 31 - Film, 32 - Video, 33 - Graphics, 34 - Standard"/>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150040001500150015001500150015001500150015004000150015001500150015001500150040001500400015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303334200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="GammaModeNumber"  parameter_total_width="1" parameter_data_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="FilmCurveType">
+                <action_argument name="FilmCurveTypeNumber" note="Range: -7 - 7"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313832200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="FilmCurveTypeNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="FilmOffset">
+                <action_argument name="FilmOffsetNumber" note="Range: -5 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313833200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="FilmOffsetNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="VideoCurveType">
+                <action_argument name="VideoCurveTypeNumber" note="Range: -7 - 7"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313834200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="VideoCurveTypeNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="VideoOffset">
+                <action_argument name="VideoOffsetNumber" note="Range: -5 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313835200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="VideoOffsetNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="GraphicsCurveType">
+                <action_argument name="GraphicsCurveTypeNumber" note="Range: -7 - 7"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313836200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="GraphicsCurveTypeNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="GraphicsOffset">
+                <action_argument name="GraphicsOffsetNumber" note="Range: -5 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313837200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="GraphicsOffsetNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="StandardCurveType">
+                <action_argument name="StandardCurveTypeNumber" note="Range: -7 - 7"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313838200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="StandardCurveTypeNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="StandardOffset">
+                <action_argument name="StandardOffsetNumber" note="Range: -5 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313839200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="StandardOffsetNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="B/WExtension">
+                <action_argument name="BWExtensionNumber" note="Values: 0 - Off, 1 - On"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303433200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BWExtensionNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="ColorTemperature">
+                <action_argument name="ColorTemperatureNumber" note="Values: 1 - Warm, 2 - Medium, 3 - Cold"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303336200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ColorTemperatureNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323820310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentColorTemperatureResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentColorTemperature" type="string">Warm</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentColorTemperature" type="string">Medium</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentColorTemperature" type="string">Cold</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="RedGain">
+                <action_argument name="RedGainNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303234200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="RedGainNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="GreenGain">
+                <action_argument name="GreenGainNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303235200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="GreenGainNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="BlueGain">
+                <action_argument name="BlueGainNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303236200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BlueGainNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="RedBias">
+                <action_argument name="RedBiasNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303237200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="RedBiasNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="BlueBias">
+                <action_argument name="BlueBiasNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303238200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BlueBiasNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="GreenBias">
+                <action_argument name="GreenBiasNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303239200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="GreenBiasNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="RGBGainBiasReset">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323320310D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="PureDetail">
+                <action_argument name="PureDetailNumber" note="Values: 0 - Off, 1 - 1, 2 - 2, 3 - 3"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303431200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PureDetailNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="PureColor">
+                <action_argument name="PureColorNumber" note="Values: 0 - Off, 1 - 1, 2 - 2, 3 - 3, 4 - 4, 5 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303432200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PureColorNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="PureMotion">
+                <action_argument name="PureMotionNumber" note="Values: 0 - Off, 1 - Low, 2 - Medium, 3 - High"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313930200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PureMotionNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="PureDemo">
+                <action_argument name="PureDemoNumber" note="Values: 0 - Off, 1 - H Split, 2 - V Split"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313937200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PureDemoNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="InputSourceFilter">
+                <action_argument name="InputSourceFilterNumber" note="Values: 1 - HDMI1, 7 - HDMI2, 2 - DVI, 8 - Component, 5 - VGA, 9 - S-Video, 10 - Video"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303339200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="InputSourceFilterNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Format">
+                <action_argument name="FormatNumber" note="Values: 1 - 4:3, 2 - 16:9, 5 - LBX, 6 - Native"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303630200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="FormatNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323720310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentAspectRatioResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentAspectRatio" type="string">4x3</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentAspectRatio" type="string">16x9</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentAspectRatio" type="string">LBX</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentAspectRatio" type="string">Native</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Overscan">
+                <action_argument name="OverscanNumber" note="Range: 0 - 4"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303631200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="OverscanNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="EdgeMasking">
+                <action_argument name="EdgeMaskingNumber" note="Range: 0 - 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303632200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="EdgeMaskingNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="VImageShift">
+                <action_argument name="VImageShiftNumber" note="Range: -50 - 50"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303634200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="VImageShiftNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="VKeystone">
+                <action_argument name="VKeystoneNumber" note="Range: -16 - 16"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303636200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="VKeystoneNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="SuperWide">
+                <action_argument name="SuperWideNumber" note="Values: 0 - Off, 1 - On, 2 - Auto"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313939200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="SuperWideNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Language">
+                <action_argument name="LanguageNumber" note="Values: 1 - English, 2 - German, 3 - French, 4 - Italian, 5 - Spanish, 6 - Portugese, 7 - Polish, 8 - Dutch, 9 - Swedish, 10 - Norwegian/Danish, 11 - Finnish, 12 - Greek, 13 - Traditional Chinese, 14 - Simplified Chinese, 15 - Japanese, 16 - Korean, 17 - Russian, 18 - Hungarian, 19 - Czechoslovak, 20 - Arabic, 21 - Thai, 22 - Turkish"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303730200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="LanguageNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="ProjectionMode">
+                <action_argument name="ProjectionNumber" note="Values: 1 - Front-Desktop, 2 - Rear-Desktop, 3 - Front-Ceiling, 4 - Rear-Ceiling"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303731200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ProjectionNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                    <!-- Read Back Value -->
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323920310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentProjectionModeResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentProjectionMode" type="string">Front-Desktop</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentProjectionMode" type="string">Rear-Desktop</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentProjectionMode" type="string">Front-Ceiling</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentProjectionMode" type="string">Rear-Ceiling</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="MenuLocation">
+                <action_argument name="MenuLocationNumber" note="Values: 1 - Top Left, 2 - Top Right, 3 - Center, 4 - Bottom Left, 5 - Bottom Right"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303732200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="MenuLocationNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="AutoPowerOffTime">
+                <action_argument name="PowerOffNumber" note="Range: 0 - 60, minutes in multiples of 5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313036200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PowerOffNumber" parameter_total_width="2"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="ColorSpace">
+                <action_argument name="ColorSpaceNumber" note="Values: 2 - RGB, 3 - YCbCr"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303337200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ColorSpaceNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Tracking">
+                <action_argument name="TrackingNumber" note="Range: 0 - 200"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303733200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="TrackingNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Phase">
+                <action_argument name="PhaseNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303734200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PhaseNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="HPosition">
+                <action_argument name="HPositionNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303735200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="HPositionNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="VPosition">
+                <action_argument name="VPositionNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E30303736200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="VPositionNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="BlackLevel">
+                <action_argument name="BlackLevelNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323030200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BlackLevelNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="WhiteLevel">
+                <action_argument name="WhiteLevelNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323031200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="WhiteLevelNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Saturation">
+                <action_argument name="SaturationNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323032200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="SaturationNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Hue">
+                <action_argument name="HueNumber" note="Range: 0 - 100"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323033200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="HueNumber" parameter_total_width="3"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="IRE">
+                <action_argument name="IRENumber" note="Values: 0 - 0, 1 - 7.5"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323034200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="IRENumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="SourceLock">
+                <action_argument name="SourceLockNumber" note="Values: 1 - On, 2 - Off"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313030200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="SourceLockNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="DynamicBlack">
+                <action_argument name="DynamicBlackNumber" note="Values: 0 - Off, 1 - Cinema 1, 2 - Cinema 2"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313931200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="DynamicBlackNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="12VTriggerA">
+                <action_argument name="12VTriggerANumber" note="Values: 0 - On, 1 - Off"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313932200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="12VTriggerANumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="12VTriggerB">
+                <action_argument name="12VTriggerBNumber" note="Values: 0 - On, 1 - Off, 2 - Auto235"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313933200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="12VTriggerBNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="AUTO235">
+                <action_argument name="AUTO235Number" note="Values: 1 - 4:3, 2 - 16:9, 5 - LBX, 6 - Native"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030323035200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="AUTO235Number" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="BackgroundColor">
+                <action_argument name="BackgroundColorNumber" note="Values: 1 - Dark Blue, 2 - Black, 3 - Gray"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313034200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BackgroundColorNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="ImageAI">
+                <action_argument name="ImageAINumber" note="Values: 1 - On, 2 - Off"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313934200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ImageAINumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="LampHour">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E303031303820310D</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="LampReminder">
+                <action_argument name="LampReminderNumber" note="Values: 1 - On, 2 - Off"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313039200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="LampReminderNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Lamp"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150015001500400015001500150015001500150015004000150015001500150015004000150015001500400015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PureEngine"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150040001500150015004000150015001500150015004000150015001500400015001500150040001500150015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Return"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150040001500400015004000150015001500150015001500150015001500150015001500150015001500150015004000150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorLeft"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150015001500150015001500150040001500150015001500150015001500400015004000150040001500400015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorRight"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150040001500150015001500150040001500150015001500150015001500400015001500150040001500400015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorUp"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150015001500150015001500150040001500150015001500150015001500150015004000150040001500400015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorDown"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150015001500400015001500150040001500150015001500150015001500400015004000150015001500400015001500150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Mode"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150015001500400015001500150015001500150015001500150015001500150015004000150015001500400015004000150040001500400015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AspectRatio16:9"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150040001500400015001500150015001500150015004000150015001500400015001500150015001500400015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AspectRatio4:3"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150040001500400015001500150015001500150015004000150015001500150015001500150015001500400015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AspectRatioLBX"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015001500150015001500150015004000150015001500150015004000150015001500400015004000150040001500150015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AspectRatioNative"><!-- IR code -->
+                <command_interface interface="ir">
+                    <command partial_response="no">
+                        <command_string type="hex">0000000000009470015600ab001500150015004000150015001500150015004000150040001500150015001500150040001500150015004000150040001500150015001500150040001500400015004000150015001500150015004000150015001500150015004000150015001500150015004000150040001500150015004000150040001500150015004000150652015600ab0015000100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="BriteMode">
+                <action_argument name="BriteModeNumber" note="Values: 1 - On, 2 - Off"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313139200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="BriteModeNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="LampReset">
+                <action_argument name="LampResetNumber" note="Values: 1 - Yes, 2 - No"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313131200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="LampResetNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="Reset">
+                <action_argument name="ResetNumber" note="Values: 1 - Yes, 2 - No"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">7E3030313132200D</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ResetNumber" parameter_data_width="1" parameter_total_width="1"/>
+                        </parameter_list>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryInputSource">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInputSourceResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QuerySoftwareVersion">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323220310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentSoftwareVersionResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="2">
+                                    <update state="CurrentSoftwareVersion" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryDisplayMode">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323320310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentDisplayModeResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentDisplayMode" type="string">Cinema</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentDisplayMode" type="string">Bright</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentDisplayMode" type="string">Photo</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentDisplayMode" type="string">Reference</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentDisplayMode" type="string">User</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryPowerState">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323420310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentPowerStateResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentPowerStatus" type="string">Off</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentPowerStatus" type="string">On</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryBrightness">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323520310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentBrightnessResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="3">
+                                    <update state="CurrentBrightness" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryContrast">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323620310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentContrastResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="3">
+                                    <update state="CurrentContrast" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryAspectRatio">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323720310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentAspectRatioResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="3">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentAspectRatio" type="string">4x3</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentAspectRatio" type="string">16x9</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentAspectRatio" type="string">LBX</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentAspectRatio" type="string">Native</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryColorTemperature">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323820310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentColorTemperatureResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentColorTemperature" type="string">Warm</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentColorTemperature" type="string">Medium</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentColorTemperature" type="string">Cold</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryProjectionMode">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031323920310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentProjectionModeResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentProjectionMode" type="string">Front-Desktop</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentProjectionMode" type="string">Rear-Desktop</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentProjectionMode" type="string">Front-Ceiling</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentProjectionMode" type="string">Rear-Ceiling</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryInformation">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031353020310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentInformationResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentPowerStatus" type="string">Off</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentPowerStatus" type="string">On</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                                <data type="character" constant_length="4">
+                                    <update state="CurrentLampHour" type="string"/>
+                                </data>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentSourceInput" type="string">None</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentSourceInput" type="string">HDMI 1</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentSourceInput" type="string">HDMI 2</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentSourceInput" type="string">DVI</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentSourceInput" type="string">Component</update>
+                                        </map>
+                                        <map key="5">
+                                            <update state="CurrentSourceInput" type="string">VGA</update>
+                                        </map>
+                                        <map key="6">
+                                            <update state="CurrentSourceInput" type="string">S-Video</update>
+                                        </map>
+                                        <map key="7">
+                                            <update state="CurrentSourceInput" type="string">Video</update>
+                                        </map>
+                                    </data_map>  
+                                </data>
+                                <data type="character" constant_length="4">
+                                    <update state="CurrentFirmwareVersion" type="string"/>
+                                </data>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentDisplayMode" type="string">Cinema</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentDisplayMode" type="string">Bright</update>
+                                        </map>
+                                        <map key="2">
+                                            <update state="CurrentDisplayMode" type="string">Photo</update>
+                                        </map>
+                                        <map key="3">
+                                            <update state="CurrentDisplayMode" type="string">Reference</update>
+                                        </map>
+                                        <map key="4">
+                                            <update state="CurrentDisplayMode" type="string">User</update>
+                                        </map>
+                                    </data_map>  
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryModelName">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031353120310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentModelNameResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <data_map match_required="yes">
+                                        <map key="0">
+                                            <update state="CurrentModelName" type="string">HD82</update>
+                                        </map>
+                                        <map key="1">
+                                            <update state="CurrentModelName" type="string">HD82LV</update>
+                                        </map>
+                                    </data_map>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+            <action name="QueryRS232VersionNo">
+                <command_interface interface="rs232">
+                    <command response_required="yes">
+                        <command_string type="hex">7E303031353220310D</command_string>
+                        <response_codes>
+                            <rspmessage status="success" name="CurrentRS232VersionNoResponse">
+                                <constant type="character">OK</constant>
+                                <data type="character" constant_length="1">
+                                    <update state="CurrentRS232VersionNo" type="string"/>
+                                </data>
+                            </rspmessage>
+                        </response_codes>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>  
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

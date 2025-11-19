@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-612S-LH-RX" alias="Absolute Nexos Long-haul HDMI Receiver, NDS-612S-LH-RX" device_class="Media_converter" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+
+    <notes>
+        This product is a Single CAT-X HDMI receiver. Compatible with Absolute NDS-611S-TX and NDS-H12-SPLT devices, for HDMI over CAT-X transmission.
+    </notes>
+
+    <component_properties>
+        <always_on_allowed>false</always_on_allowed>
+    </component_properties>
+    
+    <media_interfaces>
+        <input name_on_component="HDMI UTP In">
+            <combined_media>
+                <audio_media type="rj45_audio"/>
+                <video_media type="rj45"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="HDBaseT In">
+            <combined_media>
+                <audio_media type="link_audio"/>
+                <video_media type="link"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI Out">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+    </media_interfaces>
+    
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <input name_on_component="HDMI UTP In"/>
+            <input name_on_component="HDBaseT In"/>
+            <output name_on_component="HDMI Out"/>
+        </implementation>
+    </logical_component>
+</component>

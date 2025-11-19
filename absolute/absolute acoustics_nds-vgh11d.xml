@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-VGH11D" alias="Absolute Nexos VGA + Audio to HDMI, NDS-VGH11D" device_class="Media_converter" minimum_component_engine_version="0" rpm_xml_version="$Revision: 1.0 $">
+    <media_interfaces>
+        <input name_on_component="Audio Input">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="VGA Input">
+            <video_media type="vga"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI Output">
+            <combined_media>
+	        	<audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+	    	</combined_media>
+	    </output>
+        <output name_on_component="Audio Output">
+            <audio_media type="analog_minijack"/>
+        </output>
+        <output name_on_component="VGA Output">
+            <video_media type="vga"/>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <input name_on_component="Audio Input"/>
+            <input name_on_component="VGA Input"/>
+            <output name_on_component="HDMI Output"/>
+            <output name_on_component="Audio Output"/>
+            <output name_on_component="VGA Output"/>
+        </implementation>
+    </logical_component>
+</component>

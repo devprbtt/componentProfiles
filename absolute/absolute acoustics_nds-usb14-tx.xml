@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="NDS-USB14-TX" alias="Absolute USB Over CAT-X kit, NDS-USB14-TX" device_class="Media_converter" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 1.0 $">
+    
+    <component_properties>
+        <always_on_allowed>false</always_on_allowed>
+    </component_properties>
+    
+    <media_interfaces>
+        <data name_on_component="USB">
+            <data_media type="usb"/>
+        </data>
+        <data name_on_component="RJ45">
+            <data_media type="ethernet"/>
+        </data>
+    </media_interfaces>
+    <logical_component logical_component_name="Media_converter">
+        <implementation>
+            <data name_on_component="USB"></data>
+            <data name_on_component="RJ45"></data>
+        </implementation>
+    </logical_component>
+</component>

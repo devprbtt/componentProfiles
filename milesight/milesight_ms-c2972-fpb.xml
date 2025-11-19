@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Milesight" model="MS-C2972-FPB" device_class="Security_camera_fixed" minimum_component_engine_version="0" rpm_xml_version="2.3">
+    <notes>
+    </notes>
+    <control_interfaces preferred="ip">
+        <ip port="80" response_time_length_ms="12000" name_on_component="ETHERNET" protocol="http">
+            <receive_end_condition test_condition="length">3</receive_end_condition>
+            <response_codes>
+                <!-- 1xx is ignored -->
+                <rspcode type="character" status="success">2</rspcode>
+                <!-- i.e. 2xx responses -->
+                <rspcode type="character" status="failure">3</rspcode>
+                <!-- i.e. 3xx responses -->
+                <rspcode type="character" status="failure">4</rspcode>
+                <!-- i.e. 4xx responses -->
+                <rspcode type="character" status="failure">5</rspcode>
+                <!-- i.e. 5xx responses -->
+            </response_codes>
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"></data_media>
+                <control port="80"></control>
+            </combined_media>
+        </data>
+        <internal name_on_component="Security Camera">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_SECURITYCAMERA_SOURCE"></resource>
+        </internal>
+    </media_interfaces>
+    <logical_component logical_component_name="Security_camera">
+        <implementation>
+            <internal name_on_component="Security Camera"></internal>
+        </implementation>
+        <image_access>
+            <image_format format="jpg" resolution="default" is_multiview_default="yes" is_remote_multiview_default="yes" is_remote_default="yes" stream_decoder="mjpeg-stream">/ipcam/mjpegthird.cgi</image_format>
+            <image_format format="mjpg" resolution="default" is_default="yes" stream_decoder="mjpeg-stream">/ipcam/mjpegcif.cgi</image_format>
+        </image_access>
+        <resource_component_actions resource_type="ENV_SECURITYCAMERA_SOURCE">
+            <action name="PanLeft">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=3&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PanRight">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=4&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="TiltUp">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=1&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="TiltDown">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=2&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ZoomIn">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=32&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ZoomOut">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=33&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IrisOpen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=37&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IrisClose">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=36&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Preset1">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=1</command_string>
+                    </command>
+                </command_interface>
+            </action>  
+            <action name="Preset2">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=2</command_string>
+                    </command>
+                </command_interface>
+            </action>   
+            <action name="Preset3">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=3</command_string>
+                    </command>
+                </command_interface>
+            </action>  
+            <action name="Preset4">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=4</command_string>
+                    </command>
+                </command_interface>
+            </action>   
+            <action name="Preset5">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=5</command_string>
+                    </command>
+                </command_interface>
+            </action>   
+            <action name="Preset6">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=6</command_string>
+                    </command>
+                </command_interface>
+            </action>  
+            <action name="SelectPreset">
+                <action_argument name="PresetNumber" note="Enter Preset Value in integer (1-20)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=66&amp;ptz_go_point=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PresetNumber" parameter_total_width="2"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>  
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SavePreset">
+                <action_argument name="PresetNumber" note="Enter Preset Value in integer (1-20)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=64&amp;ptz_go_point=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PresetNumber" parameter_total_width="2"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PtzSpeed">
+                <action_argument name="PtzSpeed" note="Enter Speed Value in integer (1-10)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.speed&amp;ptz_setting_speed=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PresetNumber" parameter_total_width="2"></parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FocusNear">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=34&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FocusFar">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=35&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Stop">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=0&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ZoomAuto">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=48&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FocusAuto">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=49&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IrisAuto">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=50&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AutoPanOn">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=80&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AutoPanOff">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=81&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ZoneScanOn">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=82&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ZoneScanOff">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=83&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FlipOn">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=128&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FlipOff">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/cgi-bin/viewer/viewer.cgi?action=ptz.control&amp;ptz_cmd=129&amp;ptz_status=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="EnableMask">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/vb.htm?page=mask&amp;maskenable1=1</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DisableMask">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">/vb.htm?page=mask&amp;maskenable1=0</command_string>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

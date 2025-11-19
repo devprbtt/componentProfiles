@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute" model="MDA-875" alias="Absolute Multi-Channel Digital Amplifier, MDA-875" device_class="Amplifier" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+    <notes>
+        For more information about this product, please visit 'http://www.absolute-acoustics.com.br/Integration/Amplificadores/mda-875.html'.
+    </notes>
+    
+    <component_properties>
+        <always_on_allowed>true</always_on_allowed>
+    </component_properties>
+    
+    <control_interfaces preferred="trigger" control_optional="true">
+        <trigger trigger_active_voltage="12" name_on_component="Trigger Input"/>
+    </control_interfaces>
+    
+    <media_interfaces></media_interfaces>
+    
+    <modular_chassis>
+        <module model_name="Analog Audio Module 4 Stereo Channels">
+            <input name_on_component="BUS IN">
+                <audio_media type="rca_stereo"/>
+            </input>
+            <input name_on_component="ZONE 1 LINE IN">
+                <audio_media type="rca_stereo"/>
+            </input>
+            <input name_on_component="ZONE 2 LINE IN">
+                <audio_media type="rca_stereo"/>
+            </input>
+            <input name_on_component="ZONE 3 LINE IN">
+                <audio_media type="rca_stereo"/>
+            </input>
+            <input name_on_component="ZONE 4 LINE IN">
+                <audio_media type="rca_stereo"/>
+            </input>
+            <output name_on_component="BUS OUT">
+                <audio_media type="rca_stereo"/>
+            </output>        
+            <output name_on_component="ZONE 1 OUT">
+                <audio_media type="speakers_stereo"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+            <output name_on_component="ZONE 2 OUT">
+                <audio_media type="speakers_stereo"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+            <output name_on_component="ZONE 3 OUT">
+                <audio_media type="speakers_stereo"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+            <output name_on_component="ZONE 4 OUT">
+                <audio_media type="speakers_stereo"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+        </module>
+        <module model_name="Analog Audio Module 5.1 Surround + 1 Stereo Channel">
+            <input name_on_component="5.1 SURROUND LINE IN">
+                <audio_media type="5.1_surround_rca"/>
+            </input>
+            <input name_on_component="ZONE 4 LINE IN">
+                <audio_media type="rca_stereo"/>
+            </input>        
+            <output name_on_component="5.1 SURROUND OUT">
+                <audio_media type="speakers_5.1_surround"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+            <output name_on_component="ZONE 4 OUT">
+                <audio_media type="speakers_stereo"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+        </module>
+        <module model_name="Analog Audio Module 7.1 Surround">
+            <input name_on_component="7.1 SURROUND LINE IN">
+                <audio_media type="7.1_surround_rca"/>
+            </input>        
+            <output name_on_component="7.1 SURROUND OUT">
+                <audio_media type="speakers_7.1_surround"/>
+                <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            </output>
+        </module>        
+        <chassis_slots>
+            <slot id="Audio Input/Output Slot">
+                <supported_module model_name="Analog Audio Module 4 Stereo Channels"/>
+                <supported_module model_name="Analog Audio Module 5.1 Surround + 1 Stereo Channel"/>
+                <supported_module model_name="Analog Audio Module 7.1 Surround"/>
+                <default_module model_name="Analog Audio Module 4 Stereo Channels"/>
+            </slot>
+        </chassis_slots>
+    </modular_chassis>    
+    
+    <logical_ios>
+        <input logical_name="BUS IN">
+            <audio_media type="rca_stereo"/>
+            <default_io name_on_component="BUS IN" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </input>
+        <input logical_name="ZONE 1 LINE IN">
+            <audio_media type="rca_stereo"/>
+            <default_io name_on_component="ZONE 1 LINE IN" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </input>
+        <input logical_name="ZONE 2 LINE IN">
+            <audio_media type="rca_stereo"/>
+            <default_io name_on_component="ZONE 2 LINE IN" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </input>
+        <input logical_name="ZONE 3 LINE IN">
+            <audio_media type="rca_stereo"/>
+            <default_io name_on_component="ZONE 3 LINE IN" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </input>
+        <input logical_name="ZONE 4 LINE IN">
+            <audio_media type="rca_stereo"/>
+            <default_io name_on_component="ZONE 4 LINE IN" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+            <default_io name_on_component="ZONE 4 LINE IN" model="Analog Audio Module 5.1 Surround + 1 Stereo Channel" slot="Audio Input/Output Slot"/>
+        </input>
+        <input logical_name="5.1 SURROUND LINE IN">
+            <audio_media type="5.1_surround_rca"/>
+            <default_io name_on_component="5.1 SURROUND LINE IN" model="Analog Audio Module 5.1 Surround + 1 Stereo Channel" slot="Audio Input/Output Slot"/>
+        </input>        
+        <input logical_name="7.1 SURROUND LINE IN">
+            <audio_media type="7.1_surround_rca"/>
+            <default_io name_on_component="7.1 SURROUND LINE IN" model="Analog Audio Module 7.1 Surround" slot="Audio Input/Output Slot"/>
+        </input>
+        <output logical_name="BUS OUT">
+            <audio_media type="rca_stereo"/>
+            <audio_media type="speakers_stereo"/>
+            <default_io name_on_component="BUS OUT" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </output>
+        <output logical_name="ZONE 1 OUT">
+            <audio_media type="speakers_stereo"/>
+            <default_io name_on_component="ZONE 1 OUT" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>            
+        </output>
+        <output logical_name="ZONE 2 OUT">
+            <audio_media type="speakers_stereo"/>
+            <default_io name_on_component="ZONE 2 OUT" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </output>
+        <output logical_name="ZONE 3 OUT">
+            <audio_media type="speakers_stereo"/>
+            <default_io name_on_component="ZONE 3 OUT" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+        </output>
+        <output logical_name="ZONE 4 OUT">
+            <audio_media type="speakers_stereo"/>
+            <default_io name_on_component="ZONE 4 OUT" model="Analog Audio Module 4 Stereo Channels" slot="Audio Input/Output Slot"/>
+            <default_io name_on_component="ZONE 4 OUT" model="Analog Audio Module 5.1 Surround + 1 Stereo Channel" slot="Audio Input/Output Slot"/>
+        </output>
+        <output logical_name="5.1 SURROUND OUT">
+            <audio_media type="speakers_5.1_surround"/>
+            <default_io name_on_component="5.1 SURROUND OUT" model="Analog Audio Module 5.1 Surround + 1 Stereo Channel" slot="Audio Input/Output Slot"/>
+        </output>        
+        <output logical_name="7.1 SURROUND OUT">
+            <audio_media type="speakers_7.1_surround"/>
+            <default_io name_on_component="7.1 SURROUND OUT" model="Analog Audio Module 7.1 Surround" slot="Audio Input/Output Slot"/>
+        </output>
+    </logical_ios>
+    
+    <state_variable_list>
+        <state_variable name="Current_trigger_state" owning_logical_component="Amplifier" state_center_binding="TriggerLevel" state_center_type="string">Low</state_variable>
+    </state_variable_list>
+    
+    <logical_component logical_component_name="Amplifier">
+        <implementation>
+            <input logical_name="BUS IN"/>
+            <output logical_name="BUS OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="ZONE 1 LINE IN"/>
+            <output logical_name="ZONE 1 OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="ZONE 2 LINE IN"/>
+            <output logical_name="ZONE 2 OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="ZONE 3 LINE IN"/>
+            <output logical_name="ZONE 3 OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="ZONE 4 LINE IN"/>
+            <output logical_name="ZONE 4 OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="5.1 SURROUND LINE IN"/>
+            <output logical_name="5.1 SURROUND OUT"/>
+        </implementation>
+        <implementation>
+            <input logical_name="7.1 SURROUND LINE IN"/>
+            <output logical_name="7.1 SURROUND OUT"/>
+        </implementation>
+        
+        <status_messages>
+            <status_message name="Device Status">
+                <data type="character">
+                    <update state="TriggerLevel" type="string"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        
+        <universal_component_actions>
+            <action name="PowerOn">
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOff">
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">Low</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>0</command_string>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        
+    </logical_component>
+   
+</component>

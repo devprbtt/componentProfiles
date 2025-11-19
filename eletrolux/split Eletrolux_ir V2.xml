@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Split Eletrolux" model="IR" device_class="HVAC_controller" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.2$">
+    <notes>
+        ====================== Instruções ==================
+        Este profile permite a inclusão de equipamentos de ar condicionado por IR no Savant App
+        e popula automaticamente a tela de ar do Savant TrueControl.
+        
+        O que você precisa mudar neste arquivo:
+        1. marca e modelo do ar no cabeçalho
+        2. comandos de IR, já no formato Savant, de todas as temperaturas a serem utilizadas,
+           para "cool" (resfriar) e "heat" (aquecer)
+        
+        Não adicione novos comandos ou remova outros que não vai utilizar.
+        
+        Defina as temperaturas máximas e mínimas no Blueprint, em Tools/Settings/HVAC Scheduler
+    </notes>
+    <control_interfaces preferred="ir">
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <internal name_on_component="HVAC Controller">
+            <environmental_media></environmental_media>
+            <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Current_Cool_Point_Setting" min_value="16" max_value="32" owning_logical_component="HVAC_controller" receive_updates_from_state_center="no"  state_center_type="string" state_center_binding="ThermostatCurrentCoolPoint_1">20</state_variable>
+        <state_variable name="Current_Heat_Point_Setting" min_value="16" max_value="32" owning_logical_component="HVAC_controller" receive_updates_from_state_center="no"  state_center_type="string" state_center_binding="ThermostatCurrentHeatPoint_1">20</state_variable>
+        <state_variable name="Thermostat_Current_Temperature" min_value="16" max_value="32" owning_logical_component="HVAC_controller" receive_updates_from_state_center="yes"  state_center_type="string" state_center_binding="ThermostatCurrentTemperature_1">--</state_variable>
+        <state_variable name="Is_Current_HVAC_Mode_Heat" owning_logical_component="HVAC_controller" receive_updates_from_state_center="yes"  state_center_type="boolean" state_center_binding="IsCurrentHVACModeHeat_1">false</state_variable>
+        <state_variable name="Is_Current_HVAC_Mode_Cool" owning_logical_component="HVAC_controller" receive_updates_from_state_center="yes"  state_center_type="boolean" state_center_binding="IsCurrentHVACModeCool_1">false</state_variable>
+        <state_variable name="Is_Current_HVAC_Mode_Off" owning_logical_component="HVAC_controller" receive_updates_from_state_center="yes"  state_center_type="boolean" state_center_binding="IsCurrentHVACModeOff_1">true</state_variable>
+        <state_variable name="Current_HVAC_Mode" min_value="0" max_value="3"/><!-- 0 - OFF, 1 - COOL, 2 - HEAT, 3 - AUTO -->
+        <state_variable name="HasReceivedCommand" min_value="0" max_value="1">0</state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="HVAC_controller">
+        <implementation>
+            <internal name_on_component="HVAC Controller"/>     
+        </implementation>   
+        <resource_component_actions resource_type="ENV_HVACCONTROLLER_SOURCE"> 
+            <action name="SetCoolPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="CoolPointTemperature" note=""/>
+                <update_state_variable name="Current_Cool_Point_Setting" update_type="set" update_source="action_argument">CoolPointTemperature</update_state_variable>
+                <!--<update_state_variable name="Current_HVAC_Mode" update_type="set" update_source="constant">1</update_state_variable>-->
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="SetHeatPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="HeatPointTemperature" note=""/>
+                <update_state_variable name="Current_Heat_Point_Setting" update_type="set" update_source="action_argument">HeatPointTemperature</update_state_variable>
+                <!--<update_state_variable name="Current_HVAC_Mode" update_type="set" update_source="constant">2</update_state_variable>-->
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+           
+            <action name="SetHVACModeHeat">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <update_state_variable name="Is_Current_HVAC_Mode_Heat" update_type="set" update_source="constant">true</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Cool" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Off" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Current_HVAC_Mode" update_type="set" update_source="constant">2</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="SetHVACModeCool">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <update_state_variable name="Is_Current_HVAC_Mode_Heat" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Cool" update_type="set" update_source="constant">true</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Off" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Current_HVAC_Mode" update_type="set" update_source="constant">1</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="SetHVACModeOff">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <update_state_variable name="Is_Current_HVAC_Mode_Heat" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Cool" update_type="set" update_source="constant">false</update_state_variable>
+                <update_state_variable name="Is_Current_HVAC_Mode_Off" update_type="set" update_source="constant">true</update_state_variable>
+                <update_state_variable name="Current_HVAC_Mode" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="IncreaseCoolPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="CoolPointTemperature" note=""/>
+                <update_state_variable name="Current_Cool_Point_Setting" update_type="increment" update_source="constant">1</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="DecreaseCoolPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="CoolPointTemperature" note=""/>
+                <update_state_variable name="Current_Cool_Point_Setting" update_type="decrement" update_source="constant">1</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="IncreaseHeatPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="HeatPointTemperature" note=""/>
+                <update_state_variable name="Current_Heat_Point_Setting" update_type="increment" update_source="constant">1</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <action name="DecreaseHeatPointTemperature">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <action_argument name="HeatPointTemperature" note=""/>
+                <update_state_variable name="Current_Heat_Point_Setting" update_type="decrement" update_source="constant">1</update_state_variable>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="ir">
+                    <command/>
+                </command_interface>
+            </action>
+            <entity name="Zone" address_components="1">
+                <screen_representation>
+                    <common_unique_identifier name="ThermostatAddress" address_component="1"/>
+                </screen_representation>    
+            </entity>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="PowerOff">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">0</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">--</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009470015700AB0019003E0019001400190014001900140019003E0019003E0019001400190014001900140019003E0019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019001400190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F800190014001900140019001400190014001900140019001400190014001900140019003E0019003E0019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E00190014001900140019001400190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_Under16">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="less_than">16</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">16</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--repita aqui o comando Cool 16oC, para temperaturas abaixo do mínimo-->
+                        <command_string type="hex">0000000000009470015700AB0019003E00190014001900140019003E0019003E0019003E0019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902FB00190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E001900140019001400190EF100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_16">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">16</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">16</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 16oC-->
+                        <command_string type="hex">0000000000009470015700AB0019003E00190014001900140019003E0019003E0019003E0019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902FB00190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E001900140019001400190EF100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_17">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">17</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">17</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 17oC-->
+                        <command_string type="hex">0000000000009470015700AB0019003E00190014001900140019003E0019003E0019003E00190014001900140019003E0019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F800190014001900140019001400190014001900140019001400190014001900140019003E0019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019001400190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_18">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">18</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">18</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 18oC-->
+                        <command_string type="hex">0000000000009470015800AB0019003E00190014001900140019003E0019003E0019003E0019001400190014001900140019003E00190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F800190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E001900140019003E0019001400190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_19">        
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">19</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">19</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 19oC-->
+                        <command_string type="hex">0000000000009470015800AB0019003F00190014001900140019003F0019003F0019003F00190014001900140019003F0019003F00190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003F0019003F00190014001900140019001400190014001900140019003F001900140019003F00190014001900140019003F00190014001902FB00190014001900140019001400190014001900140019001400190014001900140019003F00190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003F0019003F0019001400190EF100000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_20">          
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">20</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">20</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 20oC-->
+                        <command_string type="hex">0000000000009470015700A90019003E00190014001900140019003E0019003E0019003E001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F700190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E0019003E0019001400190EE400000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_21">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">21</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">21</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 21oC-->
+                        <command_string type="hex">0000000000009470015700AB0019003E00190014001900140019003E0019003E0019003E00190014001900140019003E001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F800190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E00190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_22">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">22</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">22</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 22oC-->
+                        <command_string type="hex">0000000000009470015700AA0019003E00190014001900140019003E0019003E0019003E0019001400190014001900140019003E0019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F900190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E00190014001900140019003E00190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_23">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">23</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">23</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 23oC-->
+                        <command_string type="hex">0000000000009470015700AB0019003E00190014001900140019003E0019003E0019003E00190014001900140019003E0019003E0019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902FA00190014001900140019001400190014001900140019001400190014001900140019003E00190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E001900140019003E00190EEA00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_24">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">24</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">24</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 24oC-->
+                        <command_string type="hex">0000000000009470015700A90019003E00190014001900140019003E0019003E0019003E00190014001900140019001400190014001900140019003E0019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E00190014001900140019001400190014001900140019003E001900140019003E00190014001900140019003E00190014001902F700190014001900140019001400190014001900140019001400190014001900140019003E001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019001400190014001900140019003E0019003E001900140019003E00190EE400000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_25">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">25</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">25</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 25oC-->
+                        <command_string type="hex">000000000000948c00A400A9001100400011001700110040001100400011001700110017001100400011001700110017001100400011001700110017001100400011004000110017001100400011001700110017001100400011004000110040001100400011004000110040001100400011004000110017001100170011001700110017001100170011001700110040001100400011001700110017001100170011001700110017001100170011001700110017001100400011004000110040001100400011004000110040001200C900A400A900110040001100170011004000110040001100170011001700110040001100170011001700110040001100170011001700110040001100400011001700110040001100170011001700110040001100400011004000110040001100400011004000110040001100400011001700110017001100170011001700110017001100170011004000110040001100170011001700110017001100170011001700110017001100170011001700110040001100400011004000110040001100400011004000110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_26"> 
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">26</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">26</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 26oC-->
+                        <command_string type="hex">000000000000948c00A400AB001100410011001800110041001100410011001800110018001100410011001800110018001100410011001800110018001100410011004100110018001100410011001800110018001100410011004100110041001100410011004100110041001100410011004100110018001100180011001800110018001100180011001800110041001100410011001800110041001100180011001800110018001100180011001800110018001100410011001800110041001100410011004100110041001100C900A400AB00110041001100180011004100110041001100180011001800110041001100180011001800110041001100180011001800110041001100410011001800110041001100180011001800110041001100410011004100110041001100410011004100110041001100410011001800110018001100180011001800110018001100180011004100110041001100180011004100110018001100180011001800110018001100180011001800110041001100180011004100110041001100410011004100110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_27">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">27</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">27</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 27oC-->
+                        <command_string type="hex">000000000000948c00A400A9001100410011001700110041001100410011001700110017001100410011001700110017001100410011001700110017001100410011004100110017001100410011001700110017001100410011004100110041001100410011004100110041001100410011004100110017001100170011001700110017001100170011001700110041001100170011001700110041001100170011001700110017001100170011001700110041001100410011001700110041001100410011004100110041001100C900A400A900110041001100170011004100110041001100170011001700110041001100170011001700110041001100170011001700110041001100410011001700110041001100170011001700110041001100410011004100110041001100410011004100110041001100410011001700110017001100170011001700110017001100170011004100110017001100170011004100110017001100170011001700110017001100170011004100110041001100170011004100110041001100410011004100110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_28">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">28</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">28</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 28oC-->
+                        <command_string type="hex">000000000000948c00A400AB0011004200110017001100420011004200110017001100170011004200110017001100170011004200110017001100170011004200110042001100170011004200110017001100170011003E0011004200110042001100420011004200110042001100420011004200110017001100170011001700110017001100170011001700110042001100170011001700110017001100170011001700110017001100170011001700110042001100420011004200110042001100420011004200110042001100CA00A400AB00110042001100170011004200110042001100170011001700110042001100170011001700110042001100170011001700110042001100420011001700110042001100170011001700110042001100420011004200110042001100420011004200110042001100420011001700110017001100170011001700110017001100170011004200110017001100170011001700110017001100170011001700110017001100170011004200110042001100420011004200110042001100420011004200110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_29">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">29</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">29</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 29oC-->
+                        <command_string type="hex">000000000000948c00A400AA0011004200110017001100420011004200110017001100170011003E0011001700110017001100420011001700110017001100420011004200110017001100420011001700110017001100420011004200110042001100420011004200110042001100420011004200110017001100170011001700110017001100170011001700110042001100170011004200110017001100170011001700110017001100170011001700110042001100170011004200110042001100420011004200110042001100C900A400AA00110042001100170011004200110042001100170011001700110042001100170011001700110042001100170011001700110042001100420011001700110042001100170011001700110042001100420011004200110042001100420011004200110042001100420011001700110017001100170011001700110017001100170011004200110017001100420011001700110017001100170011001700110017001100170011004200110017001100420011004200110042001100420011004200110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_30">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">30</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">30</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 30oC-->
+                        <command_string type="hex">000000000000948c00A400AB001100420011001700110042001100420011001700110017001100420011001700110017001100420011001700110017001100420011004200110017001100420011001700110017001100420011004200110042001100420011004200110042001100420011004200110017001100170011001700110017001100170011001700110042001100170011003E00110042001100170011001700110017001100170011001700110042001100170011001700110042001100420011004200110042001100CA00A400AB00110042001100170011004200110042001100170011001700110042001100170011001700110042001100170011001700110042001100420011001700110042001100170011001700110042001100420011004200110042001100420011004200110042001100420011001700110017001100170011001700110017001100170011004200110017001100420011004200110017001100170011001700110017001100170011004200110017001100170011004200110042001100420011004200110ED800000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_31">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">31</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">31</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 31oC-->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_32">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="equal">32</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">32</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Cool 32oC-->                        
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Cool_Over32">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">1</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Cool_Point_Setting" test_condition="greater_than">32</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">32</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--repita aqui o comando Cool 32oC para temperaturas acima do limite-->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_Under16">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="less_than">16</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">16</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--repita aqui o comando Heat 16oC para temperaturas abaixo do limite-->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_16">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">16</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">16</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 16oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_17">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">17</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">17</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 17oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_18">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">18</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">18</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 18oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_19">        
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">19</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">19</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 19oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_20">          
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">20</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">20</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 20oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_21">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">21</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">21</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 21oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_22">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">22</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">22</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 22oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_23">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">23</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">23</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 23oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_24">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">24</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">24</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 24oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_25">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">25</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">25</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 25oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_26"> 
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">26</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">26</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 26oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_27">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">27</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">27</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 27oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_28">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">28</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">28</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 28oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_29">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">29</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">29</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 29oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_30">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">30</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">30</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 30oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_31">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">31</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">31</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 31oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_32">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="equal">32</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">32</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--copie aqui o comando Heat 32oC -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+            <action name="Heat_Over32">
+                <action_argument name="ThermostatAddress" note="1"/>
+                <execute_on_state_variable_condition name="Current_HVAC_Mode" test_condition="equal">2</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="Current_Heat_Point_Setting" test_condition="greater_than">32</execute_on_state_variable_condition>
+                <execute_on_state_variable_condition name="HasReceivedCommand" test_condition="equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="HasReceivedCommand" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="Thermostat_Current_Temperature" update_type="set" update_source="constant">32</update_state_variable>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <!--repita aqui o comando Heat 32oC para temperaturas acima do limite -->
+                        <command_string type="hex">000000000000985800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D001500C800A900A70016003D001600130016003D0016003D00160013001600130016003D00160013001600130016003D00160013001600130016003D0016003D001600130016003D0016001300160013001600130016003D0016003D0016003D0016003D0016003D0016003D0016003D0016003D00160013001600130016001300160013001600130016003D001600130016003D0016003D0016003D001600130016001300160013001600130016003D0016001300160013001600130016003D0016003D0016003D00160F1C00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="2000"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

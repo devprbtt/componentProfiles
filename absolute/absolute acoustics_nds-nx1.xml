@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Acoustics" model="NDS-NX1" alias="Absolute Nexos 2x1 Multiroom Control Amplifier, NDS-NX1" device_class="AV_processor" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+    <notes>
+        For more information about this product, please visit 'http://www.absoluteacoustics.com/nx1.html'.
+    </notes>
+    <control_interfaces preferred="rs232">
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="38400" checksum_type="standard" checksum_offset_B="0" response_time_length_ms="0" connector_type="db9 female" cable_type="rs232 straight">
+            <baud_rate speed="38400"/>
+            <send_prefix type="hex">0200</send_prefix>
+            <receive_start_condition type="hex">0200</receive_start_condition>
+        </rs232>
+        <trigger trigger_active_voltage="12" name_on_component="Trigger Input"/>
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="SOURCE INPUT 1">
+            <audio_media type="optical_digital"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="SOURCE INPUT 2">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+        </input>     
+        <output name_on_component="ZONE LEFT RIGHT 1">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>       
+        <output name_on_component="ZONE PRE OUT 1">
+            <audio_media type="rca_stereo"/>
+            <resource resource_type="AV_STEREOPROCESSOR_FUNCTION"/>
+            <resource resource_type="AV_VOLUMECONTROL_FUNCTION"/>
+        </output>         
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_power_setting_zone1" min_value="0" max_value="1">0</state_variable>
+        <volume_state_variable name="Volume_current_volume" granularity="1.000000" owning_logical_component="Audio_processor" state_center_binding="CurrentVolume" state_center_type="string" min_value="67" max_value="128">67</volume_state_variable>
+        <state_variable name="Mute_current_mute_setting_zone1" state_center_type="string" state_center_binding="CurrentMuteStatus" owning_logical_component="Audio_processor">OFF</state_variable>
+        <state_variable name="BassValueCalculated">0</state_variable>
+        <state_variable name="TrebleValueCalculated">0</state_variable>
+        <state_variable name="BalanceValueCalculated">0</state_variable>
+    </state_variable_list>    
+
+    <logical_component logical_component_name="Audio_processor">
+        <implementation>
+            <input name_on_component="SOURCE INPUT 1">
+                <action_to_select name="SelectSource1"/>
+            </input>
+            <output name_on_component="ZONE PRE OUT 1"/>
+            <output name_on_component="ZONE LEFT RIGHT 1"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="SOURCE INPUT 2">
+                <action_to_select name="SelectSource2"/>
+            </input>
+            <output name_on_component="ZONE PRE OUT 1"/>
+            <output name_on_component="ZONE LEFT RIGHT 1"/>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentSystemStatus">
+                <constant type="hex">0106</constant>
+                <bitmask_byte match_required="yes">                
+                    <bitmask mask="0XXXXXXX">
+                        <update state="CurrentPowerStatus" type="string">OFF</update>
+                    </bitmask>
+                    <bitmask mask="1XXXXXXX">
+                        <update state="CurrentPowerStatus" type="string">ON</update>
+                    </bitmask>
+                    <bitmask mask="X0XXXXXX">
+                        <update state="CurrentMuteStatus" type="string">OFF</update>
+                    </bitmask>
+                    <bitmask mask="X1XXXXXX">
+                        <update state="CurrentMuteStatus" type="string">ON</update>
+                    </bitmask>                    
+                </bitmask_byte>               
+                <data type="hex" constant_length="3">
+                    <update state="UselessConstant" type="string"></update>
+                </data>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentInput" type="string">Source1</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentInput" type="string">Source2</update>
+                        </map>
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="CurrentVolume" type="integer"></update>
+                </data>   
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="76">
+                            <update state="CurrentTreble" type="string">-10</update>
+                        </map>
+                        <map key="77">
+                            <update state="CurrentTreble" type="string">-9</update>
+                        </map>                            
+                        <map key="78">
+                            <update state="CurrentTreble" type="string">-8</update>
+                        </map>
+                        <map key="79">
+                            <update state="CurrentTreble" type="string">-7</update>
+                        </map>
+                        <map key="7A">
+                            <update state="CurrentTreble" type="string">-6</update>
+                        </map>
+                        <map key="7B">
+                            <update state="CurrentTreble" type="string">-5</update>
+                        </map>                            
+                        <map key="7C">
+                            <update state="CurrentTreble" type="string">-4</update>
+                        </map>
+                        <map key="7D">
+                            <update state="CurrentTreble" type="string">-3</update>
+                        </map>
+                        <map key="7E">
+                            <update state="CurrentTreble" type="string">-2</update>
+                        </map>
+                        <map key="7F">
+                            <update state="CurrentTreble" type="string">-1</update>
+                        </map>                            
+                        <map key="80">
+                            <update state="CurrentTreble" type="string">flat</update>
+                        </map>
+                        <map key="81">
+                            <update state="CurrentTreble" type="string">+1</update>
+                        </map>
+                        <map key="82">
+                            <update state="CurrentTreble" type="string">+2</update>
+                        </map>
+                        <map key="83">
+                            <update state="CurrentTreble" type="string">+3</update>
+                        </map>                            
+                        <map key="84">
+                            <update state="CurrentTreble" type="string">+4</update>
+                        </map>
+                        <map key="85">
+                            <update state="CurrentTreble" type="string">+5</update>
+                        </map>
+                        <map key="86">
+                            <update state="CurrentTreble" type="string">+6</update>
+                        </map>
+                        <map key="87">
+                            <update state="CurrentTreble" type="string">+7</update>
+                        </map>                            
+                        <map key="88">
+                            <update state="CurrentTreble" type="string">+8</update>
+                        </map>
+                        <map key="89">
+                            <update state="CurrentTreble" type="string">+9</update>
+                        </map>
+                        <map key="8A">
+                            <update state="CurrentTreble" type="string">+10</update>
+                        </map>                       
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="76">
+                            <update state="CurrentBass" type="string">-10</update>
+                        </map>
+                        <map key="77">
+                            <update state="CurrentBass" type="string">-9</update>
+                        </map>                            
+                        <map key="78">
+                            <update state="CurrentBass" type="string">-8</update>
+                        </map>
+                        <map key="79">
+                            <update state="CurrentBass" type="string">-7</update>
+                        </map>
+                        <map key="7A">
+                            <update state="CurrentBass" type="string">-6</update>
+                        </map>
+                        <map key="7B">
+                            <update state="CurrentBass" type="string">-5</update>
+                        </map>                            
+                        <map key="7C">
+                            <update state="CurrentBass" type="string">-4</update>
+                        </map>
+                        <map key="7D">
+                            <update state="CurrentBass" type="string">-3</update>
+                        </map>
+                        <map key="7E">
+                            <update state="CurrentBass" type="string">-2</update>
+                        </map>
+                        <map key="7F">
+                            <update state="CurrentBass" type="string">-1</update>
+                        </map>                            
+                        <map key="80">
+                            <update state="CurrentBass" type="string">flat</update>
+                        </map>
+                        <map key="81">
+                            <update state="CurrentBass" type="string">+1</update>
+                        </map>
+                        <map key="82">
+                            <update state="CurrentBass" type="string">+2</update>
+                        </map>
+                        <map key="83">
+                            <update state="CurrentBass" type="string">+3</update>
+                        </map>                            
+                        <map key="84">
+                            <update state="CurrentBass" type="string">+4</update>
+                        </map>
+                        <map key="85">
+                            <update state="CurrentBass" type="string">+5</update>
+                        </map>
+                        <map key="86">
+                            <update state="CurrentBass" type="string">+6</update>
+                        </map>
+                        <map key="87">
+                            <update state="CurrentBass" type="string">+7</update>
+                        </map>                            
+                        <map key="88">
+                            <update state="CurrentBass" type="string">+8</update>
+                        </map>
+                        <map key="89">
+                            <update state="CurrentBass" type="string">+9</update>
+                        </map>
+                        <map key="8A">
+                            <update state="CurrentBass" type="string">+10</update>
+                        </map>                       
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <data_map match_required="yes">
+                        <map key="6E">
+                            <update state="CurrentBalance" type="string">L 18</update>
+                        </map>
+                        <map key="6F">
+                            <update state="CurrentBalance" type="string">L 17</update>
+                        </map>
+                        <map key="70">
+                            <update state="CurrentBalance" type="string">L 16</update>
+                        </map>
+                        <map key="71">
+                            <update state="CurrentBalance" type="string">L 15</update>
+                        </map>
+                        <map key="72">
+                            <update state="CurrentBalance" type="string">L 14</update>
+                        </map>
+                        <map key="73">
+                            <update state="CurrentBalance" type="string">L 13</update>
+                        </map>
+                        <map key="74">
+                            <update state="CurrentBalance" type="string">L 12</update>
+                        </map>
+                        <map key="75">
+                            <update state="CurrentBalance" type="string">L 11</update>
+                        </map>
+                        <map key="76">
+                            <update state="CurrentBalance" type="string">L 10</update>
+                        </map>
+                        <map key="77">
+                            <update state="CurrentBalance" type="string">L 9</update>
+                        </map>
+                        <map key="78">
+                            <update state="CurrentBalance" type="string">L 8</update>
+                        </map>
+                        <map key="79">
+                            <update state="CurrentBalance" type="string">L 7</update>
+                        </map>
+                        <map key="7A">
+                            <update state="CurrentBalance" type="string">L 6</update>
+                        </map>
+                        <map key="7B">
+                            <update state="CurrentBalance" type="string">L 5</update>
+                        </map>
+                        <map key="7C">
+                            <update state="CurrentBalance" type="string">L 4</update>
+                        </map>
+                        <map key="7D">
+                            <update state="CurrentBalance" type="string">L 3</update>
+                        </map>
+                        <map key="7E">
+                            <update state="CurrentBalance" type="string">L 2</update>
+                        </map>
+                        <map key="7F">
+                            <update state="CurrentBalance" type="string">L 1</update>
+                        </map>
+                        <map key="80">
+                            <update state="CurrentBalance" type="string">0</update>
+                        </map>
+                        <map key="81">
+                            <update state="CurrentBalance" type="string">R 1</update>
+                        </map>
+                        <map key="82">
+                            <update state="CurrentBalance" type="string">R 2</update>
+                        </map>
+                        <map key="83">
+                            <update state="CurrentBalance" type="string">R 3</update>
+                        </map>
+                        <map key="84">
+                            <update state="CurrentBalance" type="string">R 4</update>
+                        </map>
+                        <map key="85">
+                            <update state="CurrentBalance" type="string">R 5</update>
+                        </map>
+                        <map key="86">
+                            <update state="CurrentBalance" type="string">R 6</update>
+                        </map>
+                        <map key="87">
+                            <update state="CurrentBalance" type="string">R 7</update>
+                        </map>
+                        <map key="88">
+                            <update state="CurrentBalance" type="string">R 8</update>
+                        </map>
+                        <map key="89">
+                            <update state="CurrentBalance" type="string">R 9</update>
+                        </map>
+                        <map key="8A">
+                            <update state="CurrentBalance" type="string">R 10</update>
+                        </map>
+                        <map key="8B">
+                            <update state="CurrentBalance" type="string">R 11</update>
+                        </map>
+                        <map key="8C">
+                            <update state="CurrentBalance" type="string">R 12</update>
+                        </map>
+                        <map key="8D">
+                            <update state="CurrentBalance" type="string">R 13</update>
+                        </map>
+                        <map key="8E">
+                            <update state="CurrentBalance" type="string">R 14</update>
+                        </map>
+                        <map key="8F">
+                            <update state="CurrentBalance" type="string">R 15</update>
+                        </map>
+                        <map key="90">
+                            <update state="CurrentBalance" type="string">R 16</update>
+                        </map>
+                        <map key="91">
+                            <update state="CurrentBalance" type="string">R 17</update>
+                        </map>
+                        <map key="92">
+                            <update state="CurrentBalance" type="string">R 18</update>
+                        </map>                            
+                    </data_map>
+                </data>
+                <data type="hex" constant_length="1">
+                    <update state="CommandChecksum" type="string"/>
+                </data>
+            </status_message>
+        </status_messages>
+        <universal_component_actions>
+            <action name="PowerOff">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">0</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042128</command_string>
+                        <delay ms_delay="300"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>0</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOn">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">0</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042027</command_string>
+                        <delay ms_delay="300"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+            </action>
+        </universal_component_actions>
+        <resource_component_actions resource_type="AV_VOLUMECONTROL_FUNCTION">
+            <action name="SetVolume">
+                <action_argument name="VolumeValue" note="Value: 00~50 -> -61dB~0dB"/>
+                <update_volume_variables name="Volume_current_volume" update_type="set" update_source="action_argument">VolumeValue</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0115</command_string>
+                        <parameter_list>
+                            <volume_parameter volume_state_variable="Volume_current_volume" parameter_data_type="hex" action_argument="VolumeValue" parameter_data_width="1" parameter_total_width="1"></volume_parameter>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseVolume">
+                <update_volume_variables name="Volume_current_volume" update_type="increment" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01040910</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseVolume">
+                <update_volume_variables name="Volume_current_volume" update_type="decrement" update_source="constant">1</update_volume_variables>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01040a11</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOn"> 
+                <update_state_variable name="Mute_current_mute_setting_zone1" update_type="set" update_source="constant">ON</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01040d14</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MuteOff">
+                <update_state_variable name="Mute_current_mute_setting_zone1" update_type="set" update_source="constant">OFF</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01040e15</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementBalance">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042b32</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncrementBalance">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042a31</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetBalance">
+                <action_argument name="BalanceBias" note="Value: 110~146 -> 18dB Left~18dB Right"/>
+                <update_state_variable name="BalanceValueCalculated" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="BalanceValueCalculated" update_type="increment" update_source="constant">128</update_state_variable>
+                <update_state_variable name="BalanceValueCalculated" update_type="increment" update_source="action_argument">BalanceBias</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0116</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="BalanceValueCalculated" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <resource_component_actions resource_type="AV_STEREOPROCESSOR_FUNCTION">
+            <action name="IncrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0104262d</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementBass">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0104272e</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetBass">
+                <action_argument name="BassValue" note="Value: 118~138 -> -10dB~10dB"/>
+                <update_state_variable name="BassValueCalculated" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="BassValueCalculated" update_type="increment" update_source="constant">128</update_state_variable>
+                <update_state_variable name="BassValueCalculated" update_type="increment" update_source="action_argument">BassValue</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0118</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="BassValueCalculated" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0104282f</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecrementTreble">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042930</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetTreble">
+                <action_argument name="TrebleValue" note="Value: 118~138 -> -10dB~10dB"/>
+                <update_state_variable name="TrebleValueCalculated" update_type="set" update_source="constant">0</update_state_variable>
+                <update_state_variable name="TrebleValueCalculated" update_type="increment" update_source="constant">128</update_state_variable>
+                <update_state_variable name="TrebleValueCalculated" update_type="increment" update_source="action_argument">TrebleValue</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">0117</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="hex" state_variable="TrebleValueCalculated" parameter_data_width="1" parameter_total_width="1"></parameter>
+                            <checksum_parameter parameter_data_type="hex" parameter_data_width="1" parameter_total_width="1"></checksum_parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="SelectSource1">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01044148</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectSource2">
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01044249</command_string>
+                        <delay ms_delay="200"/>
+                    </command>                    
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PowerOnOnLastActiveSource">
+                <execute_on_state_variable_condition name="Power_power_setting_zone1" test_condition="not_equal">1</execute_on_state_variable_condition>
+                <update_state_variable name="Power_power_setting_zone1" update_type="set" update_source="constant">1</update_state_variable>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="hex">01042027</command_string>
+                        <delay ms_delay="300"/>
+                    </command>                   
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex"></command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

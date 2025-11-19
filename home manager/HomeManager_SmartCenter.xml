@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="HomeManager" model="SmartCenter" device_class="Lighting_controller" rpm_xml_version="$Revision: 1.3 $" minimum_component_engine_version="0.0">
+<notes>
+	Biblioteca de integração Savant com o sistema Home Manager.
+	
+	Na Smart Center, é necessário habilitar os "Comandos TCP" dentro do menu "Integração IP", mantendo a porta padrão 18080.
+	
+	Tipos de dispositivos disponíveis:
+	
+	- SWITCH: Dispositivo de iluminação do tipo liga/desliga. Utilize esse tipo mesmo quando for uma saída dimerizável configurada como liga/desliga.
+		* Address[1] -> ID do dispositivo de iluminação
+		* Obs: utiliza os comandos SwitchOn e SwitchOff
+	
+	- DIMMER: Dispositivo de iluminação dimerizável. O tempo de rampa pode ser alterado no sistema Home Manager.
+		* Address[1] -> ID do dispositivo de iluminação
+		* Obs: utiliza o comando DimmerSet
+	
+	- SHADE SLIDER: Dispositivo para cortina/persinas do tipo Slider. É necessário informar no sistema Home Manager o tempo total do curso para o gerenciamento da posição correta da cortina/persiana.
+		* Address[1] -> ID do dispositivo de cortina/persiana
+		* Obs: utiliza o comando ShadeSet
+	
+	- SHADE: Dispositivo para cortina/persinas controladas por botões UP/DOWN/STOP. É necessário informar no sistema Home Manager o tempo total do curso para o gerenciamento da posição correta da cortina/persiana.
+		* Address[1] -> ID do dispositivo de cortina/persiana
+		* Obs: utiliza os comandos ShadeUp, ShadeDown e ShadeStop
+
+	- HVAC: Dispositivo de climatização (ar condicionado). Os comandos de infravermelho devem ser configurados no sistema da Home Manager.
+		* ThermostatAddress[1] -> ID do dispositivo de climatização
+		* HEAT / COOL -> Informação se o equipamento possui as funções de Quente/Frio ou somente Frio
+		* Obs: em "Tools" -> "Settings" -> "HVAC Settings..." ajustar para a unidade para "Celsius" e também o range min/max das temperaturas
+		* Obs: na tabela HVAC também pode-se incluir os dispositivos do tipo "Termostato" que são controlados pelos módulos de carga da HM (iluminação/cortina)
+	
+	- LOCK: Dispositivo de controle de acesso (fechaduras da marca Yale, integrado via ZigBee).
+		* DoorLockAddress[1] -> ID do dispositivo de controle de acesso
+		* Obs: utiliza os comandos UnlockDoorLock e LockDoorLock e as variáveis IsDoorLocked e IsDoorAlarm
+
+	- BUTTON: Dispositivo de acionamento/pulso, acionados por um botão na interface Savant. Pode-se executar também cenários da HM nesse botão.
+		* Address[1] -> ID do dispositivo de acionamento/pulso ou cenário
+
+	- KEYPAD BUTTON: Dispositivo do tipo botão, com as variáveis isButtonClick e isButtonHold para tecla do tipo PULSADOR e isButtonPressed para INTERRUPTOR.
+		* Address[1] -> ID do dispositivo interruptor (considerar o primeiro interruptor, que é o "mestre")
+		* Address[2] -> Número da entrada do módulo
+		* Obs: para fazer eventos de execução contínua enquanto pressionado, configure a tecla como interruptor e use a variável isButtonPressed
+	
+	Obs: Pelo sistema da Home Manager, é possível exportar um arquivo .plist e importar todos os dispositivos no projeto Savant.
+	Obs: Com o comando ExecuteDevice é possível executar qualquer ação no sistema HM, informando o ID e AÇÃO, conforme especificado nos Comandos TCP
+
+</notes>
+
+    <control_interfaces preferred="ip">
+        <ip port="18080" response_time_length_ms="500" name_on_component="Ethernet">
+            <send_postfix type="hex">0A</send_postfix>
+            <receive_end_condition test_condition="data" type="hex">0A</receive_end_condition>
+        </ip>
+    </control_interfaces>
+
+    <media_interfaces>
+        <data name_on_component="Ethernet">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="18080"/>
+            </combined_media>
+        </data>
+        <internal name_on_component="Lighting Controller">
+            <environmental_media/>
+            <resource resource_type="ENV_LIGHTINGCONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_SHADECONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE"/>
+            <resource resource_type="ENV_DOOR_LOCK_SOURCE"/>
+        </internal>
+    </media_interfaces>
+
+    <state_variable_list>
+    	<state_variable name="Current_Set_Point_Setting" owning_logical_component="HVAC_controller" state_center_type="string" state_center_binding="ThermostatCurrentSetPoint"></state_variable>
+    </state_variable_list>
+
+    <logical_component logical_component_name="Lighting_controller">
+        <implementation>
+            <internal name_on_component="Lighting Controller"/>
+        </implementation>
+
+       <!--************************************************************************************************************************-->
+       <!--********************************************           STATUS           ***********************************************-->
+       <!--************************************************************************************************************************-->
+       
+       <status_messages>
+           <status_message name="CurrentDeviceStatus">
+               <constant type="character">#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="DeviceID" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="end_of_data">
+                   <data_map match_required="yes">
+                       <map key="OFF"><update state="DeviceStatus" type="string">0</update></map>
+                       <map key="ON"><update state="DeviceStatus" type="string">100</update></map>
+                       <map key="0"><update state="DeviceStatus" type="string">0</update></map>
+                       <map key="1"><update state="DeviceStatus" type="string">1</update></map>
+                       <map key="2"><update state="DeviceStatus" type="string">2</update></map>
+                       <map key="3"><update state="DeviceStatus" type="string">3</update></map>
+                       <map key="4"><update state="DeviceStatus" type="string">4</update></map>
+                       <map key="5"><update state="DeviceStatus" type="string">5</update></map>
+                       <map key="6"><update state="DeviceStatus" type="string">6</update></map>
+                       <map key="7"><update state="DeviceStatus" type="string">7</update></map>
+                       <map key="8"><update state="DeviceStatus" type="string">8</update></map>
+                       <map key="9"><update state="DeviceStatus" type="string">9</update></map>
+                       <map key="10"><update state="DeviceStatus" type="string">10</update></map>
+                       <map key="11"><update state="DeviceStatus" type="string">11</update></map>
+                       <map key="12"><update state="DeviceStatus" type="string">12</update></map>
+                       <map key="13"><update state="DeviceStatus" type="string">13</update></map>
+                       <map key="14"><update state="DeviceStatus" type="string">14</update></map>
+                       <map key="15"><update state="DeviceStatus" type="string">15</update></map>
+                       <map key="16"><update state="DeviceStatus" type="string">16</update></map>
+                       <map key="17"><update state="DeviceStatus" type="string">17</update></map>
+                       <map key="18"><update state="DeviceStatus" type="string">18</update></map>
+                       <map key="19"><update state="DeviceStatus" type="string">19</update></map>
+                       <map key="20"><update state="DeviceStatus" type="string">20</update></map>
+                       <map key="21"><update state="DeviceStatus" type="string">21</update></map>
+                       <map key="22"><update state="DeviceStatus" type="string">22</update></map>
+                       <map key="23"><update state="DeviceStatus" type="string">23</update></map>
+                       <map key="24"><update state="DeviceStatus" type="string">24</update></map>
+                       <map key="25"><update state="DeviceStatus" type="string">25</update></map>
+                       <map key="26"><update state="DeviceStatus" type="string">26</update></map>
+                       <map key="27"><update state="DeviceStatus" type="string">27</update></map>
+                       <map key="28"><update state="DeviceStatus" type="string">28</update></map>
+                       <map key="29"><update state="DeviceStatus" type="string">29</update></map>
+                       <map key="30"><update state="DeviceStatus" type="string">30</update></map>
+                       <map key="31"><update state="DeviceStatus" type="string">31</update></map>
+                       <map key="32"><update state="DeviceStatus" type="string">32</update></map>
+                       <map key="33"><update state="DeviceStatus" type="string">33</update></map>
+                       <map key="34"><update state="DeviceStatus" type="string">34</update></map>
+                       <map key="35"><update state="DeviceStatus" type="string">35</update></map>
+                       <map key="36"><update state="DeviceStatus" type="string">36</update></map>
+                       <map key="37"><update state="DeviceStatus" type="string">37</update></map>
+                       <map key="38"><update state="DeviceStatus" type="string">38</update></map>
+                       <map key="39"><update state="DeviceStatus" type="string">39</update></map>
+                       <map key="40"><update state="DeviceStatus" type="string">40</update></map>
+                       <map key="41"><update state="DeviceStatus" type="string">41</update></map>
+                       <map key="42"><update state="DeviceStatus" type="string">42</update></map>
+                       <map key="43"><update state="DeviceStatus" type="string">43</update></map>
+                       <map key="44"><update state="DeviceStatus" type="string">44</update></map>
+                       <map key="45"><update state="DeviceStatus" type="string">45</update></map>
+                       <map key="46"><update state="DeviceStatus" type="string">46</update></map>
+                       <map key="47"><update state="DeviceStatus" type="string">47</update></map>
+                       <map key="48"><update state="DeviceStatus" type="string">48</update></map>
+                       <map key="49"><update state="DeviceStatus" type="string">49</update></map>
+                       <map key="50"><update state="DeviceStatus" type="string">50</update></map>
+                       <map key="51"><update state="DeviceStatus" type="string">51</update></map>
+                       <map key="52"><update state="DeviceStatus" type="string">52</update></map>
+                       <map key="53"><update state="DeviceStatus" type="string">53</update></map>
+                       <map key="54"><update state="DeviceStatus" type="string">54</update></map>
+                       <map key="55"><update state="DeviceStatus" type="string">55</update></map>
+                       <map key="56"><update state="DeviceStatus" type="string">56</update></map>
+                       <map key="57"><update state="DeviceStatus" type="string">57</update></map>
+                       <map key="58"><update state="DeviceStatus" type="string">58</update></map>
+                       <map key="59"><update state="DeviceStatus" type="string">59</update></map>
+                       <map key="60"><update state="DeviceStatus" type="string">60</update></map>
+                       <map key="61"><update state="DeviceStatus" type="string">61</update></map>
+                       <map key="62"><update state="DeviceStatus" type="string">62</update></map>
+                       <map key="63"><update state="DeviceStatus" type="string">63</update></map>
+                       <map key="64"><update state="DeviceStatus" type="string">64</update></map>
+                       <map key="65"><update state="DeviceStatus" type="string">65</update></map>
+                       <map key="66"><update state="DeviceStatus" type="string">66</update></map>
+                       <map key="67"><update state="DeviceStatus" type="string">67</update></map>
+                       <map key="68"><update state="DeviceStatus" type="string">68</update></map>
+                       <map key="69"><update state="DeviceStatus" type="string">69</update></map>
+                       <map key="70"><update state="DeviceStatus" type="string">70</update></map>
+                       <map key="71"><update state="DeviceStatus" type="string">71</update></map>
+                       <map key="72"><update state="DeviceStatus" type="string">72</update></map>
+                       <map key="73"><update state="DeviceStatus" type="string">73</update></map>
+                       <map key="74"><update state="DeviceStatus" type="string">74</update></map>
+                       <map key="75"><update state="DeviceStatus" type="string">75</update></map>
+                       <map key="76"><update state="DeviceStatus" type="string">76</update></map>
+                       <map key="77"><update state="DeviceStatus" type="string">77</update></map>
+                       <map key="78"><update state="DeviceStatus" type="string">78</update></map>
+                       <map key="79"><update state="DeviceStatus" type="string">79</update></map>
+                       <map key="80"><update state="DeviceStatus" type="string">80</update></map>
+                       <map key="81"><update state="DeviceStatus" type="string">81</update></map>
+                       <map key="82"><update state="DeviceStatus" type="string">82</update></map>
+                       <map key="83"><update state="DeviceStatus" type="string">83</update></map>
+                       <map key="84"><update state="DeviceStatus" type="string">84</update></map>
+                       <map key="85"><update state="DeviceStatus" type="string">85</update></map>
+                       <map key="86"><update state="DeviceStatus" type="string">86</update></map>
+                       <map key="87"><update state="DeviceStatus" type="string">87</update></map>
+                       <map key="88"><update state="DeviceStatus" type="string">88</update></map>
+                       <map key="89"><update state="DeviceStatus" type="string">89</update></map>
+                       <map key="90"><update state="DeviceStatus" type="string">90</update></map>
+                       <map key="91"><update state="DeviceStatus" type="string">91</update></map>
+                       <map key="92"><update state="DeviceStatus" type="string">92</update></map>
+                       <map key="93"><update state="DeviceStatus" type="string">93</update></map>
+                       <map key="94"><update state="DeviceStatus" type="string">94</update></map>
+                       <map key="95"><update state="DeviceStatus" type="string">95</update></map>
+                       <map key="96"><update state="DeviceStatus" type="string">96</update></map>
+                       <map key="97"><update state="DeviceStatus" type="string">97</update></map>
+                       <map key="98"><update state="DeviceStatus" type="string">98</update></map>
+                       <map key="99"><update state="DeviceStatus" type="string">99</update></map>
+                       <map key="100"><update state="DeviceStatus" type="string">100</update></map>
+                   </data_map>
+               </data>
+               <append_data_to_state_names state="DeviceID" note="'1' - '999999'"/>
+           </status_message>
+           
+           <status_message name="CurrentThermostatCoolPoint">
+               <constant type="character">HVAC=C#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="ThermostatAddress" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="end_of_data">
+                   <update state="ThermostatCurrentSetPoint" type="string"></update>
+               </data>
+               <append_data_to_state_names state="ThermostatAddress" note="'1' - '999999'"/>
+           </status_message>
+           <status_message name="CurrentThermostatHeatPoint">
+               <constant type="character">HVAC=H#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="ThermostatAddress" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="end_of_data">
+                   <update state="ThermostatCurrentSetPoint" type="string"></update>
+               </data>
+               <append_data_to_state_names state="ThermostatAddress" note="'1' - '999999'"/>
+           </status_message>
+           <status_message name="ThermostatCurrentTemperature">
+               <constant type="character">HVAC=T#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="ThermostatAddress" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="end_of_data">
+                   <update state="ThermostatCurrentSetPoint" type="string"></update>
+               </data>
+               <append_data_to_state_names state="ThermostatAddress" note="'1' - '999999'"/>
+           </status_message>
+           <status_message name="CurrentThermostatMode">
+               <constant type="character">HVAC=M#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="ThermostatAddress" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="end_of_data">
+                   <data_map match_required="yes">
+                        <map key="HEAT">
+                            <update state="ThermostatMode" type="string">HEAT</update>
+                            <update state="IsCurrentHVACModeHeat" type="boolean">true</update>
+                            <update state="IsCurrentHVACModeCool" type="boolean">false</update>
+                            <update state="IsCurrentHVACModeOff" type="boolean">false</update>
+                        </map>
+                        <map key="COOL">
+                            <update state="ThermostatMode" type="string">COOL</update>
+                            <update state="IsCurrentHVACModeHeat" type="boolean">false</update>
+                            <update state="IsCurrentHVACModeCool" type="boolean">true</update>
+                            <update state="IsCurrentHVACModeOff" type="boolean">false</update>
+                        </map>
+                        <map key="OFF">
+                            <update state="ThermostatMode" type="string">OFF</update>
+                            <update state="IsCurrentHVACModeHeat" type="boolean">false</update>
+                            <update state="IsCurrentHVACModeCool" type="boolean">false</update>
+                            <update state="IsCurrentHVACModeOff" type="boolean">true</update>
+                        </map>
+                    </data_map>
+               </data>
+               <append_data_to_state_names state="ThermostatAddress" note="'1' - '999999'"/>
+           </status_message>
+           
+           <status_message name="CurrentButtonState">
+           	   <constant type="character">KPD#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="DeviceID" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="character" terminator="-">
+                   <update state="InputNumber" type="string"/>
+               </data>
+               <data type="character" terminator_type="end_of_data">
+                   <data_map match_required="yes">
+                        <map key="CLICK">
+                            <update state="isButtonClick" type="boolean">true</update>
+                        </map>
+                        <map key="HOLD">
+                            <update state="isButtonHold" type="boolean">true</update>
+                        </map>
+                        <map key="RETURN">
+                            <update state="isButtonClick" type="boolean">false</update>
+                            <update state="isButtonHold" type="boolean">false</update>
+                        </map>
+                        <map key="PRESS">
+                             <update state="isButtonPressed" type="boolean">true</update>
+                        </map>
+                        <map key="RELEASE">
+                             <update state="isButtonPressed" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+               <append_data_to_state_names state="DeviceID" note="'1' - '999999'"/>
+               <append_data_to_state_names state="InputNumber" note="'1' - '999999'"/>
+           </status_message>
+           
+           <status_message name="CurrentDoorLockState">
+           	   <constant type="character">DOOR#ID=</constant>
+               <data type="character" terminator_type="character" terminator=",">
+                   <update state="DoorLockAddress" type="string"/>
+               </data>
+               <constant type="character">STATUS=</constant>
+               <data type="character" terminator_type="character" terminator="-">
+                   <data_map match_required="yes">
+                        <map key="OPN">
+                            <update state="IsDoorLocked" type="boolean">false</update>
+                            <update state="IsDoorAlarm" type="boolean">false</update>
+                            <update state="DoorLockStatus" type="string">Unlocked</update>
+                        </map>
+                        <map key="CLO">
+                            <update state="IsDoorLocked" type="boolean">true</update>
+                            <update state="IsDoorAlarm" type="boolean">false</update>
+                            <update state="DoorLockStatus" type="string">Locked</update>
+                        </map>
+                        <map key="ALM">
+                            <update state="IsDoorLocked" type="boolean">false</update>
+                            <update state="IsDoorAlarm" type="boolean">true</update>
+                            <update state="DoorLockStatus" type="string">Unlocked</update>
+                        </map>
+                        <map key="INV">
+                            <update state="IsDoorLocked" type="boolean">false</update>
+                            <update state="IsDoorAlarm" type="boolean">true</update>
+                            <update state="DoorLockStatus" type="string">Unlocked</update>
+                        </map>
+                    </data_map>
+               </data>
+               <data type="character" terminator_type="end_of_data">
+               </data>
+               <append_data_to_state_names state="DoorLockAddress" note="'1' - '999999'"/>
+           </status_message> 
+		
+        </status_messages>
+
+        <!--************************************************************************************************************************-->
+	<!--***************************************           LIGHTING / BUTTON           ******************************************-->
+	<!--************************************************************************************************************************-->
+        
+        <resource_component_actions resource_type="ENV_LIGHTINGCONTROLLER_SOURCE">
+            <action name="SwitchOn">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="9" parameter_data_width="9">,VALOR=ON</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SwitchOff">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=OFF</parameter>
+                        </parameter_list>
+                       <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="DimmerSet">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <action_argument name="DimmerLevel" note="Target Intensity (0 - 100) %"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="7" parameter_data_width="7">,VALOR=</parameter>
+                            <parameter parameter_data_type="character" action_argument="DimmerLevel"/>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ExecuteDevice">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+		<action_argument name="DeviceAction" note="Device Action to execute"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="8" parameter_data_width="8">,VALOR=</parameter>
+                            <parameter parameter_data_type="character" action_argument="DeviceAction"/>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ExecuteSceneOrPulse">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="8" parameter_data_width="8">,VALOR=X</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ButtonPress">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="8" parameter_data_width="8">,VALOR=X</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+
+            <action name="ButtonPressAndRelease">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <action_argument name="Address2" note="INPUT_NUMBER (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="no">
+                    	<command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="7" parameter_data_width="7">,VALOR=</parameter>
+                            <parameter parameter_data_type="character" action_argument="Address2"/>
+                            <parameter parameter_data_type="character" parameter_total_width="6" parameter_data_width="6">-CLICK</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ButtonHold">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <action_argument name="Address2" note="INPUT_NUMBER (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="7" parameter_data_width="7">,VALOR=</parameter>
+                            <parameter parameter_data_type="character" action_argument="Address2"/>
+                            <parameter parameter_data_type="character" parameter_total_width="5" parameter_data_width="5">-HOLD</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+           
+            <!--************************************************************************************************************************-->
+            
+            <entity name="Switch" address_components="1">
+                <toggle_button_representation>
+                    <release_action name="SwitchOn"></release_action>
+                    <toggle_release_action name="SwitchOff"></toggle_release_action>
+                    <osd_press_action name="SwitchOn"></osd_press_action>
+                    <osd_hold_action name="SwitchOff"></osd_hold_action>
+                    <toggleOnUsingState name="DeviceStatus">
+                        <unique_identifier name="DeviceID" address_component="1" format="%d"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryDeviceState" period_ms="0">
+                    <with_arg name="Address1" address_component="1" format="%d"/>
+                </query_status_with_action>
+            </entity>
+
+            <entity name="Dimmer" address_components="1">
+                <slider_representation>
+                    <press_action name="DimmerSet"/>
+                    <valueSource name="DeviceStatus">
+                        <unique_identifier name="DeviceID" address_component="1" format="%d"/>
+                    </valueSource>
+                </slider_representation>
+                <query_status_with_action name="QueryDeviceState" period_ms="0">
+                    <with_arg name="Address1" address_component="1" format="%d"/>
+                </query_status_with_action>
+            </entity>
+            
+            <entity name="Button" address_components="1">
+                <push_button_representation>
+                    <press_action name="ButtonPress"/>
+                </push_button_representation>
+            </entity>
+
+            <entity name="Keypad Button" address_components="2">
+            	<toggle_button_representation sendReleaseActionAfterHoldAction="false">
+                    <hold_action name="ButtonHold"></hold_action>
+                    <release_action name="ButtonPressAndRelease"></release_action>
+                    <toggle_hold_action name="ButtonHold"></toggle_hold_action>
+                    <toggle_release_action name="ButtonPressAndRelease"></toggle_release_action>
+                </toggle_button_representation>
+            </entity>
+ 
+        </resource_component_actions>
+
+        <!--************************************************************************************************************************-->
+	<!--**********************************************           SHADES           **********************************************-->
+	<!--************************************************************************************************************************-->
+		
+        <resource_component_actions resource_type="ENV_SHADECONTROLLER_SOURCE">
+        	<action name="ShadeUp">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="13" parameter_data_width="13">,VALOR=REV100</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface> 
+            </action>
+            <action name="ShadeDown">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=REV0</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface> 
+            </action>
+            <action name="ShadeStop">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=STP</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface> 
+            </action>
+            <action name="ShadeSet">
+                <action_argument name="ShadeLevel" note="Percentage to not be shaded. 0 means all the way down, 100 means all the way up"/>
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=REV</parameter>
+                            <parameter parameter_data_type="character" action_argument="ShadeLevel"/>
+                        </parameter_list>
+                        <!-- <response_codes>
+                            <rspmessage status="success" name="ShadeLoadSucess">
+                                <constant type="character">#ID=</constant>
+                                <data type="character" terminator_type="character" terminator=",">
+                                    <update state="DeviceID" type="string"/>
+                                </data>
+                                <constant type="character">STATUS=</constant>
+                                <data type="character" terminator_type="end_of_data">
+                                    <update state="DeviceStatus" type="string"></update>
+                                </data>
+                                <append_data_to_state_names state="DeviceID" note="'1' - '9999'"/>
+                            </rspmessage>
+                        </response_codes> -->
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface> 
+            </action>
+            
+            <!--************************************************************************************************************************-->
+            
+            <entity name="Shade Slider" address_components="1">
+                <slider_representation>
+                    <release_action name="ShadeSet"/>
+                    <valueSource name="DeviceStatus">
+                        <unique_identifier name="Address1" address_component="1" format="%d"/>
+                    </valueSource>
+                </slider_representation>
+                <query_status_with_action name="QueryDeviceState" period_ms="0">
+                    <with_arg name="Address1" address_component="1" format="%d"/>
+                </query_status_with_action>
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="0"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="0"/></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="20"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="20"/></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="40"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="40"/></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="60"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="60"/></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation >
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="80"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="80"/></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeSet"><argument name="ShadeLevel" value="100"/></release_action>
+                        <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="100"/></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+                <toggle_button_representation>
+                    <press_action name="ShadeSet"><argument name="ShadeLevel" value="100"/></press_action>
+                    <toggle_action name="ShadeSet"><argument name="ShadeLevel" value="0"/></toggle_action>
+                    <osd_press_action name="ShadeSet"><argument name="ShadeLevel" value="100"/></osd_press_action>
+                    <osd_hold_action name="ShadeSet"><argument name="ShadeLevel" value="0"/></osd_hold_action>
+                </toggle_button_representation>
+            </entity>
+            <entity name="Shade" address_components="1">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeUp"></release_action>
+                        <osd_press_action name="ShadeUp"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeDown"></release_action>
+                        <osd_press_action name="ShadeDown"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeStop"></release_action>
+                        <osd_press_action name="ShadeStop"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+        </resource_component_actions>
+        
+        <!--************************************************************************************************************************-->
+	<!--***********************************************           HVAC           ***********************************************-->
+	<!--************************************************************************************************************************-->
+        
+        <resource_component_actions resource_type="ENV_SINGLE_SETPOINT_HVACCONTROLLER_SOURCE">
+            <action name="SetSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+                <action_argument name="SetPointTemperature" note="Select the Temperature Point  06 - 33 Celsius"/>
+		<update_state_variable name="Current_Set_Point_Setting" update_type="set" update_source="action_argument">SetPointTemperature</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="7" parameter_data_width="7">,VALOR=</parameter>
+                            <parameter parameter_data_type="character" state_variable="Current_Set_Point_Setting" parameter_data_width="2" parameter_total_width="2" parameter_fill="0" parameter_justify="right"/>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+		<update_state_variable name="Current_Set_Point_Setting" update_type="increment" update_source="constant">1</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="8" parameter_data_width="8">,VALOR=+</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseSingleSetPointTemperature">
+                <action_argument name="ThermostatAddress" note="Select the Thermostat Address 1 - 64"/>
+		<update_state_variable name="Current_Set_Point_Setting" update_type="decrement" update_source="constant">1</update_state_variable>
+                <command_interface interface="ip">
+                    <command response_required="no" partial_response="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="8" parameter_data_width="8">,VALOR=-</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="SetHVACModeHeat">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=HEAT</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetHVACModeCool">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=COOL</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetHVACModeOff">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=OFF</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <entity name="Zone" address_components="1"> <!-- max_entities="1" ???  -->
+                <screen_representation>
+                    <common_unique_identifier name="ThermostatAddress" address_component="1"/>
+                </screen_representation>
+                <query_status_with_action name="QueryHVACState" period_ms="0">
+                    <with_arg name="ThermostatAddress" address_component="1" format="%d"/>
+                </query_status_with_action>
+            </entity>
+        </resource_component_actions>
+        
+        <!--************************************************************************************************************************-->
+	<!--********************************************           DOOR LOCK         ***********************************************-->
+	<!--************************************************************************************************************************-->
+		
+        <resource_component_actions resource_type="ENV_DOOR_LOCK_SOURCE">
+            <action name="UnlockDoorLock">
+                <action_argument name="DoorLockAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="DoorLockAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=OPN</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LockDoorLock">
+                <action_argument name="DoorLockAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="DoorLockAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="10" parameter_data_width="10">,VALOR=CLO</parameter>
+                        </parameter_list>
+                    </command>
+                </command_interface>
+            </action>
+            <entity name="Lock" address_components="1">
+                <toggle_button_representation>
+                    <press_action name="UnlockDoorLock"/>
+                    <toggle_action name="LockDoorLock"/>
+                    <osd_press_action name="UnlockDoorLock"/>
+                    <osd_hold_action name="LockDoorLock"/>
+                    <toggleOnUsingState name="IsDoorLocked">
+                        <unique_identifier name="DoorLockAddress" address_component="1"/>
+                    </toggleOnUsingState>
+                </toggle_button_representation>
+                <query_status_with_action name="QueryDoorLockState" period_ms="0">
+                    <with_arg name="DoorLockAddress" address_component="1" format="%d"/>
+                </query_status_with_action>
+            </entity>
+        </resource_component_actions>
+        
+        <!--************************************************************************************************************************-->
+        
+        <custom_component_actions>
+            <action name="QueryDeviceState">
+                <action_argument name="Address1" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="yes">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="Address1"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=?SVT</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryHVACState">
+                <action_argument name="ThermostatAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="yes">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ThermostatAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=?SVT</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="QueryDoorLockState">
+                <action_argument name="DoorLockAddress" note="DEVICE_ID (1 - 999999)"/>
+                <command_interface interface="ip">
+                    <command response_required="yes">
+                        <command_string type="character">#ID=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="DoorLockAddress"/>
+                            <parameter parameter_data_type="character" parameter_total_width="11" parameter_data_width="11">,VALOR=?SVT</parameter>
+                        </parameter_list>
+                        <delay ms_delay="300"/>
+                    </command>
+                </command_interface>
+            </action>            
+            <action name="KeepAlive">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character">#ALV</command_string>
+                        <delay ms_delay="500"/>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="60000"/>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

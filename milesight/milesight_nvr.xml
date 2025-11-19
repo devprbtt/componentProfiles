@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Milesight" model="NVR" device_class="Surveillance_system" minimum_component_engine_version="0.0" rpm_xml_version="2.4">
+    <notes>
+        
+    </notes>
+    <component_properties>
+        <always_on_allowed>false</always_on_allowed>
+    </component_properties>
+    <control_interfaces preferred="ip">
+        <ip port="80" response_time_length_ms="2000" name_on_component="ETHERNET" protocol="http">
+        </ip>
+    </control_interfaces>
+    <media_interfaces>
+        <output name_on_component="HDMI">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_SURVEILLANCECONTROLLER_SOURCE"/>
+        </output>
+        <data name_on_component="USB">
+            <data_media type="usb"/>
+        </data>
+        <data name_on_component="ETHERNET">
+            <combined_media>
+                <data_media type="ethernet"/>
+                <control port="80"/>
+            </combined_media>
+        </data>
+    </media_interfaces>
+    <state_variable_list>
+    </state_variable_list>
+    <logical_component logical_component_name="Surveillance_system">
+        <implementation>
+            <output name_on_component="HDMI"/>
+        </implementation>
+        
+        <resource_component_actions resource_type="AV_SURVEILLANCECONTROLLER_SOURCE">
+            <action name="Pause">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_Pause</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Play">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_Play</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Stop">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_Stop</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="StepUp"><!-- Skip Next -->
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_SpeedUp</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="StepDown"><!-- Skip Prev -->
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_SpeedDown</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ScanUp"><!-- Forward -->
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_SpeedUp</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ScanDown"><!-- Rewind -->
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_Rewind</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>           
+            <!--<action name="Record">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>  -->         
+            
+            <action name="ViewFour">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Wnd_4</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ViewNine">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Wnd_9</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ViewSixteen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Wnd_16</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>                      
+            
+            <!-- NUMERIC KEYS -->
+            <action name="ChannelOne">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_0</command_string>
+             <!--               <delay ms_delay="200"/>
+                        <command_string type="character" http_request_type="GET">sdk.cgi? action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelTwo">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_1</command_string>
+                           <!-- <delay ms_delay="200"/>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelThree">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_2</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelFour">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_3</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelFive">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_4</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelSix">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_5</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelSeven">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_6</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelEight">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_7</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelNine">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_8</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelTen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmdSelChannel_9</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelEleven">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_10</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelTwelve">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_11</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelThirteen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_12</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelFourteen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_13</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelFifteen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_14</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ChannelSixteen">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_15</command_string>
+                        <!-- <delay ms_delay="200"/>
+                         <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>-->
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorUp">
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelWnd_UP</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorDown">
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelWnd_DOWN</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorLeft">
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelWnd_LEFT</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDCursorRight">
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelWnd_RIGHT</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="OSDSelect">
+                <command_interface interface="ip">
+                    <command>
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelWnd_SELECT</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        </resource_component_actions>
+        
+        <custom_component_actions>
+            <!-- ADVANCED FUNCTIONS -->
+            <action name="PlaybackMode">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Page_PlayBack</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Search">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Page_PlayBack</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LiveViewMode">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Page_LiveView</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Live">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=Page_LiveView</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FullScreenToggle">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ToggleView">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=FullScreen</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="NextHour">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_NextHour</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PrevHour">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_LastHour</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="NextDay">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_NextDay</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PrevDay">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_LastDay</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="NextMonth">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_NextMonth</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="PrevMonth">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=PlayBack_LastMonth</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+                                    
+            <!--<!-\- GO LAYOUT -\->           
+            <action name="SetLayout">
+                <action_argument name="ViewNumber" note="1-20"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ViewNumber" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>-->
+            
+            
+            <!-- GO CHANNEL -->           
+            <action name="SetChannel">
+                <action_argument name="ChannelNumber" note="1-16"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=SelChannel_</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="ChannelNumber"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <!--<!-\- GO PRESET -\->           
+            <action name="SetPreset">
+                <action_argument name="PresetNumber" note="1-10"/>
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET">sdk.cgi?action=set.qtctrl.cmd&amp;cmd=</command_string>
+                        <parameter_list>
+                            <parameter parameter_data_type="character" action_argument="PresetNumber" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>-->
+            
+            <!--
+            <!-\- PTZ COMMANDS FOR FUTURE INTEGRATION -\->           
+            <action name="Ptz_Left_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Left_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Right_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Right_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Down_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Down_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Up_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_Up_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_ZoomIn_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_ZoomIn_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_ZoomOut_Press">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Ptz_ZoomOut_Release">
+                <command_interface interface="ip">
+                    <command response_required="no">
+                        <command_string type="character" http_request_type="GET"></command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            -->
+        </custom_component_actions>
+    </logical_component>
+</component>

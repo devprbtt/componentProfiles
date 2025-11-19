@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Acoustics" model="MDA-1640" alias="Absolute Multi-Channel Digital Amplifier, MDA-1640" device_class="Amplifier" minimum_component_engine_version="0" rpm_xml_version="$Revision: 2.0 $">
+    <notes>
+        For more information about this product, please visit 'http://www.absolute-acoustics.com.br/Integration/Amplificadores/mda-1640.html'.
+    </notes>
+    <component_properties>
+        <always_on_allowed>true</always_on_allowed>
+    </component_properties>
+    <control_interfaces preferred="trigger" control_optional="true">
+        <trigger trigger_active_voltage="12" name_on_component="Trigger Input"/>
+    </control_interfaces>
+    
+    <media_interfaces>
+        <input name_on_component="ZONE 1 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 2 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 3 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 4 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 5 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 6 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 7 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <input name_on_component="ZONE 8 LINE IN">
+            <audio_media type="rca_stereo"/>
+        </input>
+        <output name_on_component="ZONE 1 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 2 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 3 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 4 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 5 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 6 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 7 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+        <output name_on_component="ZONE 8 OUT">
+            <audio_media type="speakers_stereo"/>
+            <resource resource_type="AV_AMPLIFIER_FUNCTION"/>
+        </output>
+    </media_interfaces>
+    
+    <state_variable_list>
+        <state_variable name="Current_trigger_state" owning_logical_component="Amplifier" state_center_binding="TriggerLevel" state_center_type="string">Low</state_variable>
+    </state_variable_list>
+    
+    <logical_component logical_component_name="Amplifier">
+        <implementation>
+            <input name_on_component="ZONE 1 LINE IN"/>
+            <output name_on_component="ZONE 1 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 2 LINE IN"/>
+            <output name_on_component="ZONE 2 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 3 LINE IN"/>
+            <output name_on_component="ZONE 3 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 4 LINE IN"/>
+            <output name_on_component="ZONE 4 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 5 LINE IN"/>
+            <output name_on_component="ZONE 5 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 6 LINE IN"/>
+            <output name_on_component="ZONE 6 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 7 LINE IN"/>
+            <output name_on_component="ZONE 7 OUT"/>
+        </implementation>
+        <implementation>
+            <input name_on_component="ZONE 8 LINE IN"/>
+            <output name_on_component="ZONE 8 OUT"/>
+        </implementation>
+        <status_messages>
+            <status_message name="Device Status">
+                <data type="character">
+                    <update state="TriggerLevel" type="string"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        
+        <universal_component_actions>
+            <action name="PowerOn">
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">High</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>12</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="PowerOff">
+                <update_state_variable name="Current_trigger_state" update_type="set" update_source="constant">Low</update_state_variable>
+                <command_interface interface="trigger">
+                    <command response_required="no">
+                        <command_string>0</command_string>
+                    </command>
+                </command_interface>
+            </action>
+            
+        </universal_component_actions>
+        
+    </logical_component>
+   
+</component>

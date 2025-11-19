@@ -1,0 +1,969 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Lutron" model="Zafiro Tela Sivoia" device_class="Shade_controller" minimum_component_engine_version="0" rpm_xml_version="1.4" rpm_xml_version_date="$Date$">
+	<notes>
+		====================== Change Log ==================
+		Version: 1.4 Change: Version Number bump to support new Savant Revisioning Scheme.  Risk: Low Importance: Forced
+	</notes>
+    <control_interfaces preferred="ir">
+        <ir ir_command_format_type="racepointmedia"/>
+    </control_interfaces>
+    <media_interfaces>
+        <internal name_on_component="Shade Controller">
+            <environmental_media/>
+            <resource resource_type="ENV_SHADECONTROLLER_SOURCE"/>
+        </internal>
+    </media_interfaces>
+    <logical_component logical_component_name="Shade">
+        <implementation>
+            <internal name_on_component="Shade Controller"/>
+        </implementation>
+        <resource_component_actions resource_type="ENV_SHADECONTROLLER_SOURCE">
+            <action name="ShadeTiltOpen"><!-- ALLWindowsBOTHShadesOpen -->
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01CA005A005C01110113005B005C01110113005B005C016D02DC005B01CA005A005C01110113005B005C01110113005B005C016E02DC005B01CA005A005C01110113005B005C01110113005B005B032500000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ShadeTiltClose"><!-- ALLWindowsBOTHShadesClose -->
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01C9005C005C01110113005C005C0111005B00B5005C01C902DC005B01C9005C005C01110113005C005C0111005B00B7005B01C902DC005B01C9005C005C01110113005C005C0111005C00B6005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ShadeUp"><!-- ALLWindowsBOTHShadesUp -->
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002D8005901C8005B005B010F0111005A005B010F005B00B5005B01C502D8005901C8005B005B010F0111005A005B010F005B00B5005B01C602D8005901C8005B005B010F0111005A005B010F005B00B5005B01C602D8005901C8005B005B010F0111005A005B010F005B00B5005B0F8700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ShadeDown"><!-- ALLWindowsBOTHShadesDown -->
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002D8005A01C8005A005B01100111005B005B01100111005B005B016B02D8005A01C8005A005B01100111005B005B01100111005B005B016B02D8005A01C8005A005B01100111005B005B01100111005B005B016B02D8005A01C8005A005B01100111005B005B01100111005B005B0F8D00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <entity name="Shade" address_components="0">
+                <group_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeUp"></release_action>
+                        <osd_press_action name="ShadeUp"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeDown"></release_action>
+                        <osd_press_action name="ShadeDown"></osd_press_action>
+                    </push_button_representation>
+                    <push_button_representation>
+                        <release_action name="ShadeStop"></release_action>
+                        <osd_press_action name="ShadeStop"></osd_press_action>
+                    </push_button_representation>
+                </group_representation>
+            </entity>
+            
+        </resource_component_actions>
+        <custom_component_actions>
+            <action name="ALLWindowsBOTHShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01CA005A005C01110113005B005C01110113005B005C016D02DC005B01CA005A005C01110113005B005C01110113005B005C016E02DC005B01CA005A005C01110113005B005C01110113005B005B032500000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01C9005C005C01110113005C005C0111005B00B5005C01C902DC005B01C9005C005C01110113005C005C0111005B00B7005B01C902DC005B01C9005C005C01110113005C005C0111005C00B6005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005B01C9005B005B00B7005B0112005B0112005B0112005C01C902DD005B01C9005B005B00B7005B0112005C032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005B01CA005C005B00B6005C0113005B016D005C005C005B022402DD005B01CA005C005B00B6005B032500000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C01CA005A005C005B01CA005A005B0113016E01C902DC005C01CA005A005C005B01CA005A005B0113016E01C902DC005C01CA005A005C005B01CA005A005B0113016F032500000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A01CA005B005B005B01CA005B005C0112005C0112005B016E02DD005A01CA005B005B005B01CA005B005C0112005C0112005B016D02DD005A01CA005B005B005B01CA005B005C0112005C0112005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01C9005B005C005A005C016E005B0112005C016E005C016E02DC005B00B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01CA005A005C005A005C016C005C016C005C005A0113016E02DC005B01CA032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A01CA005A0113005C0113005C005C011200B7005A00B7016E02DD005A01CA005A0113005C0113005C005C011200B7005B00B7016D02DD005A01CA005A0113005C0113005C005C011200B7005A00B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B01CA005A0113005A0113005A005B0112005B005B005C022402DC005B01CA005A0113005A0113005A005B0112005C005B005C022302DC005B01CA005A0113005A0113005A005B0112005C005A005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005901CA005C016E0112005B0112005B00B6005B022402DD005901CA005C016E032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A01CA005C016E0111005B016E005C00B6005C01C702DD005A01CA005C016E0111005B032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ALLWindowsBOTHShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b01120112005b005b00b7005b00b7005b011202dc005b01c9005b005b01120112005b005b00b7005b00b7005b011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b01120112005b005b00b7005b005b005b005b00b7005b02dc005b01c9005b005b01120112005b005b00b7005b005b005b005b00b7005b00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b01120112005b005b005b01120112005b005b02dc005b01c9005b005b01120112005b005b005b01120112005b005b00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B005B005B01C9005B005B00B7005B00B70112005B02DC005B01C9005B005B005B01C9005B005B0112005B0112005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B005B005B01C9005B005B00B7005B005B005B016E02DC005B01C9005B005B005B01C9005B005B00B7005B005B005B016E00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsFRONTShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B005B005B01C9005B005B005B011200B7005B00B702DC005B01C9005B005B005B01C9005B005B005B011200B7005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B0112005B0112005B005B00B7005B0112005B00B702DC005B01C9005B0112005B0112005B005B00B7005B0112005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B0112005B0112005B005B00B7005B005B00B7005B005B005B02DC005B01C9005B0112005B0112005B005B00B7005B005B00B7005B005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsREARShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B01C9005B0112005B0112005B005B005B0112005B0112005B02DC005B01C9005B0112005B0112005B005B005B0112005B0112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="ALLWindowsBOTHShadesOpenAndPreset">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b00b7005b005b005b016e005b0112005b011202dc005b01c9005b005b00b7005b005b005b016e005b0112005b011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesOpenAndClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b00b7005b005b005b01c9005b005b005b016e02dc005b01c9005b005b00b7005b005b005b01c9005b005b005b016e00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesOpenAndRaise">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b00b7005b005b005b016e011200b7005b00b702dc005b01c9005b005b00b7005b005b005b016e011200b7005b00b700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="ALLWindowsBOTHShadesOpenAndLower">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402dc005b01c9005b005b00b7005b005b005b016e01c9005b005b005b02dc005b01c9005b005b00b7005b005b005b016e01c9005b005b005b00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+        
+        
+            <action name="FIRSTWindowsBOTHShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005A00B801110113005C005B011200B7005A00B8016D02DC005B016E005A00B801110113005C005B011200B7005B00B7016D02DC005B016E005A00B801110113005C005B011200B7005B00B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsBOTHShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A016E005C00B701120112005B005B0112005C005A005C022402DD005A016E005C00B701120112005B005C0111005C005A005C022302DD005A016E005C00B701120112005B005C0111005C005B005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsBOTHShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005C00B700B6005B0112005B0112005C00B5005C022402DC032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsBOTHShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005B00B700B6005C0111005C016D005C00B6005B01C902DC005B016E005B00B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B01C9005C01110112005B005C011100B7028002DC005B005B01C9005C01110112005B005C011100B7028002DC005B005B01C9005C01110112005B005C011100B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C9005B01120112005B005B0112005C005A0113016E02DD005A005C01C9005B01120112005B005B0112005C005C0112016D02DD005A005C01C9005B01120112005B005B0112005B005C0112032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B01CA005C00B6005B0112005B0112005C00B60113032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005C01C8005C00B6005C0111005C016E005C0111005C032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B0112011301110113005B005B0112016E01C902DC005B005B0112011301110113005B005B0112016E01C902DC005B005B0112011301110113005B005B0112016E032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C0112011201120113005A005C0112005C0112005B016E02DD005A005C0112011201120113005A005C0112005C0112005B016E02DD005A005C0112011201120113005A005C0112005C0112005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B0112011300B6005B0112005B0112005C016C005C032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005C0111011300B6005C0111005C016C005C005A0113032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="FIRSTWindowsBOTHShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B701120112005B005B00B7005B0112005B00B702DC005B016E005B00B701120112005B005B00B7005B0112005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsBOTHShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B701120112005B005B00B7005B005B00B7005B005B005B02DC005B016E005B00B701120112005B005B00B7005B005B00B7005B005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsBOTHShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B701120112005B005B005B0112005B0112005B02DC005B016E005B00B701120112005B005B005B0112005B0112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B01120112005B005B00B7005B016E005B005B02DC005B005B01C9005B01120112005B005B00B7005B016E005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B01120112005B005B00B7005B005B011200B702DC005B005B01C9005B01120112005B005B00B7005B005B011200B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsFRONTShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B01120112005B005B005B0112005B005B011202DC005B005B01C9005B01120112005B005B005B0112005B005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112011201120112005B005B00B7005B00B70112005B02DC005B005B0112011201120112005B005B00B7005B00B70112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112011201120112005B005B00B7005B005B005B016E02DC005B005B0112011201120112005B005B00B7005B005B005B016E00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FIRSTWindowsREARShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112011201120112005B005B005B011200B7005B00B702DC005B005B0112011201120112005B005B005B011200B7005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+        
+        
+        
+            <action name="SECONDWindowsBOTHShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005B00B7005A01CA005B005B011200B7028002DC005B016E005B00B7005A01CA005B005B011200B7028002DC005B016E005B00B7005A01CA005B005C011100B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsBOTHShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A016F005A00B7005B01CA005A005C0111005C005B0112016D02DD005A016F005A00B7005B01CA005A005C0112005B005C0112016E02DD005A016F005A00B7005B01CA005A005B0112005B005B0113032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsBOTHShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C016E005A00B8005B005C016D005B0112005C00B70113016D02DC032500000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsBOTHShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A016F005900B7005B005B016E005B016E005C0112005B016E02DD005A016F005900B7005B005B032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C7005C005B01C9005B005C011100B7005C00B7016D02DD005A005C01C7005C005B01C9005B005C011100B7005B00B7016D02DD005A005C01C7005C005B01C9005B005C011200B7005B00B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005B01C9005C005A01CA005B005B0112005C005A005B022502DC005C005B01C9005C005A01CA005B005B0111005C005A005C022302DC005C005B01C9005C005A01CA005B005B0112005C005A005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B01C9005C005A005C016E005C0111005C00B6005C022400B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005C01C7005C005B005B016D005B016D005C00B6005B032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01120112005C01CA005A005C01120112005C005B016D02DD005A005C01120112005C01CA005A005C01120112005C005B016F02DD005A005C01120112005C01CA005A005C01120112005C005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B01110113005A01CA005C005B0111005C00B6005B01C802DC005B005B01110113005A01CA005C005B0111005C00B5005B01C902DC005B005B01110113005A01CA005C005B0111005C00B6005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005B01120113005B005C016D005B0112005B0112005C01C900B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005C01110113005C005B016D005B016D005C005A005C022401CA032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="SECONDWindowsBOTHShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B7005B01C9005B005B00B7005B016E005B005B02DC005B016E005B00B7005B01C9005B005B00B7005B016E005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsBOTHShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B7005B01C9005B005B00B7005B005B011200B702DC005B016E005B00B7005B01C9005B005B00B7005B005B011200B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsBOTHShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B00B7005B01C9005B005B005B0112005B005B011202DC005B016E005B00B7005B01C9005B005B005B0112005B005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B005B01C9005B005B00B7005B0112005B00B702DC005B005B01C9005B005B01C9005B005B00B7005B0112005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B005B01C9005B005B00B7005B005B00B7005B005B005B02DC005B005B01C9005B005B01C9005B005B00B7005B005B00B7005B005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsFRONTShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C9005B005B01C9005B005B005B0112005B0112005B02DC005B005B01C9005B005B01C9005B005B005B0112005B0112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01120112005B01C9005B005B00B7005B00B7005B011202DC005B005B01120112005B01C9005B005B00B7005B00B7005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01120112005B01C9005B005B00B7005B005B005B005B00B7005B02DC005B005B01120112005B01C9005B005B00B7005B005B005B005B00B7005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SECONDWindowsREARShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01120112005B01C9005B005B005B01120112005B005B02DC005B005B01120112005B01C9005B005B005B01120112005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            
+            
+            <action name="THIRDWindowsBOTHShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005A016E005B016E005B0112005C005B01120112005C005C016D02DC005A016E005B016E005B0112005C005B01120112005C005C016D02DC005A016E005B016E005B0112005C005B01120112005C005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsBOTHShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005B016E005B0113005C005B0112005B00B5005C01C902DC005B016E005B016E005B0113005C005B0112005C00B6005B01C902DC005B016E005B016E005B0113005C005B0112005C00B6005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsBOTHShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005A01CA0111005B0112005B0112005C01C902DC032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsBOTHShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C016E005C01CA0111005C016D005C005B005C022300B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C90112005B0112005B005C0111016F01C802DD005A005C01C90112005B0112005B005C0111016E01C902DD005A005C01C90112005B0112005B005C0111016E032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C90112005B0112005B005C0111005C0111005B016E02DD005A005C01C90112005B0112005B005C0111005C0111005B016F02DD005A005C01C90112005B0112005B005C0111005C0111005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B01C9016E0112005C0111005C016E005C016D00B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C9016E0112005B016E005B005B0112016E00B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005B011201CA005A0113005C005B011200B7028002DC005B005B011201CA005A0113005C005B011200B7028002DC005B005B011201CA005A0113005C005B011200B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C011201C9005B0113005B005C0112005C005B0112016E02DD005A005C011201C9005B0113005B005C0112005B005B0112016E02DD005A005C011201C9005B0113005B005C0112005B005B0113032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C011202250112005C0112005B00B60113016D02DD032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005B005B011202250112005B016D005B0112005B016D00B7032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="THIRDWindowsBOTHShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B016E005B0112005B005B00B7005B00B7005B011202DC005B016E005B016E005B0112005B005B00B7005B00B7005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsBOTHShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B016E005B0112005B005B00B7005B005B005B005B00B7005B02DC005B016E005B016E005B0112005B005B00B7005B005B005B005B00B7005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsBOTHShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B016E005B0112005B005B005B01120112005B005B02DC005B016E005B016E005B0112005B005B005B01120112005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C90112005B0112005B005B00B7005B00B70112005B02DC005B005B01C90112005B0112005B005B00B7005B00B70112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C90112005B0112005B005B00B7005B005B005B016E02DC005B005B01C90112005B0112005B005B00B7005B005B005B016E00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsFRONTShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C90112005B0112005B005B005B011200B7005B00B702DC005B005B01C90112005B0112005B005B005B011200B7005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B011201C9005B0112005B005B00B7005B016E005B005B02DC005B005B011201C9005B0112005B005B00B7005B016E005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B011201C9005B0112005B005B00B7005B005B011200B702DC005B005B011201C9005B0112005B005B00B7005B005B011200B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="THIRDWindowsREARShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B011201C9005B0112005B005B005B0112005B005B011202DC005B005B011201C9005B0112005B005B005B0112005B005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            
+            
+            
+            <action name="FOURTHWindowsBOTHShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A016E005C0113005A016E005C005C0111016E01C902DD005A016E005C0113005A016E005C005C0111016F01C702DD005A016E005C0113005A016E005C005C0111016E032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsBOTHShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A016E005B0113005B016E005B005C0111005C0111005C016E02DD005A016E005B0113005B016E005B005C0111005C0111005B016D02DD005A016E005B0113005B016E005B005C0111005C0111005B032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsBOTHShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005B011201C8005C0111005C016D005C016E02DD032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsBOTHShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B016E005B011201CA005C016D005B005B0113016C02DC032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C900B7005A016F005A005C01120112005C005B016E02DD005A005C01C900B7005A016F005A005C01120112005B005B016E02DD005A005C01C900B7005A016F005A005B01120113005A005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005B01CA00B7005B016E005B005B0112005B00B8005B01CA02DC005C005B01CA00B7005B016E005B005B0113005C00B7005B01CA02DC005C005B01CA00B7005B016E005B005C0112005C00B6005B032500000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005B005C01C900B701C9005B0112005B0112005C01C901C9032500000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C01C900B701C7005C016D005C005A005C022402DD032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadesOpen">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005B005C0111016F005A016F005A005C011100B7005B00B7016D02DC005B005C0111016F005A016F005A005C011100B7005B00B7016E02DC005B005C0111016F005A016F005A005C011100B7005B00B7032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadesClose">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005B0111016E005C016E005C005B0111005C005A005C022302DC005C005B0111016E005C016E005C005B0111005C005A005C022402DC005C005B0111016E005C016E005C005B0111005C005A005C032300000000</command_string>
+                        <delay ms_delay="3000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadesUp">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DC005C005B0112016E01C9005B0112005C00B7005C022501CA032500000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadesDown">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009C4002DD005A005C0112016E01C9005B016E005B00B6005C01C902DC032300000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+            <action name="FOURTHWindowsBOTHShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B0112005B016E005B005B00B7005B00B70112005B02DC005B016E005B0112005B016E005B005B00B7005B00B70112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsBOTHShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B0112005B016E005B005B00B7005B005B005B016E02DC005B016E005B0112005B016E005B005B00B7005B005B005B016E00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsBOTHShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B016E005B0112005B016E005B005B005B011200B7005B00B702DC005B016E005B0112005B016E005B005B005B011200B7005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C900B7005B016E005B005B00B7005B00B7005B011202DC005B005B01C900B7005B016E005B005B00B7005B00B7005B011200000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C900B7005B016E005B005B00B7005B005B005B005B00B7005B02DC005B005B01C900B7005B016E005B005B00B7005B005B005B005B00B7005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsFRONTShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B01C900B7005B016E005B005B005B01120112005B005B02DC005B005B01C900B7005B016E005B005B005B01120112005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadePreset1">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112016E005B016E005B005B00B7005B0112005B00B702DC005B005B0112016E005B016E005B005B00B7005B0112005B00B700000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadePreset2">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112016E005B016E005B005B00B7005B005B00B7005B005B005B02DC005B005B0112016E005B016E005B005B00B7005B005B00B7005B005B005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FOURTHWindowsREARShadePreset3">
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">0000000000009d3402DC005B005B0112016E005B016E005B005B005B0112005B0112005B02DC005B005B0112016E005B016E005B005B005B0112005B0112005B00000000</command_string>
+                        <delay ms_delay="200"/>
+                    </command>
+                </command_interface>
+            </action>
+            
+        
+        
+        
+        </custom_component_actions>
+    </logical_component>
+</component>

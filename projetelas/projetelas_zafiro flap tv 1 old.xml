@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Projetelas" model="Zafiro Flap TV 1" rpm_xml_version="4.3" minimum_component_engine_version="0.0" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" alias="" device_class="HD_monitor">
+    <notes>
+Version: 3.1, Change: 
+
+
+Version: 4.1, Change: Rename
+</notes>
+    <control_interfaces preferred="ir">
+        <ir ir_command_format_type="racepointmedia"></ir>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="Input Name 1"></input>
+    </media_interfaces>
+    <state_variable_list>
+        <state_variable name="Power_current_power_HD Monitor" state_center_binding="CurrentPowerStatus" state_center_type="string" owning_logical_component="HD Monitor">OFF</state_variable>
+        <state_variable name="Mute_current_mute_HD Monitor" state_center_binding="CurrentMuteStatus" state_center_type="string" owning_logical_component="HD Monitor">OFF</state_variable>
+        <volume_state_variable name="Volume_current_volume_HD Monitor" state_center_binding="CurrentVolume" state_center_type="integer" owning_logical_component="HD Monitor" granularity="1" min_value="0" max_value="100">0</volume_state_variable>
+    </state_variable_list>
+    <logical_component logical_component_name="HD Monitor">
+        <implementation>
+            <input name_on_component="Input Name 1">
+                <action_to_select name="SelectInputInput Name 1"></action_to_select>
+            </input>
+        </implementation>
+        <custom_component_actions>
+            <action name="Up">
+                <command_interface interface="ir">
+                    <command response_required="no"> <!-- Comando Sobe Original V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Sobe Novo V1 -->
+                        <command_string type="hex">0000000000009470015700AA001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001605D60157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Sobe Original V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Sobe Novo V1 -->
+                        <command_string type="hex">0000000000009470015700AA001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001605D60157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Sobe Original V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060015000600520006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Sobe Novo V1 -->
+                        <command_string type="hex">0000000000009470015700AA001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001600150016003E00160015001600150016003E001600150016003E001600150016003E001600150016003E0016003E001600150016003E001600150016003E001605D60157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Down">
+                <command_interface interface="ir">
+                    <command response_required="no"> <!-- Comando Desce Antigo V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Desce Novo V1 -->
+                        <command_string type="hex">0000000000009470015700A9001600150016003F00160015001600150016003F001600150016003F001600150016003F001600150016003F0016003F001600150016003F001600150016003F0016003F0016003F00160015001600150016003F001600150016003F0016001500160015001600150016003F0016003F001600150016003F001600150016003F001605D70157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Desce Antigo V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Desce Novo V1 -->
+                        <command_string type="hex">0000000000009470015700A9001600150016003F00160015001600150016003F001600150016003F001600150016003F001600150016003F0016003F001600150016003F001600150016003F0016003F0016003F00160015001600150016003F001600150016003F0016001500160015001600150016003F0016003F001600150016003F001600150016003F001605D70157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Desce Antigo V0 -->
+                        <command_string type="hex">000000000000948c000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060500000600520006001500060052000600150006001500060052000600150006005200060052000600520006005200060052000600150006001500060052000600150006005200060A0000000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                    <command response_required="no"> <!-- Comando Desce Novo V1 -->
+                        <command_string type="hex">0000000000009470015700A9001600150016003F00160015001600150016003F001600150016003F001600150016003F001600150016003F0016003F001600150016003F001600150016003F0016003F0016003F00160015001600150016003F001600150016003F0016001500160015001600150016003F0016003F001600150016003F001600150016003F001605D70157005500160EDE00000000</command_string>
+                        <delay ms_delay="500"></delay>
+                    </command>
+                </command_interface>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>

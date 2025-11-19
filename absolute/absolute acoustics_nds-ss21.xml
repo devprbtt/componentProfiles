@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Acoustics" model="NDS-SS21" alias="Absolute Nexos 2x1 HDMI Switch, NDS-SS21" device_class="AV_switch" minimum_component_engine_version="0.0" rpm_xml_version="$Revision: 2.0 $">
+    <notes>
+        For more information about this product, please visit 'http://www.absoluteacoustics.com/nds-ss21.html'.
+    </notes>
+    <control_interfaces preferred="rs232">
+        <ir ir_command_format_type="racepointmedia"/>
+        <rs232 name_on_component="RS232" data_length="8" parity_bit="no" stop_bit="1" flow_control="none" preferred_baud_rate="9600" connector_type="db9 female" cable_type="rs232 straight" response_time_length_ms="500">
+            <baud_rate speed="9600"/>
+            <send_postfix type="hex">0D0A</send_postfix>
+            <receive_end_condition test_condition="data" type ="hex">0D0A</receive_end_condition>
+            <response_codes>
+                <rspmessage status="failure" name="Error">
+                    <constant type="character">UNKNOWN COMMAND!</constant>
+                    <data type="character">
+                        <update state="LastErrorStringReceived" type="string">Unknown Command</update>
+                    </data>
+                </rspmessage>
+            </response_codes>
+        </rs232>
+    </control_interfaces>
+    <media_interfaces>
+        <input name_on_component="HDMI IN 1">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <input name_on_component="VGA IN 1">
+            <audio_media type="analog_minijack"/>
+            <video_media type="vga"/>
+            <resource resource_type="AV_AUDIOSWITCH_FUNCTION"/>
+            <resource resource_type="AV_VIDEOSWITCH_FUNCTION"/>
+        </input>
+        <output name_on_component="HDMI OUT">
+            <combined_media>
+                <audio_media type="hdmi_audio"/>
+                <video_media type="hdmi"/>
+            </combined_media>
+        </output>
+        <output name_on_component="Minijack Audio Out">
+            <audio_media type="analog_minijack"/>
+        </output>
+    </media_interfaces>
+    <logical_component logical_component_name="AV_switch">
+        <implementation>
+            <input name_on_component="HDMI IN 1">
+                <action_to_select name="SelectInput1"/>
+            </input>
+            <output name_on_component="HDMI OUT"/>
+            <output name_on_component="Minijack Audio Out"></output>
+        </implementation>
+        <implementation>
+            <input name_on_component="VGA IN 1">
+                <action_to_select name="SelectInput5"/>
+            </input>
+            <output name_on_component="HDMI OUT"/>
+            <output name_on_component="Minijack Audio Out"></output>
+        </implementation>
+        <status_messages>
+            <status_message name="CurrentInputStatus">
+                <constant type="character">SWT </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="A1">
+                            <update state="CurrentInput" type="string">Input1</update>
+                        </map>
+                        <map key="A2">
+                            <update state="CurrentInput" type="string">Input2</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Black">
+                <constant type="character">BLK </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="IsOutputBlack" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="IsOutputBlack" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="AutoSwitch">
+                <constant type="character">AUT </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="IsAutoSwitch" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="IsAutoSwitch" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="AspectRatio">
+                <constant type="character">ASP </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentAspectRatio" type="string">Auto</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentAspectRatio" type="string">4:3</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentAspectRatio" type="string">16:9</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Color">
+                <constant type="character">COL </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentColorTemperature" type="string">Cool</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentColorTemperature" type="string">Medium</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentColorTemperature" type="string">Warm</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentColorTemperature" type="string">User</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Picture">
+                <constant type="character">PIC </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentPictureMode" type="string">Dynamic</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentPictureMode" type="string">Standard</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentPictureMode" type="string">Mild</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentPictureMode" type="string">User</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Brightness">
+                <constant type="character">BRG </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentBrightness" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Contrast">
+                <constant type="character">CTR </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentContrast" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Saturation">
+                <constant type="character">SAT </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentSaturation" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Sharpness">
+                <constant type="character">SHA </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentSharpness" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Height">
+                <constant type="character">HEI </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentHeight" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="Width">
+                <constant type="character">WID </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentWidth" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="XPosition">
+                <constant type="character">POX </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentHorizontalPosition" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="YPosition">
+                <constant type="character">POY </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="CurrentVerticalPosition" type="string"></update>
+                </data>
+            </status_message>
+            <status_message name="ScreenAdjusting">
+                <constant type="character">MOV </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="IsScreenAdjustingEnabled" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="IsScreenAdjustingEnabled" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Resolution">
+                <constant type="character">RES </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentResolution" type="string">1024x768</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentResolution" type="string">1280x720</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentResolution" type="string">1280x800</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentResolution" type="string">1360x768</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentResolution" type="string">1920x1080</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentResolution" type="string">1920x1200</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="EDID">
+                <constant type="character">EDD </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="00">
+                            <update state="CurrentEDIDMode" type="string">Bypass</update>
+                        </map>
+                        <map key="01">
+                            <update state="CurrentEDIDMode" type="string">Preset1</update>
+                        </map>
+                        <map key="02">
+                            <update state="CurrentEDIDMode" type="string">Preset2</update>
+                        </map>
+                        <map key="03">
+                            <update state="CurrentEDIDMode" type="string">Preset3</update>
+                        </map>
+                        <map key="04">
+                            <update state="CurrentEDIDMode" type="string">Preset4</update>
+                        </map>
+                        <map key="05">
+                            <update state="CurrentEDIDMode" type="string">Preset5</update>
+                        </map>
+                        <map key="06">
+                            <update state="CurrentEDIDMode" type="string">User</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Lock">
+                <constant type="character">LCK </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="IsPanelLocked" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="IsPanelLocked" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="HDMIAudioEnabled">
+                <constant type="character">AUD </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="IsHDMIAudioOutputEnabled" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="IsHDMIAudioOutputEnabled" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="Power">
+                <constant type="character">PWR </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <data_map match_required="yes">
+                        <map key="01">
+                            <update state="CurrentPowerStatus" type="boolean">true</update>
+                        </map>
+                        <map key="00">
+                            <update state="CurrentPowerStatus" type="boolean">false</update>
+                        </map>
+                    </data_map>
+                </data>
+            </status_message>
+            <status_message name="FirmwareVersion">
+                <constant type="character">FWR </constant>
+                <data type="character" terminator_type="end_of_data">
+                    <update state="FirmwareVersion" type="string"></update>
+                </data>
+            </status_message>
+        </status_messages>
+        <custom_component_actions>
+            <action name="SelectInput1">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A1</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600160016004100160016001600160016001600160016001600160016004100160041001600160016004100160041001600410016004100160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SelectInput2">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A2</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600410016001600160041001600410016001600160041001600160016004100160016001600410016001600160016001600410016001600160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseInput">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A+</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600410016004100160016001600160016001600160016001600160016004100160016001600160016004100160041001600410016004100160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseInput">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">SWT A-</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160041001600410016004100160016001600160016001600160016001600160016001600160016001600160016004100160041001600410016004100160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="EnableBlack">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">BLK 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action> 
+            <action name="DisableBlack">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">BLK 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action> 
+            <action name="AutoSwitch_On">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">AUT 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AutoSwitch_Off">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">AUT 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1024x768">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600160016001600160041001600410016001600160041001600160016004100160041001600410016001600160016001600410016001600160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1280x720">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 02</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160041001600160016001600160041001600410016001600160041001600160016001600160041001600410016001600160016001600410016001600160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1280x800">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 03</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0015001500150015001500150015001500150015001500150015004100150015001500410015004100150041001500410015004100150041001500410015004100150041001500410015004100150041001500150015001500150015001500150015001500150015001500150015001500150041001500410015004100150041001505D100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1360x768">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 04</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">000000000000948c015700AB0015001500150015001500150015001500150015001500150015004100150015001500410015004100150041001500410015004100150041001500410015004100150041001500150015004100150041001500410015001500150041001500150015001500150041001500150015001500150015001500410015001500150041001505D100000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1920x1080">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 05</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160041001600160016004100160041001600160016001600160041001600160016001600160041001600160016001600160041001600410016001600160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Resolution_1920x1200">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RES 06</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160041001600410016004100160041001600410016001600160016001600160016001600160016001600160016001600160016001600410016004100160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="LockFrontPanel">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">LCK 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="UnlockFrontPanel">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">LCK 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetBrightness">
+                <action_argument name="Brightness" note="00~99"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">BRG </parameter>
+                            <parameter parameter_data_type="character" action_argument="Brightness" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetContrast">
+                <action_argument name="Contrast" note="00~99"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">CTR </parameter>
+                            <parameter parameter_data_type="character" action_argument="Contrast" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetSaturation">
+                <action_argument name="Saturation" note="00~99"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">SAT </parameter>
+                            <parameter parameter_data_type="character" action_argument="Saturation" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetSharpness">
+                <action_argument name="Sharpness" note="00~99"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">SHA </parameter>
+                            <parameter parameter_data_type="character" action_argument="Sharpness" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetColor">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">COL</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetAspectRatio">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">ASP</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetPicture">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">PIC</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetEDID">
+                <action_argument name="EDID" note="00-Bypass, 01-Preset1, 02-Preset2, 03-Preset3, 04-Preset4, 05-Preset5, 06-User"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">COL </parameter>
+                            <parameter parameter_data_type="character" action_argument="EDID" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="EnableHDMIAudio">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">HAU 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DisableHDMIAudio">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">HAU 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="AutoAdjustVGA">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">ADJ AT</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Power_On">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">PWR 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600410016001600160041001600160016001600160016001600160016004100160016001600410016001600160041001600410016004100160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="Standby">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">PWR 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+                <command_interface interface="ir">
+                    <command response_required="no">
+                        <command_string type="hex">00000000000095ec015B00AD0016001600160016001600160016001600160016001600160016004100160016001600410016004100160041001600410016004100160041001600410016004100160016001600160016004100160041001600160016001600160041001600160016004100160041001600160016001600160041001600410016001600160041001605CB00000000</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FirmwareUpdate">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">FIRMWARE UPDATE</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="FactoryReset">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">RST</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DisableCEC">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">CEC 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SetCECTime">
+                <action_argument name="Time" note="01~99"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">CEC </parameter>
+                            <parameter parameter_data_type="character" action_argument="Time" parameter_total_width="2" parameter_data_width="2"></parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="SendCECCommand">
+                <action_argument name="Command"/>
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <parameter_list>
+                            <parameter parameter_data_type="character">CEC </parameter>
+                            <parameter parameter_data_type="hex">3C</parameter>
+                            <parameter parameter_data_type="character" action_argument="Command"></parameter>
+                            <parameter parameter_data_type="hex">3E</parameter>
+                        </parameter_list>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MoveImageLeft">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV LE</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MoveImageRight">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV RI</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MoveImageUp">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV UP</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="MoveImageDown">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV DW</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseImgWidth">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">WID ++</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseImgWidth">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">WID --</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="IncreaseImgHeight">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">HEI ++</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DecreaseImgHeight">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">HEI --</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="EnableOutputAdjust">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV 01</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="DisableOutputAdjust">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">MOV 00</command_string>
+                        <delay ms_delay="1000"/>
+                    </command>
+                </command_interface>
+            </action>
+            <action name="GetStatus">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">STA</command_string>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="GetFullStatus">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">STA AZ</command_string>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+            <action name="FirmwareVersion">
+                <command_interface interface="rs232">
+                    <command response_required="no">
+                        <command_string type="character">FWR</command_string>
+                    </command>
+                </command_interface>
+                <execute_on_schedule period_ms="0"></execute_on_schedule>
+            </action>
+        </custom_component_actions>
+    </logical_component>
+</component>
