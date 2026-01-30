@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Samsung" model="Zafiro 1 - Monitor" alias="Samsung UN49NU8000" rpm_xml_version="6.2" minimum_component_engine_version="8.7.1" device_class="HD_monitor" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd">
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Samsung" model="Zafiro 1 - Monitor" alias="Samsung UN49NU8000, Samsung UN55NU8000, Samsung UN65NU8000, Samsung UN75NU8000, Samsung UN82NU8000" rpm_xml_version="6.0" minimum_component_engine_version="8.7.1" device_class="HD_monitor" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd">
     <notes>
         Known RS232 Issues: 
         1) Volume Slider can get out of sync as there is no Feedback.
@@ -60,7 +60,6 @@ Version: 5.6, Change: rename audio out
         <always_repeat_input_selection>true</always_repeat_input_selection>
         <smart_tv_setup>samsung_2017</smart_tv_setup>
         <disable_resources_by_default resource_type="AV_SMARTTV_SOURCE"></disable_resources_by_default>
-        <disable_resources_by_default resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></disable_resources_by_default>
     </component_properties>
     <control_interfaces preferred="ir">
         <ir ir_command_format_type="racepointmedia"></ir>
@@ -257,7 +256,7 @@ Version: 5.6, Change: rename audio out
                     </command>
                     <command response_required="no">
                         <command_string type="hex">000000000000948c00AC00AC0016004000160040001600400016001500160015001600150016001500160015001600400016004000160040001600150016001500160015001600150016001500160015001600150016001500160040001600400016001500160015001600400016004000160040001600400016001500160015001600400016004000160015001600FF00000000</command_string>
-                        <delay ms_delay="2000"></delay>
+                        <delay ms_delay="300"></delay>
                     </command>
                 </command_interface>
                 <command_interface interface="rs232">
