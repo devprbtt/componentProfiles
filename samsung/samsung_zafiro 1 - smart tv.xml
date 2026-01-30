@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Samsung" model="Zafiro 1 - Smart TV" alias="Samsung UN49NU8000" rpm_xml_version="7.2" minimum_component_engine_version="8.7.1" device_class="HD_monitor" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd">
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" manufacturer="Samsung" model="Zafiro 1 - Smart TV" alias="Samsung UN49NU8000, Samsung UN55NU8000, Samsung UN65NU8000, Samsung UN75NU8000, Samsung UN82NU8000" rpm_xml_version="7.0" minimum_component_engine_version="8.7.1" device_class="HD_monitor" xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd">
     <notes>
         Known RS232 Issues: 
         1) Volume Slider can get out of sync as there is no Feedback.
@@ -62,7 +62,6 @@ Version: 7.0, Change: Substituição do Comando Menu pelo Home em Cable TV
         <always_repeat_input_selection>true</always_repeat_input_selection>
         <smart_tv_setup>samsung_2017</smart_tv_setup>
         <disable_resources_by_default resource_type="AV_SMARTTV_SOURCE"></disable_resources_by_default>
-        <disable_resources_by_default resource_type="AV_EXTERNALMEDIASERVER_SOURCE"></disable_resources_by_default>
     </component_properties>
     <control_interfaces preferred="ir">
         <ir ir_command_format_type="racepointmedia"></ir>
