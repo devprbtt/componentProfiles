@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="racepoint_component_profile.xsd" manufacturer="Absolute Controls"
-    model="HVAC JSON" device_class="HVAC_controller" rpm_xml_version="$Revision: 1.2 $" minimum_component_engine_version="0.0">
+    model="HVAC JSON" device_class="HVAC_controller" rpm_xml_version="$Revision: 1.1 $" minimum_component_engine_version="0.0">
     <notes>
         Absolute Controls HVAC JSON Profile
         Port 4998
@@ -10,15 +10,25 @@
 
         Version 1.0: initial HVAC-only JSON profile with optimistic updates.
         Version 1.1: align HVAC actions/state names with ENV_HVACCONTROLLER_SOURCE.
-        Version 1.2: remove hard-coded zone suffixes to support multiple thermostat IDs.
     </notes>
     <control_interfaces preferred="ip">
-        <ip port="4998" response_time_length_ms="1000" name_on_component="Ethernet"/>
+        <ip port="4998" protocol="tcp" response_time_length_ms="300" name_on_component="Ethernet">
+          <send_postfix type="hex">0D0A</send_postfix>
+        </ip>
     </control_interfaces>
+    
     <media_interfaces>
+        <data name_on_component="Ethernet">
+          <combined_media>
+            <data_media type="ethernet"/>
+            <control port="4998"/>
+          </combined_media>
+        </data>
+    
         <internal name_on_component="HVAC Controller">
-            <environmental_media/>
-            <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
+          <audio_media/>
+          <video_media/>
+          <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
         </internal>
     </media_interfaces>
     <state_variable_list>
