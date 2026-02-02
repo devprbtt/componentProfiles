@@ -12,12 +12,23 @@
         Version 1.1: align HVAC actions/state names with ENV_HVACCONTROLLER_SOURCE.
     </notes>
     <control_interfaces preferred="ip">
-        <ip port="4998" response_time_length_ms="1000" name_on_component="Ethernet"/>
+        <ip port="4998" protocol="tcp" response_time_length_ms="300" name_on_component="Ethernet">
+          <send_postfix type="hex">0D0A</send_postfix>
+        </ip>
     </control_interfaces>
+    
     <media_interfaces>
+        <data name_on_component="Ethernet">
+          <combined_media>
+            <data_media type="ethernet"/>
+            <control port="4998"/>
+          </combined_media>
+        </data>
+    
         <internal name_on_component="HVAC Controller">
-            <environmental_media/>
-            <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
+          <audio_media/>
+          <video_media/>
+          <resource resource_type="ENV_HVACCONTROLLER_SOURCE"/>
         </internal>
     </media_interfaces>
     <state_variable_list>
