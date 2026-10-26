@@ -1,0 +1,41 @@
+[
+  {
+    "event": "INITIAL_POWER",
+    "reply": "51414c4c504f57523f3f3f3f920d414c4c3a4f6b415930303031d80d0a"
+  },
+  {
+    "event": "POWER_OFF",
+    "reply": "53414c4c504f575230303030cc0d414c4c3a4f6b4159232323230d0d0a"
+  },
+  {
+    "event": "SAME_SOCKET_POWER_ON",
+    "reply": ""
+  },
+  {
+    "event": "NEW_SOCKET_FAILED",
+    "error": "timed out"
+  },
+  {
+    "event": "WOL_SENT",
+    "mac": "C4:08:26:EA:BA:85"
+  },
+  {
+    "event": "AFTER_WOL",
+    "attempt": 0,
+    "reply": "51414c4c504f57523f3f3f3f920d"
+  },
+  {
+    "event": "RESTORE_POWER_ON",
+    "reply": "53414c4c504f575230303031cb0d414c4c3a4f6b415930303031d80d0a414c4c3a4f6b4159232323230d0d0a"
+  },
+  {
+    "event": "ISOLATED_WOL_CYCLE",
+    "standby_seconds": 8,
+    "destination": "192.168.5.255:9",
+    "packets": 1,
+    "native_power_on_sent": false,
+    "settle_seconds": 8,
+    "query_response": "QALLPOWR????\\x92\\rALL:OkAY0001\\xd8\\r\\n",
+    "result": "on"
+  }
+]

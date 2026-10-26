@@ -1,0 +1,1084 @@
+[
+  {
+    "file": "hesense_zafiro - smart tv.xml",
+    "mapped": [
+      {
+        "group": "universal_component_actions",
+        "action": "PowerOn"
+      },
+      {
+        "group": "universal_component_actions",
+        "action": "PowerOff"
+      },
+      {
+        "group": "universal_component_actions",
+        "action": "PowerToggle"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "ScanDown"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "ScanUp"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Home"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberEnter"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberZero"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberOne"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberTwo"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberThree"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberFour"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberFive"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberSix"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberSeven"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberEight"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberNine"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Blue"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Green"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Red"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Yellow"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Rewind"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "FastForward"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Apps"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Back"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "ExitSmartTVMenu"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Blue"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Green"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Red"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Yellow"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Dash"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Enter"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberZero"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberOne"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberTwo"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberThree"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberFour"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberFive"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberSix"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberSeven"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberEight"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberNine"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "DDiamond"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "BSquare"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ATriangle"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "CCircle"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Rewind"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "FastForward"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "SetVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "DecreaseVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "IncreaseVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "MuteOff"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "MuteOn"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputComponent"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI1"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI2"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI3"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI4"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputTVTuner"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputAV1"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "D"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "B"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "A"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "C"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Blue"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Green"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Red"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Yellow"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Return"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Exit"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "MTS"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Source"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "ClosedCaptions"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "MediaPlayer"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Internet@TV"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SmartHub"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Apps"
+      }
+    ],
+    "unsupported": [
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Record"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "LastChannel"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogSelect"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalSelect"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Info"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Guide"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputAV2"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputUSB"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Amazon"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Netflix"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "ChannelList"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Aspect"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "PictureSize"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Content"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Record"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Tools"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Status"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Search"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "More"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "e-Manual"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Anynet"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Recommend"
+      }
+    ]
+  },
+  {
+    "file": "hisense_zafiro - monitor.xml",
+    "mapped": [
+      {
+        "group": "universal_component_actions",
+        "action": "PowerOn"
+      },
+      {
+        "group": "universal_component_actions",
+        "action": "PowerOff"
+      },
+      {
+        "group": "universal_component_actions",
+        "action": "PowerToggle"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "ScanDown"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "ScanUp"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Home"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberEnter"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberZero"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberOne"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberTwo"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberThree"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberFour"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberFive"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberSix"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberSeven"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberEight"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "NumberNine"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Blue"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Green"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Red"
+      },
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Yellow"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Rewind"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "FastForward"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Apps"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Back"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "ExitSmartTVMenu"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Blue"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Green"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Red"
+      },
+      {
+        "group": "AV_SMARTTV_SOURCE",
+        "action": "Yellow"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Dash"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Exit"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorLeft"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorRight"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "OSDCursorUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Enter"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Select"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalUp"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalDown"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberZero"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberOne"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberTwo"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberThree"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberFour"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberFive"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberSix"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberSeven"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberEight"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "NumberNine"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Menu"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "DDiamond"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "BSquare"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ATriangle"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "CCircle"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Play"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Pause"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Stop"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Rewind"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "FastForward"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "SetVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "DecreaseVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "IncreaseVolume"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "MuteOff"
+      },
+      {
+        "group": "AV_VOLUMECONTROL_FUNCTION",
+        "action": "MuteOn"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputComponent"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI1"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI2"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI3"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputHDMI4"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputTVTuner"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputAV1"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "D"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "B"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "A"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "C"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Blue"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Green"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Red"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Yellow"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Return"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Exit"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "MTS"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Source"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "ClosedCaptions"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "MediaPlayer"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Internet@TV"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SmartHub"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Apps"
+      }
+    ],
+    "unsupported": [
+      {
+        "group": "AV_EXTERNALMEDIASERVER_SOURCE",
+        "action": "Record"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "LastChannel"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelAnalogSelect"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "ChannelDigitalSelect"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Info"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "Guide"
+      },
+      {
+        "group": "AV_TV_SOURCE",
+        "action": "FavoriteChannel"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputAV2"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "SelectInputUSB"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Amazon"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Netflix"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "ChannelList"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Aspect"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "PictureSize"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Content"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Record"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Tools"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Status"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Search"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "More"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "e-Manual"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Anynet"
+      },
+      {
+        "group": "custom_component_actions",
+        "action": "Recommend"
+      }
+    ]
+  }
+]
